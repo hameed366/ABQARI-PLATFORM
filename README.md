@@ -1,0 +1,2 @@
+# ABQARI-PLATFORM
+تطبيق عبقري
