@@ -120,6 +120,8 @@ void main() {
     final answered = problems.where((p) => grade(p) == true).length;
     final declined = problems.where((p) => grade(p) == null).length;
     // Recorded in docs/PHASE6_REPORT.md; raise the floor when coverage grows.
+    // ignore: avoid_print
+    print('on-device coverage: $answered answered, $declined declined, of ${problems.length}');
     expect(answered, greaterThanOrEqualTo(85),
         reason: '$answered answered, $declined declined');
     expect(answered + declined, problems.length);
