@@ -62,7 +62,7 @@ class SkillPage extends StatelessWidget {
                         result: result,
                         instruction: skill.instruction.of(language),
                         notation: notation),
-                    if (result.steps.isNotEmpty) {
+                    if (result.steps.isNotEmpty)
                       StepList(
                           steps: result.steps,
                           notation: notation,
@@ -74,7 +74,6 @@ class SkillPage extends StatelessWidget {
                   ],
                 ),
               );
-                    }
             }),
           const SizedBox(height: 8),
           FilledButton.icon(

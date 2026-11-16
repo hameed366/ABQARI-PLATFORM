@@ -136,7 +136,7 @@ class _PracticePageState extends State<PracticePage> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                if (!_answered) {
+                if (!_answered)
                   FilledButton(
                       key: PracticeKeys.check,
                       onPressed: _check,
@@ -163,7 +163,6 @@ class _PracticePageState extends State<PracticePage> {
               ],
             ),
     );
-                }
   }
 }
 
@@ -234,7 +233,7 @@ class _Feedback extends StatelessWidget {
             ],
             if (question.result.steps.isNotEmpty) ...[
               const SizedBox(height: 8),
-              if (!showSolution) {
+              if (!showSolution)
                 Align(
                   alignment: AlignmentDirectional.centerStart,
                   child: TextButton(
@@ -253,6 +252,5 @@ class _Feedback extends StatelessWidget {
         ),
       ),
     );
-              }
   }
 }
