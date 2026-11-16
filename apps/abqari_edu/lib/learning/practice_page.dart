@@ -20,7 +20,8 @@ abstract final class PracticeKeys {
 /// marked exactly. Correct and incorrect answers update mastery; unreadable
 /// ones do not.
 class PracticePage extends StatefulWidget {
-  const PracticePage({super.key, required this.skill, required this.progress, this.firstSeed});
+  const PracticePage(
+      {super.key, required this.skill, required this.progress, this.firstSeed});
 
   final Skill skill;
   final ProgressController progress;
@@ -65,7 +66,8 @@ class _PracticePageState extends State<PracticePage> {
     if (question == null || _answered) return;
     final marking = mark(question, _answer.text);
     setState(() => _marking = marking);
-    if (marking.counts) await widget.progress.record(widget.skill.id, marking.isCorrect);
+    if (marking.counts)
+      await widget.progress.record(widget.skill.id, marking.isCorrect);
   }
 
   void _next() {
@@ -88,7 +90,10 @@ class _PracticePageState extends State<PracticePage> {
     return Scaffold(
       appBar: AppBar(title: Text(widget.skill.title.of(language))),
       body: question == null
-          ? Center(child: Padding(padding: const EdgeInsets.all(24), child: Text(strings.questionUnavailable)))
+          ? Center(
+              child: Padding(
+                  padding: const EdgeInsets.all(24),
+                  child: Text(strings.questionUnavailable)))
           : ListView(
               padding: const EdgeInsets.all(16),
               children: [
@@ -99,9 +104,11 @@ class _PracticePageState extends State<PracticePage> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Text('${strings.mastery(record.masteryPercent)} · ${levelName(strings, record.level)}'),
+                        Text(
+                            '${strings.mastery(record.masteryPercent)} · ${levelName(strings, record.level)}'),
                         const SizedBox(height: 6),
-                        LinearProgressIndicator(value: record.masteryPercent / 100),
+                        LinearProgressIndicator(
+                            value: record.masteryPercent / 100),
                       ],
                     );
                   },
@@ -110,7 +117,8 @@ class _PracticePageState extends State<PracticePage> {
                 Section(
                   title: widget.skill.instruction.of(language),
                   child: scrollingMath(
-                    MathView.statement(question.result.understood!, notation: notation, fontSize: 28),
+                    MathView.statement(question.result.understood!,
+                        notation: notation, fontSize: 28),
                   ),
                 ),
                 TextField(
@@ -121,13 +129,17 @@ class _PracticePageState extends State<PracticePage> {
                   onSubmitted: (_) => _check(),
                   decoration: InputDecoration(
                     labelText: strings.answerLabel,
-                    hintText: widget.skill.answerHint?.of(language) ?? strings.answerHint,
+                    hintText: widget.skill.answerHint?.of(language) ??
+                        strings.answerHint,
                     border: const OutlineInputBorder(),
                   ),
                 ),
                 const SizedBox(height: 12),
                 if (!_answered)
-                  FilledButton(key: PracticeKeys.check, onPressed: _check, child: Text(strings.checkButton))
+                  FilledButton(
+                      key: PracticeKeys.check,
+                      onPressed: _check,
+                      child: Text(strings.checkButton))
                 else
                   FilledButton.icon(
                     key: PracticeKeys.next,
@@ -192,19 +204,27 @@ class _Feedback extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(ok ? Icons.check_circle_outline : Icons.highlight_off, color: foreground),
+                Icon(ok ? Icons.check_circle_outline : Icons.highlight_off,
+                    color: foreground),
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    ok ? strings.correct : (markingMessages[code]?.of(language) ?? strings.incorrect),
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(color: foreground),
+                    ok
+                        ? strings.correct
+                        : (markingMessages[code]?.of(language) ??
+                            strings.incorrect),
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium
+                        ?.copyWith(color: foreground),
                   ),
                 ),
               ],
             ),
             if (!ok) ...[
               const SizedBox(height: 10),
-              Text(strings.correctAnswerIs, style: TextStyle(color: foreground)),
+              Text(strings.correctAnswerIs,
+                  style: TextStyle(color: foreground)),
               DefaultTextStyle.merge(
                 style: TextStyle(color: foreground),
                 child: AnswerView(result: question.result, notation: notation),
@@ -222,7 +242,10 @@ class _Feedback extends StatelessWidget {
                   ),
                 )
               else
-                StepList(steps: question.result.steps, notation: notation, languageCode: language),
+                StepList(
+                    steps: question.result.steps,
+                    notation: notation,
+                    languageCode: language),
             ],
           ],
         ),

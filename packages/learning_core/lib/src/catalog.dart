@@ -5,8 +5,8 @@ import 'model.dart';
 import 'practice.dart';
 
 const Bilingual _solve = Bilingual('حل المعادلة', 'Solve the equation');
-const Bilingual _calculate =
-    Bilingual('احسب، واكتب الناتج في أبسط صورة', 'Calculate; give the answer in simplest form');
+const Bilingual _calculate = Bilingual('احسب، واكتب الناتج في أبسط صورة',
+    'Calculate; give the answer in simplest form');
 const Bilingual _fractionHint =
     Bilingual('اكتب الكسر هكذا: ٣/٤', 'Type a fraction like this: 3/4');
 const Bilingual _solutionsHint = Bilingual(
@@ -239,7 +239,8 @@ String _expandBinomials(Random r) {
   return 'expand (x${signed(a)})(x${signed(b)})';
 }
 
-(int, int) _roots(Random r) => (pick(r, -9, 9, except: {0}), pick(r, -9, 9, except: {0}));
+(int, int) _roots(Random r) =>
+    (pick(r, -9, 9, except: {0}), pick(r, -9, 9, except: {0}));
 
 String _factorTrinomial(Random r) {
   final (m, n) = _roots(r);
@@ -253,7 +254,8 @@ String _solveQuadratic(Random r) {
 
 const LearningPath quadratics = LearningPath(
   id: 'quadratics',
-  title: Bilingual('العبارات والمعادلات التربيعية', 'Quadratic expressions and equations'),
+  title: Bilingual(
+      'العبارات والمعادلات التربيعية', 'Quadratic expressions and equations'),
   description: Bilingual(
     'فك الأقواس، والتحليل إلى عوامل، وحل المعادلة التربيعية.',
     'Expanding brackets, factorising, and solving quadratic equations.',
@@ -282,7 +284,8 @@ const LearningPath quadratics = LearningPath(
       form: ExpectedForm.factored,
       maker: _factorTrinomial,
       prerequisites: ['expand-binomials'],
-      answerHint: Bilingual('مثال: (س + ٢)(س + ٣)', 'For example: (x + 2)(x + 3)'),
+      answerHint:
+          Bilingual('مثال: (س + ٢)(س + ٣)', 'For example: (x + 2)(x + 3)'),
       lesson: [
         Explanation(Bilingual(
           'لتحليل س٢ + ب س + جـ ابحث عن عددين حاصل ضربهما جـ ومجموعهما ب.',

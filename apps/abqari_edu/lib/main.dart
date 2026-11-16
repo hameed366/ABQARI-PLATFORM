@@ -121,7 +121,8 @@ class EduHomePage extends StatelessWidget {
                     children: [
                       Text(
                         strings.headline,
-                        style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+                        style: textTheme.headlineSmall
+                            ?.copyWith(fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(height: 6),
                       Text(strings.tagline, style: textTheme.bodyMedium),
@@ -142,7 +143,8 @@ class EduHomePage extends StatelessWidget {
                     '${strings.pathProgress(progressController.progress.pathPercent(path))}',
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute<void>(
-                    builder: (_) => PathPage(path: path, progress: progressController),
+                    builder: (_) =>
+                        PathPage(path: path, progress: progressController),
                   ),
                 ),
               ),

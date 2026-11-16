@@ -24,7 +24,11 @@ IconData levelIcon(MasteryLevel level) => switch (level) {
 
 /// The engine's solution steps, numbered in the interface digits.
 class StepList extends StatelessWidget {
-  const StepList({super.key, required this.steps, required this.notation, required this.languageCode});
+  const StepList(
+      {super.key,
+      required this.steps,
+      required this.notation,
+      required this.languageCode});
 
   final List<SolutionStep> steps;
   final Notation notation;
@@ -46,7 +50,8 @@ class StepList extends StatelessWidget {
                   radius: 12,
                   backgroundColor: scheme.primary,
                   foregroundColor: scheme.onPrimary,
-                  child: Text(notation.number('${i + 1}'), style: const TextStyle(fontSize: 12)),
+                  child: Text(notation.number('${i + 1}'),
+                      style: const TextStyle(fontSize: 12)),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -57,9 +62,11 @@ class StepList extends StatelessWidget {
                         spacing: 6,
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
-                          Text(engineMessage(steps[i].messageCode, languageCode)),
+                          Text(engineMessage(
+                              steps[i].messageCode, languageCode)),
                           if (steps[i].operand != null)
-                            MathView.expression(steps[i].operand!, notation: notation, fontSize: 18),
+                            MathView.expression(steps[i].operand!,
+                                notation: notation, fontSize: 18),
                         ],
                       ),
                       for (final line in steps[i].lines)
@@ -98,7 +105,8 @@ class AnswerView extends StatelessWidget {
         ],
       );
     }
-    return scrollingMath(MathView.expression(answer.expression!, notation: notation, fontSize: 24));
+    return scrollingMath(MathView.expression(answer.expression!,
+        notation: notation, fontSize: 24));
   }
 }
 
@@ -120,7 +128,11 @@ class Section extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(title, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: scheme.primary)),
+            Text(title,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: scheme.primary)),
             const SizedBox(height: 8),
             child,
           ],
@@ -132,7 +144,11 @@ class Section extends StatelessWidget {
 
 /// The problem with its instruction above it.
 class ProblemView extends StatelessWidget {
-  const ProblemView({super.key, required this.result, required this.instruction, required this.notation});
+  const ProblemView(
+      {super.key,
+      required this.result,
+      required this.instruction,
+      required this.notation});
 
   final SolveResult result;
   final String instruction;
@@ -145,7 +161,8 @@ class ProblemView extends StatelessWidget {
       children: [
         Text(instruction, style: Theme.of(context).textTheme.titleMedium),
         const SizedBox(height: 8),
-        scrollingMath(MathView.statement(result.understood!, notation: notation, fontSize: 26)),
+        scrollingMath(MathView.statement(result.understood!,
+            notation: notation, fontSize: 26)),
       ],
     );
   }

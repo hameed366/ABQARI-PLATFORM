@@ -29,7 +29,8 @@ class SharedPreferencesProgressStore implements ProgressStore {
   final String key;
 
   @override
-  Future<String?> read() async => (await SharedPreferences.getInstance()).getString(key);
+  Future<String?> read() async =>
+      (await SharedPreferences.getInstance()).getString(key);
 
   @override
   Future<void> write(String data) async =>

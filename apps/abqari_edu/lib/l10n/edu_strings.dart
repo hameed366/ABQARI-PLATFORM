@@ -79,7 +79,8 @@ class EduStringsAr extends EduStrings {
   @override
   String get headline => 'تعلّم الرياضيات بطريقتك';
   @override
-  String get tagline => 'مسارات عامة مبنية على الموضوع والمهارة ومستوى الإتقان.';
+  String get tagline =>
+      'مسارات عامة مبنية على الموضوع والمهارة ومستوى الإتقان.';
   @override
   String get pathsTitle => 'مسارات التعلّم';
   @override
@@ -122,7 +123,8 @@ class EduStringsAr extends EduStrings {
   String pathProgress(int percent) =>
       AbqariDigits.toArabicIndic('الإتقان في المسار: ٪$percent');
   @override
-  String mastery(int percent) => AbqariDigits.toArabicIndic('الإتقان: ٪$percent');
+  String mastery(int percent) =>
+      AbqariDigits.toArabicIndic('الإتقان: ٪$percent');
 }
 
 class EduStringsEn extends EduStrings {
@@ -133,7 +135,8 @@ class EduStringsEn extends EduStrings {
   @override
   String get headline => 'Learn mathematics your way';
   @override
-  String get tagline => 'General learning paths built on topic, skill, and mastery level.';
+  String get tagline =>
+      'General learning paths built on topic, skill, and mastery level.';
   @override
   String get pathsTitle => 'Learning paths';
   @override
@@ -171,7 +174,8 @@ class EduStringsEn extends EduStrings {
   @override
   String get showSolution => 'How to solve it';
   @override
-  String get questionUnavailable => 'A question for this skill could not be prepared right now.';
+  String get questionUnavailable =>
+      'A question for this skill could not be prepared right now.';
   @override
   String pathProgress(int percent) => 'Path mastery: $percent%';
   @override

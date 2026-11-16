@@ -53,18 +53,23 @@ Marking mark(Question question, String answer) {
       for (final part in text.split(_separators)) {
         if (part.trim().isEmpty) continue;
         final value = _constant(part, question.result.variable);
-        if (value == null) return const Marking(Verdict.unreadable, 'answer_unreadable');
+        if (value == null)
+          return const Marking(Verdict.unreadable, 'answer_unreadable');
         if (!values.contains(value)) values.add(value);
       }
-      if (values.isEmpty) return const Marking(Verdict.unreadable, 'answer_unreadable');
+      if (values.isEmpty)
+        return const Marking(Verdict.unreadable, 'answer_unreadable');
       final expected = solved.roots;
-      final same = values.length == expected.length && expected.every(values.contains);
+      final same =
+          values.length == expected.length && expected.every(values.contains);
       return Marking(same ? Verdict.correct : Verdict.incorrect);
 
     case ExpectedForm.value:
       final value = _constant(text, null);
-      if (value == null) return const Marking(Verdict.unreadable, 'answer_unreadable');
-      return Marking(value == solved.exact ? Verdict.correct : Verdict.incorrect);
+      if (value == null)
+        return const Marking(Verdict.unreadable, 'answer_unreadable');
+      return Marking(
+          value == solved.exact ? Verdict.correct : Verdict.incorrect);
 
     case ExpectedForm.expanded:
     case ExpectedForm.factored:
@@ -83,7 +88,8 @@ Marking mark(Question question, String answer) {
         return const Marking(Verdict.incorrect);
       }
       final names = variablesOf(tree);
-      if (names.any((name) => name != variable)) return const Marking(Verdict.incorrect);
+      if (names.any((name) => name != variable))
+        return const Marking(Verdict.incorrect);
       final mine = Poly.fromNode(tree, variable);
       final theirs = Poly.fromNode(solved.expression!, variable);
       if (mine == null || theirs == null || mine != theirs) {
@@ -106,7 +112,9 @@ Surd? _constant(String part, String? variable) {
     Node tree = statement.lhs;
     if (statement.relation != null) {
       final lhs = statement.lhs;
-      if (statement.relation != '=' || lhs is! Var || (variable != null && lhs.name != variable)) {
+      if (statement.relation != '=' ||
+          lhs is! Var ||
+          (variable != null && lhs.name != variable)) {
         return null;
       }
       tree = statement.rhs!;
@@ -124,7 +132,8 @@ Surd? _constant(String part, String? variable) {
 
 /// No bracket containing the variable is multiplied, divided or raised.
 bool isExpanded(Node node) => switch (node) {
-      Add(:final left, :final right) || Sub(:final left, :final right) =>
+      Add(:final left, :final right) ||
+      Sub(:final left, :final right) =>
         isExpanded(left) && isExpanded(right),
       Neg(:final operand) => isExpanded(operand),
       Mul(:final left, :final right) ||
@@ -156,7 +165,9 @@ bool isFactored(Node node) {
         collect(right);
       case Pow(:final left, :final right) when variablesOf(left).isNotEmpty:
         final exponent = exactRational(right);
-        count += exponent != null && exponent.isInteger ? exponent.numerator.toInt() : 1;
+        count += exponent != null && exponent.isInteger
+            ? exponent.numerator.toInt()
+            : 1;
       case Neg(:final operand):
         collect(operand);
       default:

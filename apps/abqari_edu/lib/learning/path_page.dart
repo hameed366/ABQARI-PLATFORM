@@ -45,7 +45,8 @@ class PathPage extends StatelessWidget {
                     child: ListTile(
                       key: ValueKey('skill-${skill.id}'),
                       enabled: open,
-                      leading: Icon(open ? levelIcon(record.level) : Icons.lock_outline,
+                      leading: Icon(
+                          open ? levelIcon(record.level) : Icons.lock_outline,
                           color: open ? scheme.primary : null),
                       title: Text(skill.title.of(language)),
                       subtitle: Text(open
@@ -53,10 +54,14 @@ class PathPage extends StatelessWidget {
                               ? '${strings.recommended} · ${levelName(strings, record.level)}'
                               : levelName(strings, record.level))
                           : strings.lockedHint),
-                      trailing: open ? Icon(Icons.arrow_forward, color: scheme.primary) : null,
+                      trailing: open
+                          ? Icon(Icons.arrow_forward, color: scheme.primary)
+                          : null,
                       onTap: open
-                          ? () => Navigator.of(context).push(MaterialPageRoute<void>(
-                                builder: (_) => SkillPage(skill: skill, progress: progress),
+                          ? () => Navigator.of(context)
+                                  .push(MaterialPageRoute<void>(
+                                builder: (_) =>
+                                    SkillPage(skill: skill, progress: progress),
                               ))
                           : null,
                     ),

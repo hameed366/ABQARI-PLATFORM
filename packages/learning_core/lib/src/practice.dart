@@ -48,7 +48,8 @@ Question makeQuestion(Skill skill, int seed) {
     final result = solve(problem);
     if (result.status == SolveStatus.solved &&
         result.verification?.status == VerificationStatus.verified) {
-      return Question(skill: skill, seed: seed, problem: problem, result: result);
+      return Question(
+          skill: skill, seed: seed, problem: problem, result: result);
     }
   }
   throw QuestionUnavailable(skill.id);

@@ -14,7 +14,8 @@ abstract final class SkillKeys {
 
 /// A short lesson: explanations, then examples solved live by the engine.
 class SkillPage extends StatelessWidget {
-  const SkillPage({super.key, required this.skill, required this.progress, this.firstSeed});
+  const SkillPage(
+      {super.key, required this.skill, required this.progress, this.firstSeed});
 
   final Skill skill;
   final ProgressController progress;
@@ -49,17 +50,25 @@ class SkillPage extends StatelessWidget {
           for (final example in skill.lesson.whereType<WorkedExample>())
             Builder(builder: (context) {
               final result = solve(example.problem);
-              if (result.status != SolveStatus.solved) return const SizedBox.shrink();
+              if (result.status != SolveStatus.solved)
+                return const SizedBox.shrink();
               return Section(
                 title: strings.workedExampleTitle,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    ProblemView(result: result, instruction: skill.instruction.of(language), notation: notation),
+                    ProblemView(
+                        result: result,
+                        instruction: skill.instruction.of(language),
+                        notation: notation),
                     if (result.steps.isNotEmpty)
-                      StepList(steps: result.steps, notation: notation, languageCode: language),
+                      StepList(
+                          steps: result.steps,
+                          notation: notation,
+                          languageCode: language),
                     const SizedBox(height: 8),
-                    Text(strings.correctAnswerIs, style: Theme.of(context).textTheme.labelLarge),
+                    Text(strings.correctAnswerIs,
+                        style: Theme.of(context).textTheme.labelLarge),
                     AnswerView(result: result, notation: notation),
                   ],
                 ),
@@ -69,7 +78,8 @@ class SkillPage extends StatelessWidget {
           FilledButton.icon(
             key: SkillKeys.practice,
             onPressed: () => Navigator.of(context).push(MaterialPageRoute<void>(
-              builder: (_) => PracticePage(skill: skill, progress: progress, firstSeed: firstSeed),
+              builder: (_) => PracticePage(
+                  skill: skill, progress: progress, firstSeed: firstSeed),
             )),
             icon: const Icon(Icons.edit_note),
             label: Text(strings.practiceButton),
