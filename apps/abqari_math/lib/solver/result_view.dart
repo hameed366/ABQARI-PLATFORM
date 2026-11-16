@@ -144,7 +144,9 @@ class ResultView extends StatelessWidget {
   String? _rootApproximation(Answer answer, int index) {
     if (index < answer.roots.length) {
       final root = answer.roots[index];
-      return root.isRational ? null : approximateText(root.toDouble(), notation);
+      return root.isRational
+          ? null
+          : approximateText(root.toDouble(), notation);
     }
     if (index < answer.rootApproximations.length &&
         _hasIrrationalPart(answer.rootNodes[index])) {
@@ -195,7 +197,8 @@ class ResultView extends StatelessWidget {
                             fontSize: 26,
                           )),
                         ),
-                        if (_rootApproximation(answer, i) case final approx?) ...[
+                        if (_rootApproximation(answer, i)
+                            case final approx?) ...[
                           const SizedBox(width: 12),
                           Text('≈ $approx'),
                         ],

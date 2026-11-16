@@ -48,7 +48,8 @@ SolveResult solveResultFromJson(Map<String, dynamic> json) {
     task: task,
     variable: json['variable'] as String?,
     answer: _answer(task, answerJson),
-    verification: _verification((json['verification'] as Map).cast<String, dynamic>()),
+    verification:
+        _verification((json['verification'] as Map).cast<String, dynamic>()),
     notes: [
       for (final note in (json['notes'] as List? ?? const []))
         (note as Map)['code'] as String,
@@ -92,7 +93,8 @@ Answer _answer(String? task, Map<String, dynamic> answer) {
           (s as Map).cast<String, dynamic>(),
       ];
       final set = _solutionSets[answer['kind']];
-      if (set == null) throw FormatException('unknown solution set ${answer['kind']}');
+      if (set == null)
+        throw FormatException('unknown solution set ${answer['kind']}');
       return Answer(
         kind: AnswerKind.solutions,
         solutionSet: set,

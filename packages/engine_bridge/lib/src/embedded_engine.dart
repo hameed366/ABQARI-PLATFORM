@@ -29,7 +29,8 @@ typedef PythonLauncher = Future<void> Function(Map<String, String> environment);
 
 /// Runs `main.py` from the Python app packaged into this build.
 Future<void> launchEmbeddedPython(Map<String, String> environment) async {
-  await SeriousPython.run(appFileName: 'main.py', environmentVariables: environment);
+  await SeriousPython.run(
+      appFileName: 'main.py', environmentVariables: environment);
 }
 
 const String tokenHeader = 'X-Abqari-Token';
@@ -48,7 +49,8 @@ class EmbeddedPythonEngine implements FullEngine {
   final PythonLauncher _launcher;
   final Duration startTimeout;
   final Duration solveTimeout;
-  final HttpClient _client = HttpClient()..connectionTimeout = const Duration(seconds: 5);
+  final HttpClient _client = HttpClient()
+    ..connectionTimeout = const Duration(seconds: 5);
 
   Future<_Endpoint>? _starting;
 
@@ -70,9 +72,11 @@ class EmbeddedPythonEngine implements FullEngine {
     await probe.close();
     final random = Random.secure();
     final token = [
-      for (var i = 0; i < 32; i++) random.nextInt(256).toRadixString(16).padLeft(2, '0'),
+      for (var i = 0; i < 32; i++)
+        random.nextInt(256).toRadixString(16).padLeft(2, '0'),
     ].join();
-    final endpoint = _Endpoint(Uri(scheme: 'http', host: '127.0.0.1', port: port), token);
+    final endpoint =
+        _Endpoint(Uri(scheme: 'http', host: '127.0.0.1', port: port), token);
 
     try {
       await _launcher({'ABQARI_PORT': '$port', 'ABQARI_TOKEN': token});
@@ -99,7 +103,8 @@ class EmbeddedPythonEngine implements FullEngine {
     String path, [
     Map<String, Object?>? body,
   ]) async {
-    final request = await _client.openUrl(method, endpoint.base.replace(path: path));
+    final request =
+        await _client.openUrl(method, endpoint.base.replace(path: path));
     request.headers.set(tokenHeader, endpoint.token);
     if (body != null) {
       request.headers.contentType = ContentType.json;
@@ -115,8 +120,9 @@ class EmbeddedPythonEngine implements FullEngine {
   Future<SolveResult> solve(String text) async {
     final endpoint = await _endpoint();
     try {
-      final (status, body) = await _request(endpoint, 'POST', '/solve', {'text': text})
-          .timeout(solveTimeout);
+      final (status, body) =
+          await _request(endpoint, 'POST', '/solve', {'text': text})
+              .timeout(solveTimeout);
       if (status != 200) throw FullEngineUnavailable('http_$status');
       return solveResultFromJson(body);
     } on FullEngineUnavailable {

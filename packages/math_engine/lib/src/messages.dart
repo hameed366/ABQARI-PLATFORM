@@ -113,7 +113,8 @@ const Map<String, Map<String, String>> engineMessages = {
   // notes on answers
   'approximate_roots': {
     'ar': 'لا توجد صيغة مضبوطة مبسطة لهذه الحلول؛ القيم المعروضة تقريبية.',
-    'en': 'These solutions have no simple exact form; the values shown are approximations.',
+    'en':
+        'These solutions have no simple exact form; the values shown are approximations.',
   },
   'log_is_base_ten': {
     'ar': 'الدالة لو هنا للأساس عشرة، ولط للأساس الطبيعي.',

@@ -125,8 +125,10 @@ void main() {
   });
 
   group('the full engine', () {
-    testWidgets('is never asked what the device core can answer', (tester) async {
-      final engine = FakeFullEngine((_) async => throw StateError('must not be called'));
+    testWidgets('is never asked what the device core can answer',
+        (tester) async {
+      final engine =
+          FakeFullEngine((_) async => throw StateError('must not be called'));
       await openSolver(tester, fullEngine: engine);
       await solveTyped(tester, '٢س + ٣ = ٧');
 
@@ -154,16 +156,20 @@ void main() {
       expect(mathShowing('س = ٠'), findsOneWidget);
       expect(mathShowing('س = π'), findsOneWidget);
       expect(find.text(_ar.solvedByFullEngine), findsOneWidget);
-      expect(find.text(engineMessage('verification_partial', 'ar')), findsOneWidget);
+      expect(find.text(engineMessage('verification_partial', 'ar')),
+          findsOneWidget);
     });
 
-    testWidgets('when it cannot run, the core\'s honest answer stays', (tester) async {
-      final engine = FakeFullEngine((_) async => throw const FullEngineUnavailable('start_timeout'));
+    testWidgets('when it cannot run, the core\'s honest answer stays',
+        (tester) async {
+      final engine = FakeFullEngine(
+          (_) async => throw const FullEngineUnavailable('start_timeout'));
       await openSolver(tester, fullEngine: engine);
       await solveTyped(tester, 'جا(س) = ٠');
 
       expect(find.text(_ar.fullEngineUnavailable), findsOneWidget);
-      expect(find.text(engineMessage('needs_full_engine', 'ar')), findsOneWidget);
+      expect(
+          find.text(engineMessage('needs_full_engine', 'ar')), findsOneWidget);
       expect(find.text(_ar.solvedByFullEngine), findsNothing);
     });
 
@@ -207,8 +213,15 @@ const Map<String, dynamic> sineReply = {
   'answer': {
     'kind': 'finite',
     'solutions': [
-      {'plain': '0', 'tree': ['num', '0']},
-      {'plain': 'pi', 'approx': '3.14159265359', 'tree': ['const', 'pi']},
+      {
+        'plain': '0',
+        'tree': ['num', '0']
+      },
+      {
+        'plain': 'pi',
+        'approx': '3.14159265359',
+        'tree': ['const', 'pi']
+      },
     ],
   },
   'notes': [],

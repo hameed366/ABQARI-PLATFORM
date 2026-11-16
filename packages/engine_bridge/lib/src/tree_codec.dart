@@ -1,6 +1,15 @@
 import 'package:abqari_engine/abqari_engine.dart';
 
-const Set<String> _functions = {'sqrt', 'sin', 'cos', 'tan', 'log', 'ln', 'exp', 'abs'};
+const Set<String> _functions = {
+  'sqrt',
+  'sin',
+  'cos',
+  'tan',
+  'log',
+  'ln',
+  'exp',
+  'abs'
+};
 final RegExp _decimal = RegExp(r'^\d+(\.\d+)?$');
 const int _maxDepth = 200;
 
@@ -34,13 +43,16 @@ Node _node(Object? json, int depth) {
       return Num(value);
     case 'var':
       final name = text(1);
-      if (name.length != 1 || name.compareTo('a') < 0 || name.compareTo('z') > 0) {
+      if (name.length != 1 ||
+          name.compareTo('a') < 0 ||
+          name.compareTo('z') > 0) {
         throw FormatException('bad variable $name');
       }
       return Var(name);
     case 'const':
       final name = text(1);
-      if (name != 'pi' && name != 'e') throw FormatException('bad constant $name');
+      if (name != 'pi' && name != 'e')
+        throw FormatException('bad constant $name');
       return Constant(name);
     case 'neg':
       return Neg(child(1));
@@ -56,7 +68,8 @@ Node _node(Object? json, int depth) {
       return Pow(child(1), child(2));
     case 'call':
       final name = text(1);
-      if (!_functions.contains(name)) throw FormatException('bad function $name');
+      if (!_functions.contains(name))
+        throw FormatException('bad function $name');
       return Call(name, child(2));
     default:
       throw FormatException('unknown node kind $kind');

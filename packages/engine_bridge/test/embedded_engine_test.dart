@@ -31,7 +31,9 @@ class FakeService {
         final body = jsonDecode(await utf8.decoder.bind(request).join()) as Map;
         await Future<void>.delayed(solveDelay);
         response.statusCode = solveStatus;
-        response.write(solveBody.isNotEmpty ? solveBody : _answerFor(body['text'] as String));
+        response.write(solveBody.isNotEmpty
+            ? solveBody
+            : _answerFor(body['text'] as String));
       } else {
         response.statusCode = 404;
       }
@@ -46,7 +48,11 @@ class FakeService {
         'answer': {
           'plain': '1/2',
           'approx': '0.5',
-          'tree': ['div', ['num', '1'], ['num', '2']],
+          'tree': [
+            'div',
+            ['num', '1'],
+            ['num', '2']
+          ],
         },
         'notes': [],
         'verification': {
@@ -87,7 +93,8 @@ void main() {
     await b.close();
   });
 
-  test('a launch that never answers becomes unavailable, then can retry', () async {
+  test('a launch that never answers becomes unavailable, then can retry',
+      () async {
     var attempts = 0;
     final engine = EmbeddedPythonEngine(
       launcher: (_) async => attempts++,
@@ -95,42 +102,55 @@ void main() {
     );
     await expectLater(
       engine.solve('1'),
-      throwsA(isA<FullEngineUnavailable>().having((e) => e.reason, 'reason', 'start_timeout')),
+      throwsA(isA<FullEngineUnavailable>()
+          .having((e) => e.reason, 'reason', 'start_timeout')),
     );
     await expectLater(engine.solve('1'), throwsA(isA<FullEngineUnavailable>()));
     expect(attempts, 2);
   });
 
   test('a launcher that throws is reported as launch_failed', () async {
-    final engine = EmbeddedPythonEngine(launcher: (_) async => throw StateError('no python'));
+    final engine = EmbeddedPythonEngine(
+        launcher: (_) async => throw StateError('no python'));
     await expectLater(
       engine.solve('1'),
-      throwsA(isA<FullEngineUnavailable>().having((e) => e.reason, 'reason', 'launch_failed')),
+      throwsA(isA<FullEngineUnavailable>()
+          .having((e) => e.reason, 'reason', 'launch_failed')),
     );
   });
 
-  test('server errors, slow answers and malformed answers are not shown', () async {
+  test('server errors, slow answers and malformed answers are not shown',
+      () async {
     final engine = EmbeddedPythonEngine(
       launcher: service.launch,
       solveTimeout: const Duration(milliseconds: 500),
     );
     service.solveStatus = 500;
     service.solveBody = '{"error":"internal_error"}';
-    await expectLater(engine.solve('1'),
-        throwsA(isA<FullEngineUnavailable>().having((e) => e.reason, 'reason', 'http_500')));
+    await expectLater(
+        engine.solve('1'),
+        throwsA(isA<FullEngineUnavailable>()
+            .having((e) => e.reason, 'reason', 'http_500')));
 
     service.solveStatus = 200;
-    service.solveBody = '{"status":"solved","task":"evaluate","answer":{"tree":["num","oops"]}}';
-    await expectLater(engine.solve('1'),
-        throwsA(isA<FullEngineUnavailable>().having((e) => e.reason, 'reason', 'malformed_answer')));
+    service.solveBody =
+        '{"status":"solved","task":"evaluate","answer":{"tree":["num","oops"]}}';
+    await expectLater(
+        engine.solve('1'),
+        throwsA(isA<FullEngineUnavailable>()
+            .having((e) => e.reason, 'reason', 'malformed_answer')));
 
     service.solveBody = '[1, 2, 3]';
-    await expectLater(engine.solve('1'),
-        throwsA(isA<FullEngineUnavailable>().having((e) => e.reason, 'reason', 'malformed_answer')));
+    await expectLater(
+        engine.solve('1'),
+        throwsA(isA<FullEngineUnavailable>()
+            .having((e) => e.reason, 'reason', 'malformed_answer')));
 
     service.solveBody = '';
     service.solveDelay = const Duration(seconds: 2);
-    await expectLater(engine.solve('1'),
-        throwsA(isA<FullEngineUnavailable>().having((e) => e.reason, 'reason', 'timeout')));
+    await expectLater(
+        engine.solve('1'),
+        throwsA(isA<FullEngineUnavailable>()
+            .having((e) => e.reason, 'reason', 'timeout')));
   });
 }
