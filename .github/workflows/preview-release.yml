@@ -56,9 +56,17 @@ jobs:
         run: ../../tools/package_python_engine.sh Android
       - name: Build release APK (arm64)
         run: |
-          flutter build apk --release --split-per-abi --target-platform android-arm64 \
-            --build-name=$VERSION --build-number=${{ github.run_number }} \
-            --dart-define-from-file=../../config/cloud.public.json
+          # Gradle sometimes fails to fetch plugins (rate limits); try up to 3 times.
+          for attempt in 1 2 3; do
+            if flutter build apk --release --split-per-abi --target-platform android-arm64 \
+                --build-name=$VERSION --build-number=${{ github.run_number }} \
+                --dart-define-from-file=../../config/cloud.public.json; then
+              break
+            fi
+            [ "$attempt" = 3 ] && exit 1
+            echo "::warning::Android build attempt $attempt failed; retrying in 60s"
+            sleep 60
+          done
           mkdir -p ../../dist
           cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk \
              ../../dist/${{ matrix.label }}-$VERSION-android-arm64.apk
