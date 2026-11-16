@@ -7,7 +7,7 @@ import pytest
 
 from conftest import SqlError, migration_files
 
-TABLES = ["learning_progress", "math_domains", "math_topics", "profiles", "skills"]
+TABLES = ["learning_progress", "math_domains", "math_topics", "profiles", "skills", "user_roles"]
 CONTENT_TABLES = ["math_domains", "math_topics", "skills"]
 BAD_SLUGS = ["", "Bad Slug", "UPPER", "trailing-", "-leading", "a--b", "كسور", "a_b"]
 
@@ -26,8 +26,8 @@ def world(db):
     w = {k: _id() for k in ("domain", "topic", "skill", "student")}
     db.sql(
         f"""
-        insert into public.profiles (id, display_name, role)
-          values ('{w["student"]}', 'fixture student', 'student');
+        insert into public.profiles (id, display_name)
+          values ('{w["student"]}', 'fixture student');
         insert into public.math_domains (id, slug, title_ar, title_en)
           values ('{w["domain"]}', '{_slug()}', 'مجال تجريبي', 'Fixture domain');
         insert into public.math_topics (id, domain_id, slug, title_ar, title_en)
@@ -99,50 +99,93 @@ def test_api_roles_cannot_insert(db, role):
         )
 
 
-def test_api_role_cannot_change_a_profile_role(db, world):
-    """Holds today only because no UPDATE policy exists yet (audit risk R1)."""
-    statement = f"""update public.profiles set role = 'admin'
-                    where id = '{world["student"]}' returning id"""
-    assert db.as_role("authenticated", statement) == []
-    assert db.sql(f"select role from public.profiles where id = '{world['student']}'") == "student"
-    # control: the same shape of statement does match the row when RLS is bypassed
+def test_profiles_no_longer_carry_a_role(db):
+    """R1: nothing an owner may later edit holds the role."""
+    cols = db.rows(
+        """select column_name from information_schema.columns
+           where table_schema = 'public' and table_name = 'profiles'"""
+    )
+    assert "role" not in cols
+
+
+@pytest.mark.parametrize("role", ["anon", "authenticated"])
+def test_api_roles_cannot_grant_or_change_roles(db, world, role):
+    update = f"""update public.user_roles set role = 'admin'
+                 where user_id = '{world["student"]}' returning user_id"""
+    assert db.as_role(role, update) == []
+    with pytest.raises(SqlError, match="row-level security"):
+        db.as_role(
+            role,
+            f"""insert into public.user_roles (user_id, role)
+                values ('{world["student"]}', 'admin')
+                on conflict (user_id) do update set role = excluded.role""",
+        )
+    assert db.as_role(role, f"delete from public.user_roles returning user_id") == []
+    assert db.sql(
+        f"select role from public.user_roles where user_id = '{world['student']}'"
+    ) == "student"
+    # control: the same update does change the row when RLS is bypassed
     assert db.rows(
-        f"update public.profiles set role = role where id = '{world['student']}' returning id"
+        f"update public.user_roles set role = role where user_id = '{world['student']}' returning user_id"
     ) == [world["student"]]
 
 
 # ── roles and locales ───────────────────────────────────────────────────────
 
+def test_new_profile_starts_as_student(db):
+    uid = _id()
+    db.sql(f"insert into public.profiles (id, display_name) values ('{uid}', 'x')")
+    assert db.sql(f"select role from public.user_roles where user_id = '{uid}'") == "student"
+
+
 @pytest.mark.parametrize("role", ["student", "teacher", "admin"])
-def test_the_three_roles_are_accepted(db, role):
-    db.sql(f"insert into public.profiles (id, display_name, role) values ('{_id()}', 'x', '{role}')")
+def test_the_three_roles_are_accepted(db, world, role):
+    db.sql(f"update public.user_roles set role = '{role}' where user_id = '{world['student']}'")
+    assert db.sql(
+        f"select role from public.user_roles where user_id = '{world['student']}'"
+    ) == role
 
 
 @pytest.mark.parametrize("role", ["superuser", "Admin", ""])
-def test_unknown_roles_rejected(db, role):
-    with pytest.raises(SqlError, match="profiles_role_check"):
-        db.sql(
-            f"insert into public.profiles (id, display_name, role) values ('{_id()}', 'x', '{role}')"
+def test_unknown_roles_rejected(db, world, role):
+    with pytest.raises(SqlError, match="user_roles_role_check"):
+        db.sql(f"update public.user_roles set role = '{role}' where user_id = '{world['student']}'")
+
+
+def test_one_role_per_user_and_role_dies_with_profile(db, world):
+    with pytest.raises(SqlError, match="duplicate key"):
+        db.sql(f"insert into public.user_roles (user_id, role) values ('{world['student']}', 'teacher')")
+    db.sql(f"delete from public.profiles where id = '{world['student']}'")
+    assert db.sql(
+        f"select count(*) from public.user_roles where user_id = '{world['student']}'"
+    ) == "0"
+
+
+def test_existing_roles_survive_the_move_out_of_profiles(db_at):
+    """Data migration: roles stored under 001/002 are carried into user_roles by 003."""
+    old = db_at(2)
+    ids = {role: _id() for role in ("student", "teacher", "admin")}
+    for role, uid in ids.items():
+        old.sql(
+            f"insert into public.profiles (id, display_name, role) values ('{uid}', 'x', '{role}')"
         )
-
-
-def test_role_is_mandatory(db):
-    with pytest.raises(SqlError, match="null value"):
-        db.sql(f"insert into public.profiles (id, display_name) values ('{_id()}', 'x')")
+    old.migrate(migration_files()[2:])
+    for role, uid in ids.items():
+        assert old.sql(f"select role from public.user_roles where user_id = '{uid}'") == role
 
 
 def test_locale_defaults_to_arabic_and_accepts_english_only_otherwise(db):
     a, b = _id(), _id()
-    db.sql(f"insert into public.profiles (id, display_name, role) values ('{a}', 'x', 'student')")
+    db.sql(f"insert into public.profiles (id, display_name) values ('{a}', 'x')")
     assert db.sql(f"select preferred_locale from public.profiles where id = '{a}'") == "ar"
     db.sql(
-        f"""insert into public.profiles (id, display_name, role, preferred_locale)
-            values ('{b}', 'x', 'student', 'en')"""
+        f"""insert into public.profiles (id, display_name, preferred_locale)
+            values ('{b}', 'x', 'en')"""
     )
     with pytest.raises(SqlError, match="preferred_locale"):
         db.sql(
-            f"""insert into public.profiles (id, display_name, role, preferred_locale)
-                values ('{_id()}', 'x', 'student', 'fr')"""
+            f"""insert into public.profiles (id, display_name, preferred_locale)
+                values ('{_id()}', 'x', 'fr')"""
         )
 
 
@@ -151,7 +194,7 @@ def test_locale_defaults_to_arabic_and_accepts_english_only_otherwise(db):
 def test_blank_display_name_rejected(db):
     with pytest.raises(SqlError, match="profiles_display_name_not_blank"):
         db.sql(
-            f"insert into public.profiles (id, display_name, role) values ('{_id()}', '  ', 'student')"
+            f"insert into public.profiles (id, display_name) values ('{_id()}', '  ')"
         )
 
 
@@ -268,3 +311,30 @@ def test_deleting_profile_removes_its_progress(db, world):
     assert db.sql(
         f"select count(*) from public.learning_progress where student_id = '{world['student']}'"
     ) == "0"
+
+
+# ── archive instead of delete (migration 003, decision R2) ──────────────────
+
+@pytest.mark.parametrize("level,table", [("domain", "math_domains"), ("topic", "math_topics"), ("skill", "skills")])
+def test_content_with_student_progress_cannot_be_deleted(db, world, level, table):
+    _progress(db, world, mastery="80")
+    with pytest.raises(SqlError, match="learning_progress_skill_id_fkey"):
+        db.sql(f"delete from public.{table} where id = '{world[level]}'")
+    assert db.sql(
+        f"select mastery from public.learning_progress where student_id = '{world['student']}'"
+    ) == "80.00"
+
+
+def test_content_without_progress_can_still_be_deleted(db, world):
+    db.sql(f"delete from public.math_domains where id = '{world['domain']}'")
+    assert db.sql(f"select count(*) from public.skills where id = '{world['skill']}'") == "0"
+
+
+@pytest.mark.parametrize("table,key", [("math_domains", "domain"), ("math_topics", "topic"), ("skills", "skill")])
+def test_content_can_be_archived_and_keeps_progress(db, world, table, key):
+    _progress(db, world, mastery="80")
+    assert db.sql(f"select archived_at is null from public.{table} where id = '{world[key]}'") == "t"
+    db.sql(f"update public.{table} set archived_at = now() where id = '{world[key]}'")
+    assert db.sql(
+        f"select count(*) from public.learning_progress where student_id = '{world['student']}'"
+    ) == "1"
