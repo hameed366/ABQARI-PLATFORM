@@ -16,7 +16,16 @@ log="$(mktemp)"
 flutter test integration_test/full_engine_test.dart --reporter expanded 2>&1 | tee "$log"
 status=${PIPESTATUS[0]}
 
+show_device_log() {
+  kill "$logcat_pid" 2>/dev/null || true
+  echo "::group::Device log (crashes, kills, Python, Flutter errors)"
+  grep -E "FATAL|AndroidRuntime|F DEBUG|signal [0-9]|lowmemorykiller|ActivityManager.*(Kill|kill|died|Process)|[Pp]ython|serious|E/flutter|I/flutter|abqari" \
+    build/device-logcat.txt | tail -250 || true
+  echo "::endgroup::"
+}
+
 if grep -q "Some tests failed" "$log" || grep -qE "\[E\]" "$log"; then
+  show_device_log
   echo "::error::A device test failed."
   exit 1
 fi
@@ -26,5 +35,6 @@ if grep -q "All tests passed!" "$log"; then
   fi
   exit 0
 fi
+show_device_log
 echo "::error::The device tests did not report a result (exit $status)."
 exit "${status:-1}"
