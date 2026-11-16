@@ -85,7 +85,8 @@ void main() {
     }
   });
 
-  testWidgets('a saved dark choice opens dark with the brand surface', (tester) async {
+  testWidgets('a saved dark choice opens dark with the brand surface',
+      (tester) async {
     final theme = ThemeModeController(store: InMemoryThemeModeStore('dark'));
     await theme.load();
     await tester.pumpWidget(
@@ -100,7 +101,8 @@ void main() {
     );
   });
 
-  testWidgets('the appearance button switches to light then dark and saves', (tester) async {
+  testWidgets('the appearance button switches to light then dark and saves',
+      (tester) async {
     final store = InMemoryThemeModeStore();
     final theme = ThemeModeController(store: store);
     await tester.pumpWidget(
@@ -134,7 +136,8 @@ void main() {
     expect(find.text(_en.headline), findsOneWidget);
   });
 
-  testWidgets('home shows the logo and uses the edu lead colour', (tester) async {
+  testWidgets('home shows the logo and uses the edu lead colour',
+      (tester) async {
     await tester.pumpWidget(
       _app(
         LocaleController(store: InMemoryLocaleStore()),

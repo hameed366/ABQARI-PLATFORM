@@ -21,7 +21,8 @@ void main() {
 
   test('round-trips mixed text', () {
     const original = 'Area = 3 × 14 cm², ratio 1:2';
-    expect(AbqariDigits.toWestern(AbqariDigits.toArabicIndic(original)), original);
+    expect(
+        AbqariDigits.toWestern(AbqariDigits.toArabicIndic(original)), original);
   });
 
   test('is idempotent', () {

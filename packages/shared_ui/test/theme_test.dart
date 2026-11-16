@@ -37,7 +37,8 @@ void main() {
         };
         for (final entry in pairs.entries) {
           final ratio = _contrast(entry.value.$1, entry.value.$2);
-          expect(ratio, greaterThanOrEqualTo(4.5), reason: '${entry.key} = $ratio');
+          expect(ratio, greaterThanOrEqualTo(4.5),
+              reason: '${entry.key} = $ratio');
         }
       });
     }
@@ -55,8 +56,11 @@ void main() {
   });
 
   test('light themes lead with the brand blue and violet', () {
-    expect(AbqariTheme.light(AbqariProduct.edu).colorScheme.primary, AbqariColors.blue);
-    expect(AbqariTheme.light(AbqariProduct.math).colorScheme.primary, AbqariColors.violet);
-    expect(AbqariTheme.light(AbqariProduct.edu).colorScheme.onSurface, AbqariColors.navy);
+    expect(AbqariTheme.light(AbqariProduct.edu).colorScheme.primary,
+        AbqariColors.blue);
+    expect(AbqariTheme.light(AbqariProduct.math).colorScheme.primary,
+        AbqariColors.violet);
+    expect(AbqariTheme.light(AbqariProduct.edu).colorScheme.onSurface,
+        AbqariColors.navy);
   });
 }

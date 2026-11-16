@@ -11,7 +11,9 @@ Widget _app(ThemeModeController controller, Widget body) {
       themeMode: controller.mode,
       home: Scaffold(
         appBar: AppBar(
-          actions: [ThemeModeButton(controller: controller, tooltip: 'appearance')],
+          actions: [
+            ThemeModeButton(controller: controller, tooltip: 'appearance')
+          ],
         ),
         body: body,
       ),
@@ -23,7 +25,8 @@ Brightness _brightness(WidgetTester tester) =>
     Theme.of(tester.element(find.byType(Scaffold))).brightness;
 
 void main() {
-  testWidgets('appearance button cycles light → dark and updates its icon', (tester) async {
+  testWidgets('appearance button cycles light → dark and updates its icon',
+      (tester) async {
     final controller = ThemeModeController(store: InMemoryThemeModeStore());
     await tester.pumpWidget(_app(controller, const SizedBox()));
     expect(find.byIcon(Icons.brightness_auto), findsOneWidget);
@@ -44,12 +47,14 @@ void main() {
     );
   });
 
-  testWidgets('feature card shows its text and is not a control', (tester) async {
+  testWidgets('feature card shows its text and is not a control',
+      (tester) async {
     final controller = ThemeModeController(store: InMemoryThemeModeStore());
     await tester.pumpWidget(
       _app(
         controller,
-        const FeatureCard(icon: Icons.functions, title: 'Title', subtitle: 'Subtitle'),
+        const FeatureCard(
+            icon: Icons.functions, title: 'Title', subtitle: 'Subtitle'),
       ),
     );
 
@@ -60,10 +65,12 @@ void main() {
     expect(tile.trailing, isNull);
   });
 
-  testWidgets('logo paints at small and large sizes and is labelled', (tester) async {
+  testWidgets('logo paints at small and large sizes and is labelled',
+      (tester) async {
     final controller = ThemeModeController(store: InMemoryThemeModeStore());
     for (final size in [16.0, 56.0, 300.0]) {
-      await tester.pumpWidget(_app(controller, Center(child: AbqariLogo(size: size))));
+      await tester
+          .pumpWidget(_app(controller, Center(child: AbqariLogo(size: size))));
       expect(tester.takeException(), isNull);
       expect(tester.getSize(find.byType(AbqariLogo)), Size(size, size));
     }

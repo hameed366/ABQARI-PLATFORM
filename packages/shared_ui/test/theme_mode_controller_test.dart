@@ -36,7 +36,8 @@ void main() {
   });
 
   test('restores a saved choice and notifies', () async {
-    final controller = ThemeModeController(store: InMemoryThemeModeStore('dark'));
+    final controller =
+        ThemeModeController(store: InMemoryThemeModeStore('dark'));
     var notifications = 0;
     controller.addListener(() => notifications++);
 
@@ -47,12 +48,14 @@ void main() {
   });
 
   test('ignores an unknown saved value', () async {
-    final controller = ThemeModeController(store: InMemoryThemeModeStore('sepia'));
+    final controller =
+        ThemeModeController(store: InMemoryThemeModeStore('sepia'));
     await controller.load();
     expect(controller.mode, ThemeMode.system);
   });
 
-  test('cycle goes system → light → dark → system and saves each step', () async {
+  test('cycle goes system → light → dark → system and saves each step',
+      () async {
     final store = InMemoryThemeModeStore();
     final controller = ThemeModeController(store: store);
 
@@ -91,7 +94,8 @@ void main() {
 
   test('a failing save is reported and the change still holds', () async {
     final controller = ThemeModeController(store: _FailingStore());
-    final reported = await _capturingErrors(() => controller.setMode(ThemeMode.dark));
+    final reported =
+        await _capturingErrors(() => controller.setMode(ThemeMode.dark));
 
     expect(controller.mode, ThemeMode.dark);
     expect(reported, hasLength(1));
