@@ -359,7 +359,7 @@ void main() {
 
   testWidgets('an ended session returns to the sign-in form', (tester) async {
     final cloud = FakeCloud();
-    await openAccount(tester, cloud);
+    await openAccount(tester, cloud, progress: practised());
     await signIn(tester, 'right-password');
     cloud.failNext = CloudErrorKind.signedOut;
     await tester.tap(find.byKey(AccountKeys.sync));
@@ -371,7 +371,7 @@ void main() {
   testWidgets('offline sync keeps the user signed in and explains',
       (tester) async {
     final cloud = FakeCloud();
-    await openAccount(tester, cloud);
+    await openAccount(tester, cloud, progress: practised());
     await signIn(tester, 'right-password');
     cloud.failNext = CloudErrorKind.offline;
     await tester.tap(find.byKey(AccountKeys.sync));

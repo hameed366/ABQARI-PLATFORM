@@ -63,7 +63,9 @@ class _ClassPageState extends State<ClassPage> {
   @override
   void initState() {
     super.initState();
-    _load();
+    // After the first frame: loading notifies listeners, which must not
+    // happen while the page is still being built.
+    Future.microtask(_load);
   }
 
   Future<void> _load() async {

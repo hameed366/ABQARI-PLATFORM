@@ -50,8 +50,11 @@ class _AccountPageState extends State<AccountPage> {
   @override
   void initState() {
     super.initState();
-    _c.clearError();
-    if (_c.status == AccountStatus.signedIn) _c.refreshClasses();
+    // Not during build: both calls notify listeners.
+    Future.microtask(() {
+      _c.clearError();
+      if (_c.status == AccountStatus.signedIn) _c.refreshClasses();
+    });
   }
 
   @override
