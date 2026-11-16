@@ -1,0 +1,31 @@
+# Flutter / Dart
+.dart_tool/
+.packages
+.pub/
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-emu
+.idea/
+.vscode/
+*.iml
+# Secrets / local config
+.env
+.env.*
+!.env.example
+*.keystore
+*.jks
+*.p12
+*.mobileprovision
+# OS
+.DS_Store
+Thumbs.db
+# Python (tests / backend)
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+# Build outputs must never be committed
+*.ipa
+*.apk
+*.aab
