@@ -26,6 +26,10 @@ class FakeService {
         response.write('{"error":"forbidden"}');
       } else if (request.method == 'GET' && request.uri.path == '/health') {
         response.write('{"ready":true}');
+      } else if (request.method == 'POST' && request.contentLength < 0) {
+        // Python's http.server does not read chunked bodies.
+        response.statusCode = 411;
+        response.write('{"error":"length_required"}');
       } else if (request.method == 'POST' && request.uri.path == '/solve') {
         final body = jsonDecode(await utf8.decoder.bind(request).join()) as Map;
         await Future<void>.delayed(solveDelay);

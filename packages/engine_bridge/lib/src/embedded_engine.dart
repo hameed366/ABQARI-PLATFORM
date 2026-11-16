@@ -107,8 +107,11 @@ class EmbeddedPythonEngine implements FullEngine {
         await _client.openUrl(method, endpoint.base.replace(path: path));
     request.headers.set(tokenHeader, endpoint.token);
     if (body != null) {
+      // A fixed length, not chunked: the Python service reads Content-Length.
+      final bytes = utf8.encode(jsonEncode(body));
       request.headers.contentType = ContentType.json;
-      request.add(utf8.encode(jsonEncode(body)));
+      request.contentLength = bytes.length;
+      request.add(bytes);
     }
     final response = await request.close();
     final text = await response.transform(utf8.decoder).join();
