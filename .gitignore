@@ -20,3 +20,12 @@ build/
 # OS
 .DS_Store
 Thumbs.db
+# Python (tests / backend)
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+# Build outputs must never be committed
+*.ipa
+*.apk
+*.aab
