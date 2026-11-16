@@ -298,3 +298,13 @@ def test_every_function_in_the_accounts_migration_pins_its_search_path():
     assert len(functions) == len(bodies) >= 10
     for body in bodies:
         assert "set search_path = ''" in body, body[:60]
+
+
+def test_public_cloud_config_holds_only_public_values():
+    """config/cloud.public.json ships inside the apps: an https project URL and a
+    publishable key, nothing else, and never a secret or service key."""
+    import json
+    cfg = json.loads((REPO_ROOT / "config" / "cloud.public.json").read_text(encoding="utf-8"))
+    assert set(cfg) == {"ABQARI_CLOUD_URL", "ABQARI_CLOUD_ANON_KEY"}
+    assert re.fullmatch(r"https://[a-z0-9]{20}\.supabase\.co", cfg["ABQARI_CLOUD_URL"])
+    assert cfg["ABQARI_CLOUD_ANON_KEY"].startswith("sb_publishable_")

@@ -1,0 +1,21 @@
+# Live, read-only check of the real backend with its public address and key.
+# Runs on main, when the backend config or migrations change, and on request
+# (change .github/cloud-smoke-request on any branch).
+name: cloud-smoke
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'config/cloud.public.json'
+      - 'backend/database/**'
+      - 'tools/cloud_smoke.py'
+      - '.github/cloud-smoke-request'
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python3 tools/cloud_smoke.py

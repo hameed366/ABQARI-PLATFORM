@@ -11,7 +11,7 @@
 4. **لا ترسل** مفتاح `service_role` / `secret` لأحد، ولا تضعه في التطبيق أو المستودع.
 
 ## ٢. تطبيق الهجرات
-في **SQL Editor** شغّل الملفات بالترتيب، كلًا على حدة:
+في **SQL Editor** الصق الملف المجمّع `abqari_supabase_setup.sql` (الهجرات كلها ثم الهيكل، في معاملة واحدة)، أو شغّل الملفات بالترتيب:
 `backend/database/001_initial_schema.sql` ← `002` ← `003` ← `004` ← ثم `backend/database/seed/catalog.sql`.
 
 ## ٣. إعدادات المصادقة
@@ -31,12 +31,11 @@ select public.set_user_role('<user id>', 'teacher');
 (واجهة إدارة الأدوار داخل التطبيق مخطط لها لاحقًا.)
 
 ## ٥. بناء التطبيق مع الخادم
+العنوان والمفتاح العام محفوظان في `config/cloud.public.json`:
 ```
-flutter build apk --release \
-  --dart-define=ABQARI_CLOUD_URL=https://abcd.supabase.co \
-  --dart-define=ABQARI_CLOUD_ANON_KEY=<المفتاح العام>
+flutter build apk --release --dart-define-from-file=../../config/cloud.public.json
 ```
-في CI تُحفظ القيمتان في GitHub Secrets (`ABQARI_CLOUD_URL`، `ABQARI_CLOUD_ANON_KEY`).
+فحص حي للخادم (لا ينشئ شيئًا ولا يغيّر شيئًا): `python3 tools/cloud_smoke.py`، ويعمل تلقائيًا في GitHub (`cloud-smoke`).
 
 ## ملاحظات أمان
 - كل الصلاحيات تُفرض في قاعدة البيانات (RLS والدوال)، لا في التطبيق. اختبارات `tests/db/test_access.py` تثبت ذلك على PostgreSQL.
