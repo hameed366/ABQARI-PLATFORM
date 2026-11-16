@@ -9,6 +9,7 @@ If no server is reachable the tests are SKIPPED, never silently passed.
 """
 from __future__ import annotations
 
+import contextlib
 import os
 import shutil
 import subprocess
@@ -52,6 +53,13 @@ class Database:
         out = self.sql(statement)
         return out.splitlines() if out else []
 
+    def migrate(self, paths) -> None:
+        for path in paths:
+            try:
+                _psql(self.name, path.read_text(encoding="utf-8"), single_transaction=True)
+            except SqlError as exc:
+                raise SqlError(f"migration {path.name} failed to apply:\n{exc}") from None
+
     def as_role(self, role: str, statement: str) -> list[str]:
         """Run inside a rolled-back transaction as an API role (anon/authenticated)."""
         script = (
@@ -64,8 +72,22 @@ class Database:
         return out.splitlines() if out else []
 
 
-@pytest.fixture(scope="session")
-def db():
+@contextlib.contextmanager
+def temp_database(suffix: str, *, upto: int | None = None):
+    """A throwaway database with the shim and the first `upto` migrations applied."""
+    name = f"abqari_test_{os.getpid()}_{suffix}"
+    _psql("postgres", f'drop database if exists "{name}"')
+    _psql("postgres", f'create database "{name}"')
+    try:
+        _psql(name, SHIM.read_text(encoding="utf-8"), single_transaction=True)
+        database = Database(name)
+        database.migrate(migration_files()[:upto])
+        yield database
+    finally:
+        _psql("postgres", f'drop database if exists "{name}" with (force)')
+
+
+def _require_server():
     if shutil.which("psql") is None:
         pytest.skip("psql is not installed")
     try:
@@ -73,16 +95,19 @@ def db():
     except SqlError as exc:
         pytest.skip(f"no reachable PostgreSQL server: {exc}")
 
-    name = f"abqari_test_{os.getpid()}"
-    _psql("postgres", f'drop database if exists "{name}"')
-    _psql("postgres", f'create database "{name}"')
-    try:
-        _psql(name, SHIM.read_text(encoding="utf-8"), single_transaction=True)
-        for path in migration_files():
-            try:
-                _psql(name, path.read_text(encoding="utf-8"), single_transaction=True)
-            except SqlError as exc:
-                raise SqlError(f"migration {path.name} failed to apply:\n{exc}") from None
-        yield Database(name)
-    finally:
-        _psql("postgres", f'drop database if exists "{name}" with (force)')
+
+@pytest.fixture(scope="session")
+def db():
+    """All migrations applied."""
+    _require_server()
+    with temp_database("main") as database:
+        yield database
+
+
+@pytest.fixture()
+def db_at():
+    """Factory: db_at(n) gives a fresh database with only the first n migrations."""
+    _require_server()
+    with contextlib.ExitStack() as stack:
+        counter = iter(range(1000))
+        yield lambda upto: stack.enter_context(temp_database(f"at{next(counter)}", upto=upto))
