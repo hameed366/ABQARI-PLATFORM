@@ -51,6 +51,9 @@ void main() {
   });
 
   testWidgets('the solver screen hands off to the full engine and says so', (tester) async {
+    final started = Stopwatch()..start();
+    // ignore: avoid_print
+    void step(String what) => print('[screen test] ${started.elapsedMilliseconds} ms: $what');
     final locale = LocaleController(store: InMemoryLocaleStore('ar'));
     await tester.pumpWidget(AbqariMathApp(
       localeController: locale,
@@ -58,14 +61,18 @@ void main() {
       fullEngine: engine,
     ));
     await tester.pumpAndSettle();
+    step('app shown');
     await tester.tap(find.byType(ListTile).first);
     await tester.pumpAndSettle();
+    step('solver opened');
 
     // Set the text directly: opening the on-screen keyboard is not what this
     // test is about, and it has made the CI emulator unstable.
     tester.widget<TextField>(find.byKey(SolverKeys.input)).controller!.text = 'جا(π/٦)';
+    step('text set');
     await tester.tap(find.byKey(SolverKeys.solve));
     await tester.pump();
+    step('solve tapped');
     final clock = Stopwatch()..start();
     for (var i = 0; i < 240 && find.byKey(SolverKeys.working).evaluate().isNotEmpty; i++) {
       await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 500)));
