@@ -156,7 +156,7 @@ abstract class EduStrings {
         for (final role in AccountRole.values) roleName(role),
         confirmationSent('a@example.com'),
         synced(DateTime(2026, 1, 1, 9, 5)),
-        joined('السابع أ'),
+        joined('A'),
         joinCodeIs('ABCD2345'),
         studentsCount(12),
         masteredCount(3, 11),
