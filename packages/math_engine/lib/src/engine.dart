@@ -40,6 +40,8 @@ class Answer {
     this.rootNodes = const [],
     this.solutionSet,
     this.constantOfIntegration = false,
+    this.approximation,
+    this.rootApproximations = const [],
   });
 
   final AnswerKind kind;
@@ -58,6 +60,12 @@ class Answer {
 
   /// The expression is an antiderivative; add an arbitrary constant.
   final bool constantOfIntegration;
+
+  /// Decimal value supplied by the full engine when no exact [exact] exists.
+  final double? approximation;
+
+  /// Decimal values of [rootNodes], from the full engine (null where exact).
+  final List<double?> rootApproximations;
 }
 
 class SolveResult {

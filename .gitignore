@@ -31,3 +31,7 @@ __pycache__/
 *.aab
 # Shared packages are libraries: their lockfiles are not committed
 packages/*/pubspec.lock
+
+# Python engine staged into the app at build time
+apps/abqari_math/python/abqari_solver/
+apps/abqari_math/build-python/
