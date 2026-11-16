@@ -17,7 +17,39 @@ abstract class MathStrings {
   String get thirdFeatureTitle;
   String get thirdFeatureSubtitle;
 
-  /// All strings, for completeness checks in tests.
+  // solver screen
+  String get solverTitle;
+  String get inputLabel;
+  String get inputHint;
+  String get solveButton;
+  String get examplesTitle;
+  List<String> get examples;
+  String get understoodTitle;
+  String get answerTitle;
+  String get stepsTitle;
+  String get notesTitle;
+  String get verificationTitle;
+  String checksPassed(int passed, int total);
+  String errorAt(int position);
+
+  /// The solver strings, for completeness checks in tests.
+  List<String> get solverStrings => [
+        solverTitle,
+        inputLabel,
+        inputHint,
+        solveButton,
+        examplesTitle,
+        ...examples,
+        understoodTitle,
+        answerTitle,
+        stepsTitle,
+        notesTitle,
+        verificationTitle,
+        checksPassed(3, 4),
+        errorAt(5),
+      ];
+
+  /// The home-screen strings, for completeness checks in tests.
   List<String> get all => [
         appTitle,
         headline,
@@ -61,6 +93,41 @@ class MathStringsAr extends MathStrings {
   String get thirdFeatureTitle => 'الرياضيات المتقدمة';
   @override
   String get thirdFeatureSubtitle => 'تفاضل وتكامل، إحصاء وجبر خطي';
+
+  @override
+  String get solverTitle => 'حل المسائل';
+  @override
+  String get inputLabel => 'اكتب المسألة';
+  @override
+  String get inputHint => 'مثال: ٢س + ٣ = ٧';
+  @override
+  String get solveButton => 'حل';
+  @override
+  String get examplesTitle => 'أمثلة';
+  @override
+  List<String> get examples => const [
+        '٢س + ٣ = ٧',
+        'س² − ٥س + ٦ = ٠',
+        'حلل س² − ٩',
+        'احسب ١/٢ + ١/٣',
+      ];
+  @override
+  String get understoodTitle => 'فهمتُ المسألة هكذا';
+  @override
+  String get answerTitle => 'الناتج';
+  @override
+  String get stepsTitle => 'خطوات الحل';
+  @override
+  String get notesTitle => 'ملاحظات';
+  @override
+  String get verificationTitle => 'التحقق';
+  @override
+  String checksPassed(int passed, int total) => AbqariDigits.toArabicIndic(
+        'اجتاز $passed من $total فحوص مستقلة',
+      );
+  @override
+  String errorAt(int position) =>
+      AbqariDigits.toArabicIndic('عند الحرف رقم $position');
 }
 
 class MathStringsEn extends MathStrings {
@@ -86,4 +153,37 @@ class MathStringsEn extends MathStrings {
   String get thirdFeatureTitle => 'Advanced mathematics';
   @override
   String get thirdFeatureSubtitle => 'Calculus, statistics, and linear algebra';
+
+  @override
+  String get solverTitle => 'Problem solving';
+  @override
+  String get inputLabel => 'Type the problem';
+  @override
+  String get inputHint => 'Example: 2x + 3 = 7';
+  @override
+  String get solveButton => 'Solve';
+  @override
+  String get examplesTitle => 'Examples';
+  @override
+  List<String> get examples => const [
+        '2x + 3 = 7',
+        'x^2 - 5x + 6 = 0',
+        'factor x^2 - 9',
+        'calculate 1/2 + 1/3',
+      ];
+  @override
+  String get understoodTitle => 'I read the problem as';
+  @override
+  String get answerTitle => 'Result';
+  @override
+  String get stepsTitle => 'Steps';
+  @override
+  String get notesTitle => 'Notes';
+  @override
+  String get verificationTitle => 'Verification';
+  @override
+  String checksPassed(int passed, int total) =>
+      'Passed $passed of $total independent checks';
+  @override
+  String errorAt(int position) => 'At character $position';
 }
