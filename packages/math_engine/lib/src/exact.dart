@@ -59,7 +59,8 @@ Rational? exactRational(Node node, {Map<String, Rational> env = const {}}) {
       if (base.isZero && power < 0) {
         throw const MathDomainError('division_by_zero');
       }
-      final bits = math.max(base.numerator.bitLength, base.denominator.bitLength);
+      final bits =
+          math.max(base.numerator.bitLength, base.denominator.bitLength);
       if (bits * power.abs() > maxBits) {
         throw const MathInputError('number_too_large', detail: 'power');
       }

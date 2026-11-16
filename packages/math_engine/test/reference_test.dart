@@ -14,9 +14,11 @@ final List<Map<String, dynamic>> problems = [
     p as Map<String, dynamic>,
 ];
 
-Node expected(String text) => parse(normalize(text.replaceAll('**', '^')).text).lhs;
+Node expected(String text) =>
+    parse(normalize(text.replaceAll('**', '^')).text).lhs;
 
-bool sameNumber(double? a, double? b) => a != null && b != null && closeDoubles(a, b);
+bool sameNumber(double? a, double? b) =>
+    a != null && b != null && closeDoubles(a, b);
 
 bool samePolynomial(Node a, Node b) {
   final names = {...variablesOf(a), ...variablesOf(b)};
@@ -29,11 +31,13 @@ bool samePolynomial(Node a, Node b) {
 
 /// Null when the device engine (correctly) declined the problem.
 bool? grade(Map<String, dynamic> problem) {
-  final result = solve(problem['input'] as String, task: problem['task'] as String?);
+  final result =
+      solve(problem['input'] as String, task: problem['task'] as String?);
   if (result.verification?.status == VerificationStatus.failed) {
     fail('${problem['id']}: verification failed');
   }
-  if (result.status == SolveStatus.unsupported && result.errorCode == needsFullEngine) {
+  if (result.status == SolveStatus.unsupported &&
+      result.errorCode == needsFullEngine) {
     return null;
   }
   final kind = problem['kind'] as String;
@@ -47,7 +51,8 @@ bool? grade(Map<String, dynamic> problem) {
   if (result.status != SolveStatus.solved) return false;
   final answer = result.answer!;
   final verifiedRequired = problem['verification'] == 'verified';
-  if (verifiedRequired && result.verification!.status != VerificationStatus.verified) {
+  if (verifiedRequired &&
+      result.verification!.status != VerificationStatus.verified) {
     return false;
   }
   switch (kind) {
@@ -55,14 +60,17 @@ bool? grade(Map<String, dynamic> problem) {
       final want = expected(expect_ as String);
       final exactWant = exactRational(want);
       if (exactWant != null &&
-          !(answer.exact!.isRational && answer.exact!.rationalValue == exactWant)) {
+          !(answer.exact!.isRational &&
+              answer.exact!.rationalValue == exactWant)) {
         return false;
       }
       return sameNumber(numericDouble(want), answer.exact!.toDouble());
     case 'truth':
       return answer.truth == expect_;
     case 'solutions':
-      final want = [for (final s in expect_ as List) numericDouble(expected(s as String))];
+      final want = [
+        for (final s in expect_ as List) numericDouble(expected(s as String))
+      ];
       if (want.isEmpty) return answer.solutionSet == SolutionSet.none;
       if (answer.roots.length != want.length) return false;
       for (var i = 0; i < want.length; i++) {
@@ -74,7 +82,8 @@ bool? grade(Map<String, dynamic> problem) {
     case 'equivalent':
       return samePolynomial(answer.expression!, expected(expect_ as String));
     case 'same_form':
-      final same = samePolynomial(answer.expression!, expected(expect_ as String));
+      final same =
+          samePolynomial(answer.expression!, expected(expect_ as String));
       if (problem['input'].toString().contains('factor') ||
           problem['input'].toString().startsWith('حلل')) {
         final e = answer.expression!;
@@ -92,14 +101,18 @@ bool? grade(Map<String, dynamic> problem) {
   fail('unknown kind $kind');
 }
 
-String _statusName(String python) =>
-    {'undefined': 'undefined', 'unsupported': 'unsupported', 'invalid_input': 'invalidInput'}[python]!;
+String _statusName(String python) => {
+      'undefined': 'undefined',
+      'unsupported': 'unsupported',
+      'invalid_input': 'invalidInput'
+    }[python]!;
 
 void main() {
   for (final problem in problems) {
     test('${problem['id']}: ${problem['input']}', () {
       final verdict = grade(problem);
-      expect(verdict, isNot(false), reason: 'wrong answer on the device engine');
+      expect(verdict, isNot(false),
+          reason: 'wrong answer on the device engine');
     });
   }
 
@@ -107,7 +120,8 @@ void main() {
     final answered = problems.where((p) => grade(p) == true).length;
     final declined = problems.where((p) => grade(p) == null).length;
     // Recorded in docs/PHASE6_REPORT.md; raise the floor when coverage grows.
-    expect(answered, greaterThanOrEqualTo(85), reason: '$answered answered, $declined declined');
+    expect(answered, greaterThanOrEqualTo(85),
+        reason: '$answered answered, $declined declined');
     expect(answered + declined, problems.length);
   });
 }

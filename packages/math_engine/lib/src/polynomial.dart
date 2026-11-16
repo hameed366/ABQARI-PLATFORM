@@ -62,7 +62,8 @@ class Poly {
     return Poly(result);
   }
 
-  Poly scale(Rational factor) => Poly([for (final c in coefficients) c * factor]);
+  Poly scale(Rational factor) =>
+      Poly([for (final c in coefficients) c * factor]);
 
   /// Exact value at [x] by Horner's rule.
   Rational evaluate(Rational x) {
@@ -165,7 +166,8 @@ class Poly {
 
   static Node _term(Rational magnitude, int power, String variable) {
     if (power == 0) return rationalNode(magnitude);
-    final Node x = power == 1 ? Var(variable) : Pow(Var(variable), Num('$power'));
+    final Node x =
+        power == 1 ? Var(variable) : Pow(Var(variable), Num('$power'));
     if (magnitude == Rational.one) return x;
     return Mul(rationalNode(magnitude), x);
   }
@@ -238,8 +240,7 @@ int distinctRealRootCount(Poly f) {
   if (f.degree < 1) return 0;
   final sequence = <Poly>[f, f.derivative()];
   while (true) {
-    final (_, remainder) =
-        sequence[sequence.length - 2].divmod(sequence.last);
+    final (_, remainder) = sequence[sequence.length - 2].divmod(sequence.last);
     if (remainder.isZero) break;
     sequence.add(-remainder);
   }
@@ -310,8 +311,7 @@ List<int> _divisors(BigInt value) {
     for (final candidate in candidates) {
       var multiplicity = 0;
       while (remaining.degree >= 1 && remaining.evaluate(candidate).isZero) {
-        remaining =
-            remaining.divmod(Poly([-candidate, Rational.one])).$1;
+        remaining = remaining.divmod(Poly([-candidate, Rational.one])).$1;
         multiplicity++;
       }
       if (multiplicity > 0) found.add((candidate, multiplicity));

@@ -28,10 +28,30 @@ const int maxDepth = 60;
 const int maxAdjacentVariables = 3;
 
 // Longest first.
-const List<String> _names = ['sqrt', 'sin', 'cos', 'tan', 'log', 'exp', 'abs', 'ln', 'pi'];
+const List<String> _names = [
+  'sqrt',
+  'sin',
+  'cos',
+  'tan',
+  'log',
+  'exp',
+  'abs',
+  'ln',
+  'pi'
+];
 final RegExp _number = RegExp(r'\d+(?:\.\d+)?');
 
-enum _Kind { number, variable, constant, function, operator, relation, open, close, end }
+enum _Kind {
+  number,
+  variable,
+  constant,
+  function,
+  operator,
+  relation,
+  open,
+  close,
+  end
+}
 
 class _Token {
   const _Token(this.kind, this.text, this.position);
@@ -94,16 +114,19 @@ List<_Token> _tokenize(String text) {
       }
       final name = _names.where((name) => text.startsWith(name, i)).firstOrNull;
       if (name != null) {
-        tokens.add(_Token(name == 'pi' ? _Kind.constant : _Kind.function, name, i));
+        tokens.add(
+            _Token(name == 'pi' ? _Kind.constant : _Kind.function, name, i));
         i += name.length;
       } else {
-        tokens.add(_Token(char == 'e' ? _Kind.constant : _Kind.variable, char, i));
+        tokens.add(
+            _Token(char == 'e' ? _Kind.constant : _Kind.variable, char, i));
         i++;
       }
       continue;
     }
-    final relation =
-        relationSymbols.where((symbol) => text.startsWith(symbol, i)).firstOrNull;
+    final relation = relationSymbols
+        .where((symbol) => text.startsWith(symbol, i))
+        .firstOrNull;
     if (relation != null) {
       tokens.add(_Token(_Kind.relation, relation, i));
       i += relation.length;
@@ -253,7 +276,8 @@ class _Parser {
       case _Kind.end:
         throw MathInputError('incomplete', position: token.position);
       case _Kind.close:
-        throw MathInputError('unbalanced_parentheses', position: token.position);
+        throw MathInputError('unbalanced_parentheses',
+            position: token.position);
       case _Kind.operator:
       case _Kind.relation:
         throw MathInputError('unexpected_token',

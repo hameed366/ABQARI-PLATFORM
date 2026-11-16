@@ -61,28 +61,46 @@ const Map<String, List<String>> _commands = {
 };
 
 final RegExp _tashkeel = RegExp('[ً-ْٰـ]');
-final RegExp _invisible =
-    RegExp('[​-‏‪-‮⁦-⁩﻿]');
+final RegExp _invisible = RegExp('[​-‏‪-‮⁦-⁩﻿]');
 final RegExp _letter = RegExp('[a-z؀-ۿ]');
 final RegExp _arabicLetter = RegExp('[؀-ۿ]');
 final RegExp _allowed = RegExp(r'^[0-9a-z+\-*/^().=<>! ]$');
 final RegExp _superscriptRun = RegExp('[⁰¹²³⁴⁵⁶⁷⁸⁹]+');
-final RegExp _sqrtAtom =
-    RegExp('√\\s*(\\d+(?:\\.\\d+)?|[a-zA-Z؀-ۿ])');
+final RegExp _sqrtAtom = RegExp('√\\s*(\\d+(?:\\.\\d+)?|[a-zA-Z؀-ۿ])');
 final RegExp _spaces = RegExp(' +');
 
 const String _superscripts = '⁰¹²³⁴⁵⁶⁷⁸⁹';
 
 const Map<String, String> _symbols = {
-  '×': '*', '·': '*', '∙': '*', '⋅': '*', '✕': '*',
-  '÷': '/', '∕': '/',
-  '−': '-', '–': '-', '—': '-', '﹣': '-', '－': '-',
-  '＋': '+', '＝': '=',
+  '×': '*',
+  '·': '*',
+  '∙': '*',
+  '⋅': '*',
+  '✕': '*',
+  '÷': '/',
+  '∕': '/',
+  '−': '-',
+  '–': '-',
+  '—': '-',
+  '﹣': '-',
+  '－': '-',
+  '＋': '+',
+  '＝': '=',
   '٫': '.',
-  '≤': '<=', '≥': '>=', '≠': '!=',
+  '≤': '<=',
+  '≥': '>=',
+  '≠': '!=',
   'π': 'pi',
-  '（': '(', '）': ')', '[': '(', ']': ')', '{': '(', '}': ')',
-  ' ': ' ', '\t': ' ', '\n': ' ', '\r': ' ',
+  '（': '(',
+  '）': ')',
+  '[': '(',
+  ']': ')',
+  '{': '(',
+  '}': ')',
+  ' ': ' ',
+  '\t': ' ',
+  '\n': ' ',
+  '\r': ' ',
 };
 
 // Longest first so جتا is not read as جا + ا.

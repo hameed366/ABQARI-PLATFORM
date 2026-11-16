@@ -75,10 +75,14 @@ void main() {
     });
 
     test('rejects deep nesting and long input', () {
-      expect(() => tree('${'(' * 100}1${')' * 100}'),
-          throwsA(isA<MathInputError>().having((e) => e.code, 'code', 'too_deep')));
-      expect(() => tree('x' * 501),
-          throwsA(isA<MathInputError>().having((e) => e.code, 'code', 'too_long')));
+      expect(
+          () => tree('${'(' * 100}1${')' * 100}'),
+          throwsA(
+              isA<MathInputError>().having((e) => e.code, 'code', 'too_deep')));
+      expect(
+          () => tree('x' * 501),
+          throwsA(
+              isA<MathInputError>().having((e) => e.code, 'code', 'too_long')));
     });
 
     for (final hostile in [

@@ -47,7 +47,9 @@ String _text(Node node, Notation n) {
     case Div(:final left, :final right):
       String part(Node p) {
         final t = _text(p, n);
-        return p is Num || p is Var || p is Constant || p is Sym ? t : _paren(t);
+        return p is Num || p is Var || p is Constant || p is Sym
+            ? t
+            : _paren(t);
       }
       return '${part(left)}/${part(right)}';
     case Pow(:final left, :final right):

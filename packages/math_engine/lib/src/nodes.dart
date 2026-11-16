@@ -87,8 +87,9 @@ class Statement {
   final Node? rhs;
 
   @override
-  String toString() =>
-      relation == null ? sexpr(lhs) : '($relation ${sexpr(lhs)} ${sexpr(rhs!)})';
+  String toString() => relation == null
+      ? sexpr(lhs)
+      : '($relation ${sexpr(lhs)} ${sexpr(rhs!)})';
 }
 
 /// `a = b = c …` — one line of working.
@@ -112,8 +113,10 @@ String sexpr(Node node) => switch (node) {
       Mul(:final left, :final right) => '(mul ${sexpr(left)} ${sexpr(right)})',
       Div(:final left, :final right) => '(div ${sexpr(left)} ${sexpr(right)})',
       Pow(:final left, :final right) => '(pow ${sexpr(left)} ${sexpr(right)})',
-      PlusMinus(:final left, :final right) => '(pm ${sexpr(left)} ${sexpr(right)})',
-      Call(:final function, :final argument) => '($function ${sexpr(argument)})',
+      PlusMinus(:final left, :final right) =>
+        '(pm ${sexpr(left)} ${sexpr(right)})',
+      Call(:final function, :final argument) =>
+        '($function ${sexpr(argument)})',
     };
 
 /// The variable letters appearing in [node].

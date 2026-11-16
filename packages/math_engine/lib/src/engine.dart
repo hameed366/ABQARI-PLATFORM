@@ -211,25 +211,29 @@ String _pickVariable(Set<String> names, String? requested) {
     return requested;
   }
   if (names.length > 1) {
-    throw const UnsupportedProblem(needsFullEngine, detail: 'several variables');
+    throw const UnsupportedProblem(needsFullEngine,
+        detail: 'several variables');
   }
   return names.isEmpty ? 'x' : names.single;
 }
 
 Poly _polynomialOrUnsupported(Node node, String variable) =>
     Poly.fromNode(node, variable) ??
-    (throw const UnsupportedProblem(needsFullEngine, detail: 'not a polynomial'));
+    (throw const UnsupportedProblem(needsFullEngine,
+        detail: 'not a polynomial'));
 
 // ── constants ────────────────────────────────────────────────────────────────
 
 _Outcome _evaluate(Node tree) {
   final value = constantSurd(tree);
   if (value == null) {
-    throw const UnsupportedProblem(needsFullEngine, detail: 'not exact on device');
+    throw const UnsupportedProblem(needsFullEngine,
+        detail: 'not exact on device');
   }
   return _Outcome(
     task: 'evaluate',
-    answer: Answer(kind: AnswerKind.value, expression: surdNode(value), exact: value),
+    answer: Answer(
+        kind: AnswerKind.value, expression: surdNode(value), exact: value),
     verification: verifyEvaluation(tree, value),
   );
 }
@@ -237,7 +241,8 @@ _Outcome _evaluate(Node tree) {
 _Outcome _checkStatement(Statement statement) {
   final difference = constantSurd(Sub(statement.lhs, statement.rhs!));
   if (difference == null) {
-    throw const UnsupportedProblem(needsFullEngine, detail: 'not exact on device');
+    throw const UnsupportedProblem(needsFullEngine,
+        detail: 'not exact on device');
   }
   final sign = difference.sign;
   final truth = switch (statement.relation) {
@@ -262,7 +267,8 @@ _Outcome _transform(Node tree, String task) {
   final names = variablesOf(tree);
   if (names.isEmpty) return _evaluate(tree);
   if (names.length > 1) {
-    throw const UnsupportedProblem(needsFullEngine, detail: 'several variables');
+    throw const UnsupportedProblem(needsFullEngine,
+        detail: 'several variables');
   }
   final variable = names.single;
   final polynomial = _polynomialOrUnsupported(tree, variable);
@@ -334,7 +340,8 @@ _Outcome _solveEquation(Statement statement, String? requested) {
     return _Outcome(
       task: 'solve_equation',
       variable: variable,
-      answer: const Answer(kind: AnswerKind.solutions, solutionSet: SolutionSet.allReals),
+      answer: const Answer(
+          kind: AnswerKind.solutions, solutionSet: SolutionSet.allReals),
       verification: verifyIdentity(statement, variable),
       notes: const ['all_real_numbers'],
     );
@@ -354,10 +361,12 @@ _Outcome _solveEquation(Statement statement, String? requested) {
       verifyNoSolution(statement, variable, difference.coefficient(0)),
     );
   } else if (difference.degree == 1) {
-    roots.add(Surd.rational(-difference.coefficient(0) / difference.coefficient(1)));
+    roots.add(
+        Surd.rational(-difference.coefficient(0) / difference.coefficient(1)));
     steps.addAll(_linearSteps(statement, left, right, variable));
   } else if (difference.degree == 2) {
-    final (found, quadraticSteps, quadraticNotes) = _quadratic(difference, variable);
+    final (found, quadraticSteps, quadraticNotes) =
+        _quadratic(difference, variable);
     roots.addAll(found);
     steps.addAll(quadraticSteps);
     notes.addAll(quadraticNotes);
@@ -417,7 +426,9 @@ List<SolutionStep> _linearSteps(
   final rightNode = right.toNode(x);
   if (sexpr(leftNode) != sexpr(statement.lhs) ||
       sexpr(rightNode) != sexpr(statement.rhs!)) {
-    steps.add(SolutionStep('expand_sides', [EquationChain([leftNode, rightNode])]));
+    steps.add(SolutionStep('expand_sides', [
+      EquationChain([leftNode, rightNode])
+    ]));
   }
   final a1 = left.coefficient(1), b1 = left.coefficient(0);
   final a2 = right.coefficient(1), b2 = right.coefficient(0);
@@ -425,21 +436,33 @@ List<SolutionStep> _linearSteps(
   if (!a2.isZero) {
     steps.add(SolutionStep(
       a2.isNegative ? 'add_both' : 'subtract_both',
-      [EquationChain([Poly([b1, a]).toNode(x), signedRationalNode(b2)])],
+      [
+        EquationChain([
+          Poly([b1, a]).toNode(x),
+          signedRationalNode(b2)
+        ])
+      ],
       operand: Poly([Rational.zero, a2.abs]).toNode(x),
     ));
   }
   if (!b1.isZero) {
     steps.add(SolutionStep(
       b1.isNegative ? 'add_both' : 'subtract_both',
-      [EquationChain([Poly([Rational.zero, a]).toNode(x), signedRationalNode(b2 - b1)])],
+      [
+        EquationChain([
+          Poly([Rational.zero, a]).toNode(x),
+          signedRationalNode(b2 - b1)
+        ])
+      ],
       operand: rationalNode(b1.abs),
     ));
   }
   if (a != Rational.one) {
     steps.add(SolutionStep(
       'divide_both',
-      [EquationChain([Var(x), signedRationalNode((b2 - b1) / a)])],
+      [
+        EquationChain([Var(x), signedRationalNode((b2 - b1) / a)])
+      ],
       operand: signedRationalNode(a),
     ));
   }
@@ -468,7 +491,9 @@ Surd _normalizedSurd(Rational a, Rational b, BigInt m) =>
   const four = Num('4');
   const two = Num('2');
   final steps = <SolutionStep>[
-    SolutionStep('standard_form', [EquationChain([f.toNode(x), const Num('0')])]),
+    SolutionStep('standard_form', [
+      EquationChain([f.toNode(x), const Num('0')])
+    ]),
     SolutionStep('discriminant', [
       EquationChain([
         const Sym('Δ'),
@@ -498,9 +523,11 @@ Surd _normalizedSurd(Rational a, Rational b, BigInt m) =>
     steps.add(SolutionStep('quadratic_formula', [
       EquationChain([
         Var(x),
-        const Div(PlusMinus(Neg(Var('b')), Call('sqrt', Sym('Δ'))), Mul(two, Var('a'))),
+        const Div(PlusMinus(Neg(Var('b')), Call('sqrt', Sym('Δ'))),
+            Mul(two, Var('a'))),
         Div(
-          PlusMinus(signedRationalNode(-b), Call('sqrt', signedRationalNode(discriminant))),
+          PlusMinus(signedRationalNode(-b),
+              Call('sqrt', signedRationalNode(discriminant))),
           signedRationalNode(Rational.fromInt(2) * a),
         ),
       ]),
@@ -510,7 +537,8 @@ Surd _normalizedSurd(Rational a, Rational b, BigInt m) =>
         for (final root in roots) (root.rationalValue, 1),
       ]..sort((p, q) => p.$1.compareTo(q.$1));
       steps.add(SolutionStep('factorization', [
-        EquationChain([factoredNode(f, x, rational, Poly(const [])), const Num('0')]),
+        EquationChain(
+            [factoredNode(f, x, rational, Poly(const [])), const Num('0')]),
       ]));
     }
   }
@@ -524,13 +552,15 @@ Node surdNode(Surd value) {
   final p = value.a.numerator * (common ~/ value.a.denominator);
   final q = value.b.numerator * (common ~/ value.b.denominator);
   final Node root = Call('sqrt', Num('${value.radicand}'));
-  final Node irrational = q.abs() == BigInt.one ? root : Mul(Num('${q.abs()}'), root);
+  final Node irrational =
+      q.abs() == BigInt.one ? root : Mul(Num('${q.abs()}'), root);
   final Node numerator;
   if (p == BigInt.zero) {
     numerator = q.isNegative ? Neg(irrational) : irrational;
   } else {
     final rational = signedRationalNode(Rational(p));
-    numerator = q.isNegative ? Sub(rational, irrational) : Add(rational, irrational);
+    numerator =
+        q.isNegative ? Sub(rational, irrational) : Add(rational, irrational);
   }
   return common == BigInt.one ? numerator : Div(numerator, Num('$common'));
 }

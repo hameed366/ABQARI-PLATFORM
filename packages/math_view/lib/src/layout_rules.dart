@@ -12,7 +12,10 @@ int precedence(Node node) => switch (node) {
 
 bool startsWithDigit(Node node) => switch (node) {
       Num() => true,
-      Pow(:final left) || Mul(:final left) || Add(:final left) || Sub(:final left) =>
+      Pow(:final left) ||
+      Mul(:final left) ||
+      Add(:final left) ||
+      Sub(:final left) =>
         startsWithDigit(left),
       _ => false,
     };

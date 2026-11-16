@@ -65,7 +65,8 @@ void main() {
     expect(tile.trailing, isNull);
   });
 
-  testWidgets('a feature card with an action is tappable and its arrow follows direction',
+  testWidgets(
+      'a feature card with an action is tappable and its arrow follows direction',
       (tester) async {
     var taps = 0;
     for (final direction in TextDirection.values) {

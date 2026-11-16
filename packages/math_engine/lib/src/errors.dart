@@ -7,7 +7,8 @@ class MathInputError implements Exception {
   final String? detail;
 
   @override
-  String toString() => 'MathInputError($code, position: $position, detail: $detail)';
+  String toString() =>
+      'MathInputError($code, position: $position, detail: $detail)';
 }
 
 /// The problem is well-formed but has no defined real value.

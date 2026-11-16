@@ -114,8 +114,12 @@ class MathView extends StatelessWidget {
   }
 }
 
-Widget _row(List<Widget> children, {CrossAxisAlignment align = CrossAxisAlignment.center}) =>
-    Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: align, children: children);
+Widget _row(List<Widget> children,
+        {CrossAxisAlignment align = CrossAxisAlignment.center}) =>
+    Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: align,
+        children: children);
 
 class _MathPainter {
   _MathPainter(this.notation, this.size, this.color);
@@ -172,7 +176,8 @@ class _MathPainter {
           r = paren(r, scale);
           return _row([l, r]);
         }
-        if (explicitTimes(right)) return _row([l, operator(Notation.times, scale), r]);
+        if (explicitTimes(right))
+          return _row([l, operator(Notation.times, scale), r]);
         return _row([l, SizedBox(width: size * scale * 0.06), r]);
       case Div(:final left, :final right):
         return _fraction(left, right, scale);
@@ -183,7 +188,11 @@ class _MathPainter {
           case 'sqrt':
             return _radical(argument, scale);
           case 'abs':
-            return _row([this.text('|', scale), build(argument, scale), this.text('|', scale)]);
+            return _row([
+              this.text('|', scale),
+              build(argument, scale),
+              this.text('|', scale)
+            ]);
           case 'exp':
             return _power(const Constant('e'), argument, scale);
           default:
@@ -205,13 +214,18 @@ class _MathPainter {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Center(child: KeyedSubtree(key: MathViewKeys.numerator, child: build(top, inner))),
+            Center(
+                child: KeyedSubtree(
+                    key: MathViewKeys.numerator, child: build(top, inner))),
             Container(
               height: math.max(1, size * scale * 0.06),
               margin: EdgeInsets.symmetric(vertical: size * scale * 0.06),
               color: color,
             ),
-            Center(child: KeyedSubtree(key: MathViewKeys.denominator, child: build(bottom, inner))),
+            Center(
+                child: KeyedSubtree(
+                    key: MathViewKeys.denominator,
+                    child: build(bottom, inner))),
           ],
         ),
       ),
@@ -247,7 +261,8 @@ class _MathPainter {
       painter: RadicalPainter(color: color, strokeWidth: stroke),
       child: const SizedBox.expand(),
     );
-    if (notation == Notation.arabic) sign = Transform.flip(flipX: true, child: sign);
+    if (notation == Notation.arabic)
+      sign = Transform.flip(flipX: true, child: sign);
     return IntrinsicHeight(
       child: _row(
         [
@@ -306,13 +321,15 @@ class RadicalPainter extends CustomPainter {
 
 /// A decimal approximation, at most [significant] significant digits, written
 /// in [notation]'s digits. Null for values too large or small to show plainly.
-String? approximateText(double value, Notation notation, {int significant = 10}) {
+String? approximateText(double value, Notation notation,
+    {int significant = 10}) {
   if (value.isNaN || value.isInfinite) return null;
   if (value != 0 && (value.abs() >= 1e10 || value.abs() < 1e-6)) return null;
   var text = value.toStringAsPrecision(significant);
   if (text.contains('e')) return null;
   if (text.contains('.')) {
-    text = text.replaceFirst(RegExp(r'0+$'), '').replaceFirst(RegExp(r'\.$'), '');
+    text =
+        text.replaceFirst(RegExp(r'0+$'), '').replaceFirst(RegExp(r'\.$'), '');
   }
   final negative = text.startsWith('-');
   final digits = notation.number(negative ? text.substring(1) : text);

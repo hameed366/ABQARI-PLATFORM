@@ -19,7 +19,8 @@ void main() {
   });
 
   test('add or subtract is chosen by sign', () {
-    expect(rules('3x - 5 = 2x + 7'), ['subtract_both', 'add_both', 'solutions']);
+    expect(
+        rules('3x - 5 = 2x + 7'), ['subtract_both', 'add_both', 'solutions']);
     expect(rules('7 = 2x + 3'),
         ['subtract_both', 'subtract_both', 'divide_both', 'solutions']);
     expect(rules('2(x - 3) = 4(x + 1)').first, 'expand_sides');
@@ -33,11 +34,18 @@ void main() {
 
   test('quadratic: discriminant, formula, factors', () {
     final result = solve('x^2 - 5x + 6 = 0');
-    expect([for (final s in result.steps) s.rule], [
-      'standard_form', 'discriminant', 'quadratic_formula', 'factorization', 'solutions',
+    expect([
+      for (final s in result.steps) s.rule
+    ], [
+      'standard_form',
+      'discriminant',
+      'quadratic_formula',
+      'factorization',
+      'solutions',
     ]);
     expect(result.steps[1].lines.single.parts.last.toString(), '1');
-    expect(result.steps.last.lines.map((l) => l.toString()), ['x = 2', 'x = 3']);
+    expect(
+        result.steps.last.lines.map((l) => l.toString()), ['x = 2', 'x = 3']);
   });
 
   test('irrational roots are exact and not given fake factors', () {
@@ -46,13 +54,15 @@ void main() {
     expect(result.answer!.rootNodes.map(sexpr), ['(neg (sqrt 2))', '(sqrt 2)']);
     expect(result.verification!.status, VerificationStatus.verified);
     final golden = solve('x^2 + x - 1 = 0').answer!.rootNodes.map(sexpr);
-    expect(golden, ['(div (sub (neg 1) (sqrt 5)) 2)', '(div (add (neg 1) (sqrt 5)) 2)']);
+    expect(golden,
+        ['(div (sub (neg 1) (sqrt 5)) 2)', '(div (add (neg 1) (sqrt 5)) 2)']);
   });
 
   test('no real solutions is proven, not assumed', () {
     final result = solve('x^2 + 1 = 0');
     expect(result.answer!.solutionSet, SolutionSet.none);
-    expect(result.verification!.checks.map((c) => (c.name, c.passed)), [('root_count', true)]);
+    expect(result.verification!.checks.map((c) => (c.name, c.passed)),
+        [('root_count', true)]);
     expect(result.verification!.status, VerificationStatus.verified);
   });
 
@@ -63,7 +73,13 @@ void main() {
   });
 
   test('beyond the device engine it says so instead of guessing', () {
-    for (final text in ['x^3 - 2 = 0', 'sin(x) = 0', 'sin(pi/6)', 'log(100)', '1/x = 2']) {
+    for (final text in [
+      'x^3 - 2 = 0',
+      'sin(x) = 0',
+      'sin(pi/6)',
+      'log(100)',
+      '1/x = 2'
+    ]) {
       final result = solve(text);
       expect(result.status, SolveStatus.unsupported, reason: text);
       expect(result.errorCode, needsFullEngine, reason: text);
@@ -86,7 +102,8 @@ void main() {
   test('options are validated', () {
     expect(solve('x + 1', task: 'teleport').errorCode, 'unknown_task');
     expect(solve('x + 1', variable: 'e').errorCode, 'unknown_variable');
-    expect(solve('x^2 = 4', task: 'differentiate').errorCode, 'relation_needs_solve');
+    expect(solve('x^2 = 4', task: 'differentiate').errorCode,
+        'relation_needs_solve');
     expect(solve('solve x^2 + 1').errorCode, 'solve_needs_equation');
     expect(solve('(x+1)^2', task: 'expand').answer!.expression.toString(),
         '(add (add (pow x 2) (mul 2 x)) 1)');
@@ -96,7 +113,8 @@ void main() {
     test('a wrong expansion', () {
       expect(verifyEquivalence(node('(x+1)^2'), node('x^2 + 1'), 'x').status,
           VerificationStatus.failed);
-      expect(verifyEquivalence(node('(x+1)^2'), node('x^2 + 2x + 1'), 'x').status,
+      expect(
+          verifyEquivalence(node('(x+1)^2'), node('x^2 + 2x + 1'), 'x').status,
           VerificationStatus.verified);
     });
 
@@ -107,18 +125,24 @@ void main() {
       final four = Surd.rational(Rational.fromInt(4));
       final missed = verifyRoots(statement, 'x', f, [two]);
       expect(missed.status, VerificationStatus.failed);
-      expect(missed.checks.where((c) => c.passed == false).map((c) => c.name), ['root_count']);
+      expect(missed.checks.where((c) => c.passed == false).map((c) => c.name),
+          ['root_count']);
       final wrong = verifyRoots(statement, 'x', f, [two, four]);
       expect(wrong.checks.where((c) => c.passed == false).map((c) => c.name),
           containsAll(['substitution', 'floating_point_substitution']));
     });
 
     test('a wrong value, derivative and integral', () {
-      expect(verifyEvaluation(node('2 + 3 * 4'), Surd.rational(Rational.fromInt(15))).status,
-          VerificationStatus.failed);
-      expect(verifyDerivative(node('x^3'), 'x', node('3x')).status, VerificationStatus.failed);
       expect(
-        verifyIntegral(node('x^2'), 'x', Poly([Rational.zero, Rational.zero, Rational.one])).status,
+          verifyEvaluation(
+                  node('2 + 3 * 4'), Surd.rational(Rational.fromInt(15)))
+              .status,
+          VerificationStatus.failed);
+      expect(verifyDerivative(node('x^3'), 'x', node('3x')).status,
+          VerificationStatus.failed);
+      expect(
+        verifyIntegral(node('x^2'), 'x',
+            Poly([Rational.zero, Rational.zero, Rational.one])).status,
         VerificationStatus.failed,
       );
     });
@@ -142,7 +166,11 @@ void main() {
       expect(text['en']!.trim(), isNotEmpty, reason: code);
     });
     for (final text in [
-      '2(x-3) = 4(x+1)', 'x^2 - 5x + 6 = 0', 'x + 1 = x + 2', 'x^3 - x = 0', 'x^2 + 2x + 1 = 0',
+      '2(x-3) = 4(x+1)',
+      'x^2 - 5x + 6 = 0',
+      'x + 1 = x + 2',
+      'x^3 - x = 0',
+      'x^2 + 2x + 1 = 0',
     ]) {
       for (final step in solve(text).steps) {
         expect(engineMessages, contains(step.messageCode), reason: step.rule);

@@ -126,7 +126,8 @@ Verification verifyEquivalence(Node typed, Node result, String variable) {
   } else {
     check.add('exact_sampling', null, '$agree exact point(s) only');
   }
-  check.add('floating_point_sampling', _floatingAgreement(typed, result, variable));
+  check.add(
+      'floating_point_sampling', _floatingAgreement(typed, result, variable));
   return check;
 }
 
@@ -254,7 +255,8 @@ Verification _verifyConstantDifference(
       return check;
     }
   }
-  check.add('exact_sampling', true, 'lhs − rhs = $constant at ${points.length} points');
+  check.add('exact_sampling', true,
+      'lhs − rhs = $constant at ${points.length} points');
   return check;
 }
 
@@ -298,7 +300,9 @@ Verification verifyIntegral(Node typed, String variable, Poly antiderivative) {
     const width = 0.25;
     final area = _simpson(typed, variable, start, start + width);
     if (area == null) continue;
-    final claimed = antiderivative.evaluate(point + Rational(BigInt.one, BigInt.from(4))).toDouble() -
+    final claimed = antiderivative
+            .evaluate(point + Rational(BigInt.one, BigInt.from(4)))
+            .toDouble() -
         antiderivative.evaluate(point).toDouble();
     if ((area - claimed).abs() <= 1e-8 * (1 + area.abs() + claimed.abs())) {
       agree++;

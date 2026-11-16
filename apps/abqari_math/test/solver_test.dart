@@ -11,7 +11,8 @@ import 'package:material_ui/material_ui.dart';
 const _ar = MathStringsAr();
 
 /// Opens the app straight on the solver, in [language].
-Future<LocaleController> openSolver(WidgetTester tester, {String language = 'ar'}) async {
+Future<LocaleController> openSolver(WidgetTester tester,
+    {String language = 'ar'}) async {
   final locale = LocaleController(store: InMemoryLocaleStore(language));
   await locale.load();
   await tester.pumpWidget(AbqariMathApp(
@@ -31,20 +32,24 @@ Future<void> solveTyped(WidgetTester tester, String text) async {
   await tester.pumpAndSettle();
 }
 
-Finder mathShowing(String plain) =>
-    find.byWidgetPredicate((widget) => widget is MathView && widget.plainText == plain);
+Finder mathShowing(String plain) => find.byWidgetPredicate(
+    (widget) => widget is MathView && widget.plainText == plain);
 
 void main() {
-  testWidgets('solves a linear equation on the device and shows it in Arabic notation',
+  testWidgets(
+      'solves a linear equation on the device and shows it in Arabic notation',
       (tester) async {
     await openSolver(tester);
     await solveTyped(tester, '٢س + ٣ = ٧');
 
-    expect(mathShowing('٢س + ٣ = ٧'), findsOneWidget, reason: 'understood form');
+    expect(mathShowing('٢س + ٣ = ٧'), findsOneWidget,
+        reason: 'understood form');
     expect(mathShowing('س = ٢'), findsWidgets, reason: 'answer and final step');
-    expect(find.text(engineMessage('verification_verified', 'ar')), findsOneWidget);
+    expect(find.text(engineMessage('verification_verified', 'ar')),
+        findsOneWidget);
     expect(find.text(_ar.stepsTitle), findsOneWidget);
-    expect(find.text(engineMessage('step_subtract_both', 'ar')), findsOneWidget);
+    expect(
+        find.text(engineMessage('step_subtract_both', 'ar')), findsOneWidget);
     expect(find.text(engineMessage('step_divide_both', 'ar')), findsOneWidget);
   });
 
@@ -59,7 +64,8 @@ void main() {
 
     expect(mathShowing('x = 2'), findsWidgets);
     expect(mathShowing('س = ٢'), findsNothing);
-    expect(find.text(engineMessage('verification_verified', 'en')), findsOneWidget);
+    expect(find.text(engineMessage('verification_verified', 'en')),
+        findsOneWidget);
   });
 
   testWidgets('quadratic: exact irrational roots with a decimal approximation',
@@ -90,7 +96,8 @@ void main() {
     await solveTyped(tester, 'hello');
 
     expect(find.text(engineMessage('unknown_word', 'ar')), findsOneWidget);
-    expect(find.text(engineMessage('verification_verified', 'ar')), findsNothing);
+    expect(
+        find.text(engineMessage('verification_verified', 'ar')), findsNothing);
   });
 
   testWidgets('problems beyond the device engine are declined, never guessed',

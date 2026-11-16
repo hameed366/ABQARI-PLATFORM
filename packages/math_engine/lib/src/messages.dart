@@ -16,8 +16,10 @@ const Map<String, Map<String, String>> engineMessages = {
   },
   'unknown_symbol': {'ar': 'رمز غير مفهوم.', 'en': 'Unrecognised symbol.'},
   'unknown_word': {
-    'ar': 'كلمة غير مفهومة. هذا المحرك يقرأ العبارات الرياضية، لا المسائل اللفظية.',
-    'en': 'Unrecognised word. This engine reads mathematical expressions, not word problems.',
+    'ar':
+        'كلمة غير مفهومة. هذا المحرك يقرأ العبارات الرياضية، لا المسائل اللفظية.',
+    'en':
+        'Unrecognised word. This engine reads mathematical expressions, not word problems.',
   },
   'comma_not_supported': {
     'ar': 'الفاصلة غير مدعومة. استخدم النقطة للكسور العشرية.',
@@ -39,8 +41,14 @@ const Map<String, Map<String, String>> engineMessages = {
     'ar': 'الأقواس غير متطابقة.',
     'en': 'The parentheses do not match.',
   },
-  'incomplete': {'ar': 'العبارة غير مكتملة.', 'en': 'The expression is incomplete.'},
-  'unexpected_token': {'ar': 'رمز في غير موضعه.', 'en': 'A symbol is out of place.'},
+  'incomplete': {
+    'ar': 'العبارة غير مكتملة.',
+    'en': 'The expression is incomplete.'
+  },
+  'unexpected_token': {
+    'ar': 'رمز في غير موضعه.',
+    'en': 'A symbol is out of place.'
+  },
   'chained_relation': {
     'ar': 'اكتب علاقة واحدة فقط.',
     'en': 'Write a single relation only.',
@@ -67,7 +75,10 @@ const Map<String, Map<String, String>> engineMessages = {
     'ar': 'القسمة على صفر غير معرّفة.',
     'en': 'Division by zero is undefined.',
   },
-  'undefined': {'ar': 'العبارة غير معرّفة.', 'en': 'The expression is undefined.'},
+  'undefined': {
+    'ar': 'العبارة غير معرّفة.',
+    'en': 'The expression is undefined.'
+  },
   'not_real': {
     'ar': 'الناتج ليس عددًا حقيقيًا.',
     'en': 'The result is not a real number.',
@@ -83,7 +94,8 @@ const Map<String, Map<String, String>> engineMessages = {
   },
   'needs_full_engine': {
     'ar': 'هذه المسألة تحتاج المحرك الكامل، وهو غير متاح على الجهاز بعد.',
-    'en': 'This problem needs the full engine, which is not available on the device yet.',
+    'en':
+        'This problem needs the full engine, which is not available on the device yet.',
   },
   'internal_error': {
     'ar': 'حدث خطأ غير متوقع أثناء الحل.',
@@ -115,12 +127,15 @@ const Map<String, Map<String, String>> engineMessages = {
     'en': 'The result was verified independently.',
   },
   'verification_partial': {
-    'ar': 'تحقق جزئي: لم يتعارض شيء مع الناتج، لكن تعذّر إجراء بعض الفحوص. لا تعتبره مؤكدًا.',
-    'en': 'Partially verified: nothing contradicted the result, but some checks could not be run. Do not treat it as confirmed.',
+    'ar':
+        'تحقق جزئي: لم يتعارض شيء مع الناتج، لكن تعذّر إجراء بعض الفحوص. لا تعتبره مؤكدًا.',
+    'en':
+        'Partially verified: nothing contradicted the result, but some checks could not be run. Do not treat it as confirmed.',
   },
   'verification_failed': {
     'ar': 'فشل التحقق: فحص مستقل تعارض مع الناتج. لا تعتمد عليه.',
-    'en': 'Verification failed: an independent check contradicted the result. Do not rely on it.',
+    'en':
+        'Verification failed: an independent check contradicted the result. Do not rely on it.',
   },
   // steps
   'step_expand_sides': {'ar': 'بسّط كل طرف.', 'en': 'Simplify each side.'},
@@ -137,7 +152,10 @@ const Map<String, Map<String, String>> engineMessages = {
     'ar': 'اكتب المعادلة على الصورة القياسية.',
     'en': 'Write the equation in standard form.',
   },
-  'step_discriminant': {'ar': 'احسب المميز.', 'en': 'Compute the discriminant.'},
+  'step_discriminant': {
+    'ar': 'احسب المميز.',
+    'en': 'Compute the discriminant.'
+  },
   'step_quadratic_formula': {
     'ar': 'طبّق القانون العام.',
     'en': 'Apply the quadratic formula.',

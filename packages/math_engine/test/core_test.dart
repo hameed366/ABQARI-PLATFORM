@@ -51,7 +51,8 @@ void main() {
 
   group('Poly', () {
     test('reads polynomials from typed trees', () {
-      expect(Poly.fromNode(parse(normalize('(x+1)^2').text).lhs, 'x'), poly([1, 2, 1]));
+      expect(Poly.fromNode(parse(normalize('(x+1)^2').text).lhs, 'x'),
+          poly([1, 2, 1]));
       expect(Poly.fromNode(parse(normalize('x/2 + 1/3').text).lhs, 'x'),
           Poly([r(1, 3), r(1, 2)]));
       expect(Poly.fromNode(parse(normalize('1/x').text).lhs, 'x'), isNull);

@@ -101,7 +101,8 @@ class _SolverPageState extends State<SolverPage> {
               label: Text(strings.solveButton),
             ),
             const SizedBox(height: 16),
-            Text(strings.examplesTitle, style: Theme.of(context).textTheme.labelLarge),
+            Text(strings.examplesTitle,
+                style: Theme.of(context).textTheme.labelLarge),
             const SizedBox(height: 4),
             Wrap(
               spacing: 8,

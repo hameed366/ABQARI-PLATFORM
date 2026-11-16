@@ -73,7 +73,8 @@ void main() {
     expect(store.languageCode, 'ar');
   });
 
-  testWidgets('only the problem-solving card is an action, and it opens the solver',
+  testWidgets(
+      'only the problem-solving card is an action, and it opens the solver',
       (tester) async {
     final controller = LocaleController(store: InMemoryLocaleStore());
     await tester.pumpWidget(_app(controller));
@@ -172,7 +173,8 @@ void main() {
     for (final text in arabic) {
       expect(text.trim(), isNotEmpty);
       expect(arabicLetters.hasMatch(text), isTrue, reason: text);
-      expect(westernDigits.hasMatch(text), isFalse, reason: 'Arabic uses ٠–٩: $text');
+      expect(westernDigits.hasMatch(text), isFalse,
+          reason: 'Arabic uses ٠–٩: $text');
     }
     for (final text in english) {
       expect(text.trim(), isNotEmpty);

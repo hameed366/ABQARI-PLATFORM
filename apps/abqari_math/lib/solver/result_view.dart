@@ -59,13 +59,15 @@ class ResultView extends StatelessWidget {
   List<Widget> _solved(BuildContext context, MathStrings strings) {
     final answer = result.answer!;
     final verification = result.verification!;
-    final notes = result.notes.where((code) => !_answerNotes.contains(code)).toList();
+    final notes =
+        result.notes.where((code) => !_answerNotes.contains(code)).toList();
     return [
       _Section(title: strings.answerTitle, child: _answer(context, answer)),
       _VerificationBanner(
         status: verification.status,
         summary: _say('verification_${verification.status.name}'),
-        detail: strings.checksPassed(verification.passedCount, verification.checks.length),
+        detail: strings.checksPassed(
+            verification.passedCount, verification.checks.length),
       ),
       if (result.steps.isNotEmpty)
         _Section(
@@ -107,18 +109,21 @@ class ResultView extends StatelessWidget {
     final emphasis = Theme.of(context).textTheme.titleMedium;
     switch (answer.kind) {
       case AnswerKind.value:
-        final approx = answer.exact!.isRational && answer.exact!.rationalValue.isInteger
-            ? null
-            : approximateText(answer.exact!.toDouble(), notation);
+        final approx =
+            answer.exact!.isRational && answer.exact!.rationalValue.isInteger
+                ? null
+                : approximateText(answer.exact!.toDouble(), notation);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _math(MathView.expression(answer.expression!, notation: notation, fontSize: 26)),
+            _math(MathView.expression(answer.expression!,
+                notation: notation, fontSize: 26)),
             if (approx != null) Text('≈ $approx'),
           ],
         );
       case AnswerKind.truth:
-        return Text(_say(answer.truth! ? 'true_statement' : 'false_statement'), style: emphasis);
+        return Text(_say(answer.truth! ? 'true_statement' : 'false_statement'),
+            style: emphasis);
       case AnswerKind.solutions:
         switch (answer.solutionSet!) {
           case SolutionSet.allReals:
@@ -136,14 +141,16 @@ class ResultView extends StatelessWidget {
                       children: [
                         Flexible(
                           child: _math(MathView.chain(
-                            EquationChain([Var(result.variable!), answer.rootNodes[i]]),
+                            EquationChain(
+                                [Var(result.variable!), answer.rootNodes[i]]),
                             notation: notation,
                             fontSize: 26,
                           )),
                         ),
                         if (!answer.roots[i].isRational) ...[
                           const SizedBox(width: 12),
-                          Text('≈ ${approximateText(answer.roots[i].toDouble(), notation) ?? ''}'),
+                          Text(
+                              '≈ ${approximateText(answer.roots[i].toDouble(), notation) ?? ''}'),
                         ],
                       ],
                     ),
@@ -155,7 +162,8 @@ class ResultView extends StatelessWidget {
         final expression = answer.constantOfIntegration
             ? Add(answer.expression!, const Sym('C'))
             : answer.expression!;
-        return _math(MathView.expression(expression, notation: notation, fontSize: 26));
+        return _math(
+            MathView.expression(expression, notation: notation, fontSize: 26));
     }
   }
 }
@@ -178,7 +186,11 @@ class _Section extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Text(title, style: Theme.of(context).textTheme.labelLarge?.copyWith(color: scheme.primary)),
+            Text(title,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge
+                    ?.copyWith(color: scheme.primary)),
             const SizedBox(height: 8),
             child,
           ],
@@ -226,9 +238,21 @@ class _VerificationBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final (icon, background, foreground) = switch (status) {
-      VerificationStatus.verified => (Icons.verified_outlined, scheme.primaryContainer, scheme.onPrimaryContainer),
-      VerificationStatus.partial => (Icons.info_outline, scheme.tertiaryContainer, scheme.onTertiaryContainer),
-      VerificationStatus.failed => (Icons.gpp_bad_outlined, scheme.errorContainer, scheme.onErrorContainer),
+      VerificationStatus.verified => (
+          Icons.verified_outlined,
+          scheme.primaryContainer,
+          scheme.onPrimaryContainer
+        ),
+      VerificationStatus.partial => (
+          Icons.info_outline,
+          scheme.tertiaryContainer,
+          scheme.onTertiaryContainer
+        ),
+      VerificationStatus.failed => (
+          Icons.gpp_bad_outlined,
+          scheme.errorContainer,
+          scheme.onErrorContainer
+        ),
     };
     return Card(
       elevation: 0,
