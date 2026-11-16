@@ -61,7 +61,9 @@ void main() {
     await tester.tap(find.byType(ListTile).first);
     await tester.pumpAndSettle();
 
-    await tester.enterText(find.byKey(SolverKeys.input), 'جا(π/٦)');
+    // Set the text directly: opening the on-screen keyboard is not what this
+    // test is about, and it has made the CI emulator unstable.
+    tester.widget<TextField>(find.byKey(SolverKeys.input)).controller!.text = 'جا(π/٦)';
     await tester.tap(find.byKey(SolverKeys.solve));
     await tester.pump();
     for (var i = 0; i < 240 && find.byKey(SolverKeys.working).evaluate().isNotEmpty; i++) {
