@@ -66,10 +66,19 @@ void main() {
     tester.widget<TextField>(find.byKey(SolverKeys.input)).controller!.text = 'جا(π/٦)';
     await tester.tap(find.byKey(SolverKeys.solve));
     await tester.pump();
+    final clock = Stopwatch()..start();
     for (var i = 0; i < 240 && find.byKey(SolverKeys.working).evaluate().isNotEmpty; i++) {
       await tester.runAsync(() => Future<void>.delayed(const Duration(milliseconds: 500)));
       await tester.pump();
+      if (i % 10 == 0) {
+        // ignore: avoid_print
+        print('waiting for the full engine: ${clock.elapsedMilliseconds} ms, '
+            'working=${find.byKey(SolverKeys.working).evaluate().isNotEmpty}, '
+            'result=${find.byKey(SolverKeys.result).evaluate().isNotEmpty}');
+      }
     }
+    // ignore: avoid_print
+    print('screen hand-off finished after ${clock.elapsedMilliseconds} ms');
     await tester.pumpAndSettle();
 
     expect(find.text(const MathStringsAr().solvedByFullEngine), findsOneWidget);

@@ -13,8 +13,16 @@ logcat_pid=$!
 trap 'kill "$logcat_pid" 2>/dev/null || true' EXIT
 
 log="$(mktemp)"
-flutter test integration_test/full_engine_test.dart --reporter expanded 2>&1 | tee "$log"
-status=${PIPESTATUS[0]}
+# Each test in its own app launch, so one cannot leave the next in a bad state.
+status=0
+for name in "the embedded Python engine answers on the device" \
+            "the solver screen hands off to the full engine and says so"; do
+  flutter test integration_test/full_engine_test.dart --plain-name "$name" \
+    --reporter expanded 2>&1 | tee -a "$log"
+  code=${PIPESTATUS[0]}
+  [ "$code" -ne 0 ] && status=$code
+done
+passed=$(grep -c "All tests passed!" "$log" || true)
 
 show_device_log() {
   kill "$logcat_pid" 2>/dev/null || true
@@ -29,7 +37,7 @@ if grep -q "Some tests failed" "$log" || grep -qE "\[E\]" "$log"; then
   echo "::error::A device test failed."
   exit 1
 fi
-if grep -q "All tests passed!" "$log"; then
+if [ "$passed" -eq 2 ]; then
   if [ "$status" -ne 0 ]; then
     echo "::warning::All device tests passed, but the test runner exited with $status during teardown."
   fi
