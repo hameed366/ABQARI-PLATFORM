@@ -13,6 +13,14 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:material_ui/material_ui.dart';
 
+/// A bounded wait for frames. On a live device `pumpAndSettle` can wait
+/// forever (it stalled in CI after navigation); this never does.
+Future<void> settle(WidgetTester tester) async {
+  for (var i = 0; i < 20; i++) {
+    await tester.pump(const Duration(milliseconds: 100));
+  }
+}
+
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   final engine = EmbeddedPythonEngine(startTimeout: const Duration(minutes: 4));
@@ -60,10 +68,10 @@ void main() {
       themeModeController: ThemeModeController(store: InMemoryThemeModeStore()),
       fullEngine: engine,
     ));
-    await tester.pumpAndSettle();
+    await settle(tester);
     step('app shown');
     await tester.tap(find.byType(ListTile).first);
-    await tester.pumpAndSettle();
+    await settle(tester);
     step('solver opened');
 
     // Set the text directly: opening the on-screen keyboard is not what this
@@ -86,7 +94,7 @@ void main() {
     }
     // ignore: avoid_print
     print('screen hand-off finished after ${clock.elapsedMilliseconds} ms');
-    await tester.pumpAndSettle();
+    await settle(tester);
 
     expect(find.text(const MathStringsAr().solvedByFullEngine), findsOneWidget);
     expect(
