@@ -1,0 +1,9 @@
+name: abqari_cloud
+description: Optional ABQARI accounts - sign-in, roles, classes and progress sync against the project's Supabase backend. Pure Dart; holds only the public (anon) key.
+publish_to: 'none'
+version: 0.1.0
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.25.0

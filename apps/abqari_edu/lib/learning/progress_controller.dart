@@ -22,7 +22,7 @@ class InMemoryProgressStore implements ProgressStore {
   Future<void> write(String data) async => this.data = data;
 }
 
-/// On the device. (Accounts and sync come with the backend, phase 8.)
+/// On the device. (With an account, AccountController also uploads it.)
 class SharedPreferencesProgressStore implements ProgressStore {
   const SharedPreferencesProgressStore({this.key = 'abqari.edu.progress'});
 

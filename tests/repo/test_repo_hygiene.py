@@ -268,3 +268,33 @@ def test_no_invisible_direction_characters_in_source():
 def test_edu_takes_its_content_from_the_learning_package():
     pubspec = (REPO_ROOT / "apps" / "abqari_edu" / "pubspec.yaml").read_text()
     assert "path: ../../packages/learning_core" in pubspec
+
+
+# ── phase 8: accounts ───────────────────────────────────────────────────────
+
+def test_backend_address_and_key_come_only_from_build_flags():
+    """No project URL or key is written into code; builds get them via --dart-define."""
+    hits = []
+    for root in ("apps", "packages"):
+        for path in (REPO_ROOT / root).rglob("lib/**/*.dart"):
+            text = _strip_comments(path, path.read_text(encoding="utf-8"))
+            if re.search(r"https://[a-z0-9-]+\.supabase\.(co|in)", text):
+                hits.append(str(path.relative_to(REPO_ROOT)))
+    assert hits == []
+
+
+def test_cloud_package_has_no_way_to_hold_a_secret_key():
+    for path in (REPO_ROOT / "packages" / "cloud" / "lib").rglob("*.dart"):
+        text = path.read_text(encoding="utf-8").lower()
+        for needle in ("service_role", "servicerole", "sb_secret_", "secretkey", "secret_key"):
+            assert needle not in text, f"{path.name} mentions {needle!r}"
+
+
+def test_every_function_in_the_accounts_migration_pins_its_search_path():
+    """SECURITY DEFINER functions without a fixed search_path can be hijacked."""
+    sql = (REPO_ROOT / "backend" / "database" / "004_accounts_classes_policies.sql").read_text()
+    functions = re.findall(r"create function (public\.\w+)\(.*?\$\$", sql, re.S)
+    bodies = re.findall(r"create function public\.\w+\(.*?as \$\$", sql, re.S)
+    assert len(functions) == len(bodies) >= 10
+    for body in bodies:
+        assert "set search_path = ''" in body, body[:60]
