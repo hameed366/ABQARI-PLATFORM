@@ -13,7 +13,7 @@ from sympy.polys.polyerrors import PolynomialError
 
 from . import verify as v
 from .errors import MathDomainError, MathInputError, UnsupportedProblem
-from .latex import statement_latex
+from .latex import expression_latex, statement_latex
 from .messages import message
 from .normalize import TASKS, normalize
 from .parser import Node, Statement, parse, variables
@@ -179,12 +179,17 @@ def _check_statement(statement: Statement) -> dict:
     }
 
 
-def _linear_steps(left: sp.Expr, right: sp.Expr, x: sp.Symbol) -> list[dict]:
+def _linear_steps(
+    left: sp.Expr, right: sp.Expr, x: sp.Symbol, typed: tuple[str, str]
+) -> list[dict]:
+    """`typed` is the LaTeX of each side exactly as the user wrote it."""
     left_e, right_e = sp.expand(left), sp.expand(right)
     a1, b1 = left_e.coeff(x, 1), left_e.coeff(x, 0)
     a2, b2 = right_e.coeff(x, 1), right_e.coeff(x, 0)
     steps = []
-    if left_e != left or right_e != right:
+    # SymPy distributes numeric factors on construction, so compare with what was
+    # typed rather than with the SymPy objects to know whether a side changed.
+    if (sp.latex(left_e), sp.latex(right_e)) != typed:
         steps.append(_step("expand_sides", _equation_latex(left_e, right_e)))
     a = a1 - a2
     if a2 != 0:
@@ -200,7 +205,9 @@ def _linear_steps(left: sp.Expr, right: sp.Expr, x: sp.Symbol) -> list[dict]:
     return steps
 
 
-def _solve_polynomial(expression: sp.Expr, left: sp.Expr, right: sp.Expr, x: sp.Symbol):
+def _solve_polynomial(
+    expression: sp.Expr, left: sp.Expr, right: sp.Expr, x: sp.Symbol, typed: tuple[str, str]
+):
     """Returns (solutions, steps, notes, approximate)."""
     polynomial = sp.Poly(expression, x)
     degree = polynomial.degree()
@@ -210,7 +217,7 @@ def _solve_polynomial(expression: sp.Expr, left: sp.Expr, right: sp.Expr, x: sp.
     if degree == 1:
         a, b = polynomial.all_coeffs()
         if left.is_polynomial(x) and right.is_polynomial(x):
-            steps = _linear_steps(left, right, x)
+            steps = _linear_steps(left, right, x, typed)
         else:
             steps = [_step("move_all", _equation_latex(polynomial.as_expr(), sp.Integer(0)))]
         return [sp.simplify(-b / a)], steps, notes, False
@@ -321,7 +328,8 @@ def _solve_equation(statement: Statement, requested: str | None) -> dict:
         notes.append(message("no_real_solutions"))
         steps.append(_step("move_all", _equation_latex(expression, sp.Integer(0))))
     elif is_polynomial:
-        solutions, steps, notes, approximate = _solve_polynomial(expression, left, right, x)
+        typed = (expression_latex(statement.lhs), expression_latex(statement.rhs))
+        solutions, steps, notes, approximate = _solve_polynomial(expression, left, right, x, typed)
     else:
         try:
             found = sp.solveset(left - right, x, domain=sp.S.Reals)

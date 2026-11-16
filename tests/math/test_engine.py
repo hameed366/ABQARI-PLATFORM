@@ -149,7 +149,9 @@ def test_linear_steps_follow_the_balance_method():
 def test_linear_steps_choose_add_or_subtract_by_sign():
     assert _rules("3x - 5 = 2x + 7") == ["subtract_both", "add_both", "solutions"]
     assert _rules("7 = 2x + 3") == ["subtract_both", "subtract_both", "divide_both", "solutions"]
-    assert _rules("2(x - 3) = 4(x + 1)")[0] == "expand_sides"
+    expanded = solve("2(x - 3) = 4(x + 1)")["steps"][0]
+    assert expanded["rule"] == "expand_sides" and expanded["latex"] == "2 x - 6 = 4 x + 4"
+    assert _rules("0.5x = 2.5")[0] == "expand_sides"  # decimals become exact fractions
 
 
 def test_quadratic_steps_show_discriminant_formula_and_factors():
