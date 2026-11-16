@@ -1,3 +1,4 @@
+import 'package:abqari_bridge/abqari_bridge.dart';
 import 'package:abqari_localization/abqari_localization.dart';
 import 'package:abqari_ui/abqari_ui.dart';
 import 'package:material_ui/material_ui.dart';
@@ -18,6 +19,7 @@ Future<void> main() async {
     AbqariMathApp(
       localeController: localeController,
       themeModeController: themeModeController,
+      fullEngine: EmbeddedPythonEngine(),
     ),
   );
 }
@@ -27,10 +29,14 @@ class AbqariMathApp extends StatelessWidget {
     super.key,
     required this.localeController,
     required this.themeModeController,
+    this.fullEngine,
   });
 
   final LocaleController localeController;
   final ThemeModeController themeModeController;
+
+  /// Solves what the on-device core cannot. Null: the core alone.
+  final FullEngine? fullEngine;
 
   @override
   Widget build(BuildContext context) {
@@ -52,6 +58,7 @@ class AbqariMathApp extends StatelessWidget {
         home: MathHomePage(
           localeController: localeController,
           themeModeController: themeModeController,
+          fullEngine: fullEngine,
         ),
       ),
     );
@@ -63,10 +70,12 @@ class MathHomePage extends StatelessWidget {
     super.key,
     required this.localeController,
     required this.themeModeController,
+    this.fullEngine,
   });
 
   final LocaleController localeController;
   final ThemeModeController themeModeController;
+  final FullEngine? fullEngine;
 
   @override
   Widget build(BuildContext context) {
@@ -118,6 +127,7 @@ class MathHomePage extends StatelessWidget {
                 builder: (_) => SolverPage(
                   localeController: localeController,
                   themeModeController: themeModeController,
+                  fullEngine: fullEngine,
                 ),
               ),
             ),

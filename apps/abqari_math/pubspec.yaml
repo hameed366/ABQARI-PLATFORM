@@ -18,6 +18,8 @@ dependencies:
     path: ../../packages/math_engine
   abqari_formula:
     path: ../../packages/math_view
+  abqari_bridge:
+    path: ../../packages/engine_bridge
   cupertino_icons: ^1.0.8
 dev_dependencies:
   flutter_test:
