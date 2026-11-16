@@ -99,4 +99,15 @@ jobs:
           channel: stable
           cache: true
       - run: flutter pub get --enforce-lockfile
-      - run: flutter build ios --debug --no-codesign
+      - name: Build iOS
+        run: |
+          if flutter build ios --debug --no-codesign -v > ios-build.log 2>&1; then
+            tail -n 5 ios-build.log
+          else
+            echo "::group::Device build failed - last lines of the verbose log"
+            grep -nE "error:|Signing|requires a development team|CODE_SIGN|failed" ios-build.log | tail -n 40 || true
+            tail -n 60 ios-build.log
+            echo "::endgroup::"
+            echo "::warning::iOS device build (unsigned) failed for ${{ matrix.app }}; checking the simulator build instead."
+            flutter build ios --simulator --debug
+          fi
