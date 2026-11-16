@@ -37,7 +37,7 @@ _COMMANDS: dict[str, tuple[str, ...]] = {
 }
 
 _TASHKEEL = re.compile(r"[ً-ْٰـ]")  # harakat, dagger alif, tatweel
-_INVISIBLE = re.compile(r"[​-‏‪-‮⁦-⁩﻿]")
+_INVISIBLE = re.compile(r"[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]")
 
 _DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹", "01234567890123456789")
 

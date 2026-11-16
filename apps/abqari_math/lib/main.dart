@@ -3,6 +3,7 @@ import 'package:abqari_ui/abqari_ui.dart';
 import 'package:material_ui/material_ui.dart';
 
 import 'l10n/math_strings.dart';
+import 'solver/solver_page.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -112,6 +113,14 @@ class MathHomePage extends StatelessWidget {
             icon: Icons.calculate_outlined,
             title: strings.firstFeatureTitle,
             subtitle: strings.firstFeatureSubtitle,
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(
+                builder: (_) => SolverPage(
+                  localeController: localeController,
+                  themeModeController: themeModeController,
+                ),
+              ),
+            ),
           ),
           FeatureCard(
             icon: Icons.category_outlined,

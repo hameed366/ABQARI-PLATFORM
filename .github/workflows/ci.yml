@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: [localization, shared_ui]
+        package: [localization, math_engine, math_view, shared_ui]
     defaults:
       run:
         working-directory: packages/${{ matrix.package }}
@@ -50,7 +50,9 @@ jobs:
       - run: flutter pub get
       - run: dart format --output=none --set-exit-if-changed lib test
       - run: flutter analyze
-      - run: flutter test
+      - name: Test (Flutter packages with flutter test, pure Dart with dart test)
+        run: |
+          if grep -q "flutter_test:" pubspec.yaml; then flutter test; else dart test; fi
 
   flutter:
     name: flutter (${{ matrix.app }})

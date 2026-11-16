@@ -1,5 +1,6 @@
 import 'package:abqari_math/l10n/math_strings.dart';
 import 'package:abqari_math/main.dart';
+import 'package:abqari_math/solver/solver_page.dart';
 import 'package:abqari_localization/abqari_localization.dart';
 import 'package:abqari_ui/abqari_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -72,17 +73,24 @@ void main() {
     expect(store.languageCode, 'ar');
   });
 
-  testWidgets('feature cards do not pretend to be buttons', (tester) async {
+  testWidgets(
+      'only the problem-solving card is an action, and it opens the solver',
+      (tester) async {
     final controller = LocaleController(store: InMemoryLocaleStore());
     await tester.pumpWidget(_app(controller));
     await tester.pumpAndSettle();
 
-    final tiles = tester.widgetList<ListTile>(find.byType(ListTile));
+    final tiles = tester.widgetList<ListTile>(find.byType(ListTile)).toList();
     expect(tiles, hasLength(3));
-    for (final tile in tiles) {
+    expect(tiles.first.onTap, isNotNull);
+    for (final tile in tiles.skip(1)) {
       expect(tile.onTap, isNull);
       expect(tile.trailing, isNull);
     }
+
+    await tester.tap(find.text(_ar.firstFeatureTitle));
+    await tester.pumpAndSettle();
+    expect(find.byType(SolverPage), findsOneWidget);
   });
 
   testWidgets('a saved dark choice opens dark with the brand surface',
@@ -157,13 +165,18 @@ void main() {
   });
 
   test('both languages are complete and in the right script', () {
-    final arabicLetters = RegExp(r'[؀-ۿ]');
-    expect(_ar.all.length, _en.all.length);
-    for (final text in _ar.all) {
+    final arabicLetters = RegExp(r'[\u0600-\u06FF]');
+    final westernDigits = RegExp('[0-9]');
+    final arabic = [..._ar.all, ..._ar.solverStrings];
+    final english = [..._en.all, ..._en.solverStrings];
+    expect(arabic.length, english.length);
+    for (final text in arabic) {
       expect(text.trim(), isNotEmpty);
       expect(arabicLetters.hasMatch(text), isTrue, reason: text);
+      expect(westernDigits.hasMatch(text), isFalse,
+          reason: 'Arabic uses ٠–٩: $text');
     }
-    for (final text in _en.all) {
+    for (final text in english) {
       expect(text.trim(), isNotEmpty);
       expect(arabicLetters.hasMatch(text), isFalse, reason: text);
     }

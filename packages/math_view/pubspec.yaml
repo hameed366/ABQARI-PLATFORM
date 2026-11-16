@@ -1,0 +1,18 @@
+name: abqari_formula
+description: Draws mathematics from the ABQARI engine in Arabic notation (right to left, Arabic-Indic digits, exponent at the top left, mirrored root) or Latin notation.
+publish_to: 'none'
+version: 0.1.0
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  material_ui: ^1.0.0
+  abqari_engine:
+    path: ../math_engine
+  abqari_localization:
+    path: ../localization
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0

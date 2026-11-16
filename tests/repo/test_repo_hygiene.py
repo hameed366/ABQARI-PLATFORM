@@ -247,3 +247,17 @@ def test_ci_requires_sympy_for_the_engine_tests():
         text = (REPO_ROOT / ".github/workflows" / workflow).read_text()
         assert 'ABQARI_REQUIRE_SYMPY: "1"' in text, workflow
         assert "backend/math_solver/requirements.txt" in text, workflow
+
+
+def test_no_invisible_direction_characters_in_source():
+    """Bidi control characters can make code read differently from how it runs
+    ("Trojan Source"). Source must spell them as escapes."""
+    hidden = re.compile("[\u200b-\u200f\u202a-\u202e\u2066-\u2069\ufeff]")
+    offenders = []
+    for path in tracked_files():
+        if path.suffix not in {".dart", ".py", ".sql", ".yaml", ".yml", ".json", ".md"}:
+            continue
+        for number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            if hidden.search(line):
+                offenders.append(f"{path.relative_to(REPO_ROOT)}:{number}")
+    assert offenders == []

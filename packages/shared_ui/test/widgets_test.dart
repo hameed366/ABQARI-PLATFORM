@@ -65,6 +65,40 @@ void main() {
     expect(tile.trailing, isNull);
   });
 
+  testWidgets(
+      'a feature card with an action is tappable and its arrow follows direction',
+      (tester) async {
+    var taps = 0;
+    for (final direction in TextDirection.values) {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: Directionality(
+            textDirection: direction,
+            child: Scaffold(
+              body: FeatureCard(
+                icon: Icons.functions,
+                title: 'Title',
+                subtitle: 'Subtitle',
+                onTap: () => taps++,
+              ),
+            ),
+          ),
+        ),
+      );
+      final arrow = tester.widget<Icon>(find.byIcon(Icons.arrow_forward));
+      expect(arrow.icon!.matchTextDirection, isTrue);
+      final tile = tester.getRect(find.byType(ListTile));
+      final arrowRect = tester.getRect(find.byIcon(Icons.arrow_forward));
+      if (direction == TextDirection.rtl) {
+        expect(arrowRect.center.dx, lessThan(tile.center.dx));
+      } else {
+        expect(arrowRect.center.dx, greaterThan(tile.center.dx));
+      }
+      await tester.tap(find.byType(ListTile));
+    }
+    expect(taps, 2);
+  });
+
   testWidgets('logo paints at small and large sizes and is labelled',
       (tester) async {
     final controller = ThemeModeController(store: InMemoryThemeModeStore());
