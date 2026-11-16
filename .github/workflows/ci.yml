@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: [localization]
+        package: [localization, shared_ui]
     defaults:
       run:
         working-directory: packages/${{ matrix.package }}
