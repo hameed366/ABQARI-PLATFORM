@@ -51,8 +51,9 @@ Node _node(Object? json, int depth) {
       return Var(name);
     case 'const':
       final name = text(1);
-      if (name != 'pi' && name != 'e')
+      if (name != 'pi' && name != 'e') {
         throw FormatException('bad constant $name');
+      }
       return Constant(name);
     case 'neg':
       return Neg(child(1));
@@ -68,8 +69,9 @@ Node _node(Object? json, int depth) {
       return Pow(child(1), child(2));
     case 'call':
       final name = text(1);
-      if (!_functions.contains(name))
+      if (!_functions.contains(name)) {
         throw FormatException('bad function $name');
+      }
       return Call(name, child(2));
     default:
       throw FormatException('unknown node kind $kind');

@@ -93,8 +93,9 @@ Answer _answer(String? task, Map<String, dynamic> answer) {
           (s as Map).cast<String, dynamic>(),
       ];
       final set = _solutionSets[answer['kind']];
-      if (set == null)
+      if (set == null) {
         throw FormatException('unknown solution set ${answer['kind']}');
+      }
       return Answer(
         kind: AnswerKind.solutions,
         solutionSet: set,
