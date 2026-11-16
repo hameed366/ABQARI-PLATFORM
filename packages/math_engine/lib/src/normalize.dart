@@ -61,12 +61,14 @@ const Map<String, List<String>> _commands = {
 };
 
 final RegExp _tashkeel = RegExp(r'[\u064B-\u0652\u0670\u0640]');
-final RegExp _invisible = RegExp(r'[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]');
+final RegExp _invisible =
+    RegExp(r'[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF]');
 final RegExp _letter = RegExp(r'[a-z\u0600-\u06FF]');
 final RegExp _arabicLetter = RegExp(r'[\u0600-\u06FF]');
 final RegExp _allowed = RegExp(r'^[0-9a-z+\-*/^().=<>! ]$');
 final RegExp _superscriptRun = RegExp('[⁰¹²³⁴⁵⁶⁷⁸⁹]+');
-final RegExp _sqrtAtom = RegExp(r'\u221A\s*(\d+(?:\.\d+)?|[a-zA-Z\u0600-\u06FF])');
+final RegExp _sqrtAtom =
+    RegExp(r'\u221A\s*(\d+(?:\.\d+)?|[a-zA-Z\u0600-\u06FF])');
 final RegExp _spaces = RegExp(' +');
 
 const String _superscripts = '⁰¹²³⁴⁵⁶⁷⁸⁹';

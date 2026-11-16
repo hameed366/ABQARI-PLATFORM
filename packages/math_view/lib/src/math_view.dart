@@ -189,11 +189,8 @@ class _MathPainter {
           case 'sqrt':
             return _radical(argument, scale);
           case 'abs':
-            return _row([
-              label('|', scale),
-              build(argument, scale),
-              label('|', scale)
-            ]);
+            return _row(
+                [label('|', scale), build(argument, scale), label('|', scale)]);
           case 'exp':
             return _power(const Constant('e'), argument, scale);
           default:
