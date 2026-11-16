@@ -206,3 +206,25 @@ def test_shared_packages_know_nothing_about_either_app():
             text = path.read_text(encoding="utf-8")
             for app in APPS:
                 assert app not in text, f"{path.relative_to(REPO_ROOT)} references {app}"
+
+
+# ── phase 4: one visual identity ────────────────────────────────────────────
+
+@pytest.mark.parametrize("app", APPS)
+def test_app_takes_its_look_from_the_shared_ui_package(app):
+    pubspec = (REPO_ROOT / "apps" / app / "pubspec.yaml").read_text()
+    assert "path: ../../packages/shared_ui" in pubspec
+    for path in (REPO_ROOT / "apps" / app / "lib").rglob("*.dart"):
+        text = _strip_comments(path, path.read_text(encoding="utf-8"))
+        for needle in ("Color(0x", "Colors.", "ColorScheme.fromSeed", "ThemeData("):
+            assert needle not in text, (
+                f"{path.relative_to(REPO_ROOT)} defines its own look ({needle}); use abqari_ui"
+            )
+
+
+def test_ui_package_carries_no_user_visible_text():
+    """abqari_ui stays language-neutral: apps pass every visible string in."""
+    for path in (REPO_ROOT / "packages" / "shared_ui" / "lib").rglob("*.dart"):
+        assert not ARABIC.search(path.read_text(encoding="utf-8")), path.name
+    pubspec = (REPO_ROOT / "packages" / "shared_ui" / "pubspec.yaml").read_text()
+    assert "abqari_localization" not in pubspec

@@ -1,6 +1,7 @@
 import 'package:abqari_math/l10n/math_strings.dart';
 import 'package:abqari_math/main.dart';
 import 'package:abqari_localization/abqari_localization.dart';
+import 'package:abqari_ui/abqari_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -10,10 +11,21 @@ const _en = MathStringsEn();
 TextDirection _direction(WidgetTester tester) =>
     Directionality.of(tester.element(find.byType(ListView)));
 
+AbqariMathApp _app(LocaleController locale, [ThemeModeController? theme]) {
+  return AbqariMathApp(
+    localeController: locale,
+    themeModeController:
+        theme ?? ThemeModeController(store: InMemoryThemeModeStore()),
+  );
+}
+
+Brightness _brightness(WidgetTester tester) =>
+    Theme.of(tester.element(find.byType(ListView))).brightness;
+
 void main() {
   testWidgets('first launch is Arabic and right-to-left', (tester) async {
     final controller = LocaleController(store: InMemoryLocaleStore());
-    await tester.pumpWidget(AbqariMathApp(localeController: controller));
+    await tester.pumpWidget(_app(controller));
     await tester.pumpAndSettle();
 
     for (final text in _ar.all) {
@@ -26,7 +38,7 @@ void main() {
       (tester) async {
     final controller = LocaleController(store: InMemoryLocaleStore('en'));
     await controller.load();
-    await tester.pumpWidget(AbqariMathApp(localeController: controller));
+    await tester.pumpWidget(_app(controller));
     await tester.pumpAndSettle();
 
     for (final text in _en.all) {
@@ -39,7 +51,7 @@ void main() {
       (tester) async {
     final store = InMemoryLocaleStore();
     final controller = LocaleController(store: store);
-    await tester.pumpWidget(AbqariMathApp(localeController: controller));
+    await tester.pumpWidget(_app(controller));
     await tester.pumpAndSettle();
 
     await tester.tap(find.text('English'));
@@ -62,7 +74,7 @@ void main() {
 
   testWidgets('feature cards do not pretend to be buttons', (tester) async {
     final controller = LocaleController(store: InMemoryLocaleStore());
-    await tester.pumpWidget(AbqariMathApp(localeController: controller));
+    await tester.pumpWidget(_app(controller));
     await tester.pumpAndSettle();
 
     final tiles = tester.widgetList<ListTile>(find.byType(ListTile));
@@ -71,6 +83,74 @@ void main() {
       expect(tile.onTap, isNull);
       expect(tile.trailing, isNull);
     }
+  });
+
+  testWidgets('a saved dark choice opens dark with the brand surface', (tester) async {
+    final theme = ThemeModeController(store: InMemoryThemeModeStore('dark'));
+    await theme.load();
+    await tester.pumpWidget(
+      _app(LocaleController(store: InMemoryLocaleStore()), theme),
+    );
+    await tester.pumpAndSettle();
+
+    expect(_brightness(tester), Brightness.dark);
+    expect(
+      Theme.of(tester.element(find.byType(ListView))).colorScheme.surface,
+      AbqariColors.darkSurface,
+    );
+  });
+
+  testWidgets('the appearance button switches to light then dark and saves', (tester) async {
+    final store = InMemoryThemeModeStore();
+    final theme = ThemeModeController(store: store);
+    await tester.pumpWidget(
+      _app(LocaleController(store: InMemoryLocaleStore()), theme),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byType(ThemeModeButton));
+    await tester.pumpAndSettle();
+    expect(_brightness(tester), Brightness.light);
+    expect(store.name, 'light');
+
+    await tester.tap(find.byType(ThemeModeButton));
+    await tester.pumpAndSettle();
+    expect(_brightness(tester), Brightness.dark);
+    expect(store.name, 'dark');
+  });
+
+  testWidgets('appearance survives a language switch', (tester) async {
+    final theme = ThemeModeController(store: InMemoryThemeModeStore('dark'));
+    await theme.load();
+    await tester.pumpWidget(
+      _app(LocaleController(store: InMemoryLocaleStore()), theme),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.text('English'));
+    await tester.pumpAndSettle();
+
+    expect(_brightness(tester), Brightness.dark);
+    expect(find.text(_en.headline), findsOneWidget);
+  });
+
+  testWidgets('home shows the logo and uses the math lead colour', (tester) async {
+    await tester.pumpWidget(
+      _app(
+        LocaleController(store: InMemoryLocaleStore()),
+        ThemeModeController(
+          store: InMemoryThemeModeStore(),
+          initial: ThemeMode.light,
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.byType(AbqariLogo), findsOneWidget);
+    expect(
+      Theme.of(tester.element(find.byType(ListView))).colorScheme.primary,
+      AbqariTheme.light(AbqariProduct.math).colorScheme.primary,
+    );
   });
 
   test('both languages are complete and in the right script', () {

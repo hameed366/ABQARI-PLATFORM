@@ -11,6 +11,8 @@ abstract class CommonStrings {
 
   String get switchLanguageTooltip;
 
+  String get switchAppearanceTooltip;
+
   static const LocalizationsDelegate<CommonStrings> delegate =
       TypedLocalizationsDelegate<CommonStrings>({
     'ar': CommonStringsAr(),
@@ -29,6 +31,9 @@ class CommonStringsAr extends CommonStrings {
 
   @override
   String get switchLanguageTooltip => 'تغيير اللغة إلى الإنجليزية';
+
+  @override
+  String get switchAppearanceTooltip => 'تغيير المظهر: تلقائي، فاتح، داكن';
 }
 
 class CommonStringsEn extends CommonStrings {
@@ -39,4 +44,8 @@ class CommonStringsEn extends CommonStrings {
 
   @override
   String get switchLanguageTooltip => 'Switch language to Arabic';
+
+  @override
+  String get switchAppearanceTooltip =>
+      'Change appearance: automatic, light, dark';
 }
