@@ -128,31 +128,31 @@ class _MathPainter {
   final double size;
   final Color color;
 
-  Widget text(String value, double scale) =>
+  Widget label(String value, double scale) =>
       Text(value, style: TextStyle(fontSize: size * scale), softWrap: false);
 
   Widget operator(String symbol, [double scale = 1]) => Padding(
         padding: EdgeInsets.symmetric(horizontal: size * scale * 0.22),
-        child: text(symbol, scale),
+        child: label(symbol, scale),
       );
 
   Widget paren(Widget child, double scale) =>
-      _row([text('(', scale), child, text(')', scale)]);
+      _row([label('(', scale), child, label(')', scale)]);
 
   Widget build(Node node, [double scale = 1]) {
     switch (node) {
       case Num(:final text):
-        return this.text(notation.number(text), scale);
+        return label(notation.number(text), scale);
       case Var(:final name):
-        return this.text(notation.variable(name), scale);
+        return label(notation.variable(name), scale);
       case Constant(:final name):
-        return this.text(notation.constant(name), scale);
+        return label(notation.constant(name), scale);
       case Sym(:final symbol):
-        return this.text(notation.symbol(symbol), scale);
+        return label(notation.symbol(symbol), scale);
       case Neg(:final operand):
         final inner = build(operand, scale);
         return _row([
-          this.text(Notation.minus, scale),
+          label(Notation.minus, scale),
           precedence(operand) <= 1 ? paren(inner, scale) : inner,
         ]);
       case Add(:final left, :final right) || Sub(:final left, :final right):
@@ -176,8 +176,9 @@ class _MathPainter {
           r = paren(r, scale);
           return _row([l, r]);
         }
-        if (explicitTimes(right))
+        if (explicitTimes(right)) {
           return _row([l, operator(Notation.times, scale), r]);
+        }
         return _row([l, SizedBox(width: size * scale * 0.06), r]);
       case Div(:final left, :final right):
         return _fraction(left, right, scale);
@@ -189,15 +190,15 @@ class _MathPainter {
             return _radical(argument, scale);
           case 'abs':
             return _row([
-              this.text('|', scale),
+              label('|', scale),
               build(argument, scale),
-              this.text('|', scale)
+              label('|', scale)
             ]);
           case 'exp':
             return _power(const Constant('e'), argument, scale);
           default:
             return _row([
-              this.text(notation.function(function), scale),
+              label(notation.function(function), scale),
               SizedBox(width: size * scale * 0.08),
               paren(build(argument, scale), scale),
             ]);
@@ -261,8 +262,9 @@ class _MathPainter {
       painter: RadicalPainter(color: color, strokeWidth: stroke),
       child: const SizedBox.expand(),
     );
-    if (notation == Notation.arabic)
+    if (notation == Notation.arabic) {
       sign = Transform.flip(flipX: true, child: sign);
+    }
     return IntrinsicHeight(
       child: _row(
         [
