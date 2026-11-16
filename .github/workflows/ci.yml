@@ -26,8 +26,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - run: pip install pytest
+      - run: pip install pytest -r backend/math_solver/requirements.txt
       - run: python -m pytest
+        env:
+          ABQARI_REQUIRE_SYMPY: "1"
 
   packages:
     name: package (${{ matrix.package }})
