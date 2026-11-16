@@ -1,0 +1,30 @@
+# TEMPORARY, one-off: resolves dependencies (updating the apps' lockfiles) and
+# applies `dart format` with the real toolchain, then commits. Removed after it runs.
+name: phase3-sync
+on:
+  push:
+    branches: [phase-3]
+    paths: ['.github/workflows/phase3-sync.yml']
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+      - name: Resolve and format
+        run: |
+          for dir in packages/localization apps/abqari_edu apps/abqari_math; do
+            (cd $dir && flutter pub get && dart format lib test)
+          done
+      - run: git status --short
+      - name: Commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "apps: update lockfiles and apply dart format (Flutter stable)"
+          git push

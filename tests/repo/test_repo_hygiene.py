@@ -158,5 +158,51 @@ def test_apps_have_distinct_store_identifiers():
 def test_ci_builds_every_app():
     ci = (REPO_ROOT / ".github/workflows/ci.yml").read_text()
     assert ci.count("app: [abqari_edu, abqari_math]") == 2  # android + ios matrices
-    for command in ("flutter analyze", "flutter test", "flutter build apk", "flutter build ios"):
+    packages = sorted(p.name for p in (REPO_ROOT / "packages").iterdir() if p.is_dir())
+    assert f"package: [{', '.join(packages)}]" in ci, "every shared package must be tested in CI"
+    for command in ("dart format", "flutter analyze", "flutter test", "flutter build apk",
+                    "flutter build ios"):
         assert command in ci
+
+
+# ── phase 3: two languages, two directions ──────────────────────────────────
+
+ARABIC = re.compile(r"[؀-ۿ]")
+
+
+@pytest.mark.parametrize("app", APPS)
+def test_app_uses_the_shared_localization_package(app):
+    pubspec = (REPO_ROOT / "apps" / app / "pubspec.yaml").read_text()
+    assert "abqari_localization:" in pubspec
+    assert "path: ../../packages/localization" in pubspec
+
+
+@pytest.mark.parametrize("app", APPS)
+def test_user_visible_text_lives_only_in_l10n(app):
+    """No Arabic literals in UI code: every string goes through lib/l10n/."""
+    lib = REPO_ROOT / "apps" / app / "lib"
+    offenders = [
+        str(p.relative_to(REPO_ROOT))
+        for p in lib.rglob("*.dart")
+        if "l10n" not in p.relative_to(lib).parts
+        and ARABIC.search(_strip_comments(p, p.read_text(encoding="utf-8")))
+    ]
+    assert offenders == []
+
+
+@pytest.mark.parametrize("app", APPS)
+def test_direction_is_never_hard_coded(app):
+    """Direction must follow the locale; no forced RTL/LTR and no one-sided arrows."""
+    for path in (REPO_ROOT / "apps" / app / "lib").rglob("*.dart"):
+        text = _strip_comments(path, path.read_text(encoding="utf-8"))
+        for needle in ("TextDirection.rtl", "TextDirection.ltr", "chevron_left", "chevron_right",
+                       "arrow_back_ios", "arrow_forward_ios"):
+            assert needle not in text, f"{path.relative_to(REPO_ROOT)} uses {needle}"
+
+
+def test_shared_packages_know_nothing_about_either_app():
+    for path in (REPO_ROOT / "packages").rglob("*"):
+        if path.is_file() and path.suffix in {".dart", ".yaml"}:
+            text = path.read_text(encoding="utf-8")
+            for app in APPS:
+                assert app not in text, f"{path.relative_to(REPO_ROOT)} references {app}"

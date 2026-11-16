@@ -10,6 +10,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   material_ui: ^1.0.0
+  abqari_localization:
+    path: ../../packages/localization
   cupertino_icons: ^1.0.8
 dev_dependencies:
   flutter_test:

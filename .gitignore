@@ -29,3 +29,5 @@ __pycache__/
 *.ipa
 *.apk
 *.aab
+# Shared packages are libraries: their lockfiles are not committed
+packages/*/pubspec.lock
