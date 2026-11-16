@@ -24,8 +24,9 @@ class SkillProgress {
 
   MasteryLevel get level {
     if (attempts == 0) return MasteryLevel.notStarted;
-    if (recent.length >= window && masteryPercent >= masteredAt)
+    if (recent.length >= window && masteryPercent >= masteredAt) {
       return MasteryLevel.mastered;
+    }
     if (masteryPercent >= practisingAt) return MasteryLevel.practising;
     return MasteryLevel.learning;
   }
@@ -50,8 +51,9 @@ class SkillProgress {
     final recent = json['recent'];
     final attempts = json['attempts'];
     final correct = json['correct'];
-    if (recent is! List || attempts is! int || correct is! int)
+    if (recent is! List || attempts is! int || correct is! int) {
       return const SkillProgress();
+    }
     final flags = [
       for (final r in recent)
         if (r is bool) r
@@ -84,8 +86,9 @@ class LearnerProgress {
   /// The first open skill of [path] that is not mastered yet.
   Skill? recommendedNext(LearningPath path) {
     for (final skill in path.skills) {
-      if (isUnlocked(skill) && of(skill.id).level != MasteryLevel.mastered)
+      if (isUnlocked(skill) && of(skill.id).level != MasteryLevel.mastered) {
         return skill;
+      }
     }
     return null;
   }

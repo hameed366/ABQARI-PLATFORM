@@ -50,8 +50,9 @@ class SkillPage extends StatelessWidget {
           for (final example in skill.lesson.whereType<WorkedExample>())
             Builder(builder: (context) {
               final result = solve(example.problem);
-              if (result.status != SolveStatus.solved)
+              if (result.status != SolveStatus.solved) {
                 return const SizedBox.shrink();
+              }
               return Section(
                 title: strings.workedExampleTitle,
                 child: Column(
@@ -61,7 +62,7 @@ class SkillPage extends StatelessWidget {
                         result: result,
                         instruction: skill.instruction.of(language),
                         notation: notation),
-                    if (result.steps.isNotEmpty)
+                    if (result.steps.isNotEmpty) {
                       StepList(
                           steps: result.steps,
                           notation: notation,
@@ -73,6 +74,7 @@ class SkillPage extends StatelessWidget {
                   ],
                 ),
               );
+                    }
             }),
           const SizedBox(height: 8),
           FilledButton.icon(
