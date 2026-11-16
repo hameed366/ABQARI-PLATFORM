@@ -18,9 +18,13 @@ dependencies:
     path: ../../packages/math_engine
   abqari_formula:
     path: ../../packages/math_view
+  abqari_bridge:
+    path: ../../packages/engine_bridge
   cupertino_icons: ^1.0.8
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
   flutter_lints: ^5.0.0
 flutter:

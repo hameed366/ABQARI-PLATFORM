@@ -20,11 +20,15 @@ class ResultView extends StatelessWidget {
     required this.result,
     required this.notation,
     required this.languageCode,
+    this.fromFullEngine = false,
   });
 
   final SolveResult result;
   final Notation notation;
   final String languageCode;
+
+  /// Show that the answer came from the full engine.
+  final bool fromFullEngine;
 
   String _say(String code) => engineMessage(code, languageCode);
 
@@ -62,7 +66,24 @@ class ResultView extends StatelessWidget {
     final notes =
         result.notes.where((code) => !_answerNotes.contains(code)).toList();
     return [
-      _Section(title: strings.answerTitle, child: _answer(context, answer)),
+      _Section(
+        title: strings.answerTitle,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _answer(context, answer),
+            if (fromFullEngine)
+              Padding(
+                padding: const EdgeInsets.only(top: 8),
+                child: Chip(
+                  avatar: const Icon(Icons.memory, size: 16),
+                  label: Text(strings.solvedByFullEngine),
+                  visualDensity: VisualDensity.compact,
+                ),
+              ),
+          ],
+        ),
+      ),
       _VerificationBanner(
         status: verification.status,
         summary: _say('verification_${verification.status.name}'),
@@ -105,14 +126,41 @@ class ResultView extends StatelessWidget {
     ];
   }
 
+  /// A decimal for a value that is not an integer, when one is known.
+  String? _valueApproximation(Answer answer) {
+    final exact = answer.exact;
+    if (exact != null) {
+      return exact.isRational && exact.rationalValue.isInteger
+          ? null
+          : approximateText(exact.toDouble(), notation);
+    }
+    final value = answer.approximation;
+    return value == null || !_hasIrrationalPart(answer.expression!)
+        ? null
+        : approximateText(value, notation);
+  }
+
+  /// A decimal for irrational roots; none for exact rationals.
+  String? _rootApproximation(Answer answer, int index) {
+    if (index < answer.roots.length) {
+      final root = answer.roots[index];
+      return root.isRational
+          ? null
+          : approximateText(root.toDouble(), notation);
+    }
+    if (index < answer.rootApproximations.length &&
+        _hasIrrationalPart(answer.rootNodes[index])) {
+      final value = answer.rootApproximations[index];
+      return value == null ? null : approximateText(value, notation);
+    }
+    return null;
+  }
+
   Widget _answer(BuildContext context, Answer answer) {
     final emphasis = Theme.of(context).textTheme.titleMedium;
     switch (answer.kind) {
       case AnswerKind.value:
-        final approx =
-            answer.exact!.isRational && answer.exact!.rationalValue.isInteger
-                ? null
-                : approximateText(answer.exact!.toDouble(), notation);
+        final approx = _valueApproximation(answer);
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -122,8 +170,10 @@ class ResultView extends StatelessWidget {
           ],
         );
       case AnswerKind.truth:
-        return Text(_say(answer.truth! ? 'true_statement' : 'false_statement'),
-            style: emphasis);
+        return Text(
+          _say(answer.truth! ? 'true_statement' : 'false_statement'),
+          style: emphasis,
+        );
       case AnswerKind.solutions:
         switch (answer.solutionSet!) {
           case SolutionSet.allReals:
@@ -134,7 +184,7 @@ class ResultView extends StatelessWidget {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                for (var i = 0; i < answer.roots.length; i++)
+                for (var i = 0; i < answer.rootNodes.length; i++)
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 4),
                     child: Row(
@@ -147,10 +197,10 @@ class ResultView extends StatelessWidget {
                             fontSize: 26,
                           )),
                         ),
-                        if (!answer.roots[i].isRational) ...[
+                        if (_rootApproximation(answer, i)
+                            case final approx?) ...[
                           const SizedBox(width: 12),
-                          Text(
-                              '≈ ${approximateText(answer.roots[i].toDouble(), notation) ?? ''}'),
+                          Text('≈ $approx'),
                         ],
                       ],
                     ),
@@ -167,6 +217,20 @@ class ResultView extends StatelessWidget {
     }
   }
 }
+
+/// True when the value contains a root, π, e or a function: worth a decimal.
+bool _hasIrrationalPart(Node node) => switch (node) {
+      Call() || Constant() || Sym() => true,
+      Num() || Var() => false,
+      Neg(:final operand) => _hasIrrationalPart(operand),
+      Add(:final left, :final right) ||
+      Sub(:final left, :final right) ||
+      Mul(:final left, :final right) ||
+      Div(:final left, :final right) ||
+      Pow(:final left, :final right) ||
+      PlusMinus(:final left, :final right) =>
+        _hasIrrationalPart(left) || _hasIrrationalPart(right),
+    };
 
 class _Section extends StatelessWidget {
   const _Section({required this.title, required this.child});

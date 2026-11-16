@@ -29,6 +29,9 @@ abstract class MathStrings {
   String get stepsTitle;
   String get notesTitle;
   String get verificationTitle;
+  String get fullEngineWorking;
+  String get fullEngineUnavailable;
+  String get solvedByFullEngine;
   String checksPassed(int passed, int total);
   String errorAt(int position);
 
@@ -45,6 +48,9 @@ abstract class MathStrings {
         stepsTitle,
         notesTitle,
         verificationTitle,
+        fullEngineWorking,
+        fullEngineUnavailable,
+        solvedByFullEngine,
         checksPassed(3, 4),
         errorAt(5),
       ];
@@ -122,6 +128,13 @@ class MathStringsAr extends MathStrings {
   @override
   String get verificationTitle => 'التحقق';
   @override
+  String get fullEngineWorking => 'يعمل المحرك الكامل على المسألة…';
+  @override
+  String get fullEngineUnavailable =>
+      'تعذّر تشغيل المحرك الكامل الآن. حاول مرة أخرى.';
+  @override
+  String get solvedByFullEngine => 'حُلّت بالمحرك الكامل';
+  @override
   String checksPassed(int passed, int total) => AbqariDigits.toArabicIndic(
         'اجتاز $passed من $total فحوص مستقلة',
       );
@@ -181,6 +194,13 @@ class MathStringsEn extends MathStrings {
   String get notesTitle => 'Notes';
   @override
   String get verificationTitle => 'Verification';
+  @override
+  String get fullEngineWorking => 'The full engine is working on it…';
+  @override
+  String get fullEngineUnavailable =>
+      'The full engine could not run right now. Please try again.';
+  @override
+  String get solvedByFullEngine => 'Solved by the full engine';
   @override
   String checksPassed(int passed, int total) =>
       'Passed $passed of $total independent checks';

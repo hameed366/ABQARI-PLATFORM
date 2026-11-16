@@ -101,7 +101,25 @@ const Map<String, Map<String, String>> engineMessages = {
     'ar': 'حدث خطأ غير متوقع أثناء الحل.',
     'en': 'An unexpected error occurred while solving.',
   },
+  'not_text': {'ar': 'المدخل ليس نصًا.', 'en': 'The input is not text.'},
+  'cannot_solve': {
+    'ar': 'تعذّر إيجاد حل مضبوط لهذه المعادلة.',
+    'en': 'No exact solution could be found for this equation.',
+  },
+  'cannot_integrate': {
+    'ar': 'تعذّر إيجاد تكامل بصيغة مغلقة.',
+    'en': 'No closed-form integral could be found.',
+  },
   // notes on answers
+  'approximate_roots': {
+    'ar': 'لا توجد صيغة مضبوطة مبسطة لهذه الحلول؛ القيم المعروضة تقريبية.',
+    'en':
+        'These solutions have no simple exact form; the values shown are approximations.',
+  },
+  'log_is_base_ten': {
+    'ar': 'الدالة لو هنا للأساس عشرة، ولط للأساس الطبيعي.',
+    'en': 'Here log is base ten and ln is the natural logarithm.',
+  },
   'no_real_solutions': {
     'ar': 'لا توجد حلول حقيقية.',
     'en': 'There are no real solutions.',
