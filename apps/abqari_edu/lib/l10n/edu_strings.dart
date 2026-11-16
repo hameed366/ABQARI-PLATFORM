@@ -48,7 +48,8 @@ class EduStringsAr extends EduStrings {
   @override
   String get headline => 'تعلّم الرياضيات بطريقتك';
   @override
-  String get tagline => 'مسارات عامة مبنية على الموضوع والمهارة ومستوى الإتقان.';
+  String get tagline =>
+      'مسارات عامة مبنية على الموضوع والمهارة ومستوى الإتقان.';
   @override
   String get firstFeatureTitle => 'مسارات التعلّم';
   @override
@@ -60,7 +61,8 @@ class EduStringsAr extends EduStrings {
   @override
   String get thirdFeatureTitle => 'متابعة التقدّم';
   @override
-  String get thirdFeatureSubtitle => 'اعرف المهارات التي أتقنتها وما يحتاج إلى مراجعة';
+  String get thirdFeatureSubtitle =>
+      'اعرف المهارات التي أتقنتها وما يحتاج إلى مراجعة';
 }
 
 class EduStringsEn extends EduStrings {
@@ -71,11 +73,13 @@ class EduStringsEn extends EduStrings {
   @override
   String get headline => 'Learn mathematics your way';
   @override
-  String get tagline => 'General learning paths built on topic, skill, and mastery level.';
+  String get tagline =>
+      'General learning paths built on topic, skill, and mastery level.';
   @override
   String get firstFeatureTitle => 'Learning paths';
   @override
-  String get firstFeatureSubtitle => 'Pick a domain and a topic that match your level';
+  String get firstFeatureSubtitle =>
+      'Pick a domain and a topic that match your level';
   @override
   String get secondFeatureTitle => 'Practice and quizzes';
   @override
@@ -83,5 +87,6 @@ class EduStringsEn extends EduStrings {
   @override
   String get thirdFeatureTitle => 'Progress tracking';
   @override
-  String get thirdFeatureSubtitle => 'See which skills you have mastered and which need review';
+  String get thirdFeatureSubtitle =>
+      'See which skills you have mastered and which need review';
 }

@@ -71,11 +71,13 @@ class MathStringsEn extends MathStrings {
   @override
   String get headline => 'Your complete mathematics workspace';
   @override
-  String get tagline => 'Enter a problem, understand its steps, and verify the solution.';
+  String get tagline =>
+      'Enter a problem, understand its steps, and verify the solution.';
   @override
   String get firstFeatureTitle => 'Problem solving';
   @override
-  String get firstFeatureSubtitle => 'Arithmetic, algebra, equations, and inequalities';
+  String get firstFeatureSubtitle =>
+      'Arithmetic, algebra, equations, and inequalities';
   @override
   String get secondFeatureTitle => 'Geometry and graphs';
   @override

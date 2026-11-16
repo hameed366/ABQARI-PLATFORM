@@ -22,7 +22,8 @@ void main() {
     expect(_direction(tester), TextDirection.rtl);
   });
 
-  testWidgets('a saved English choice opens in English, left-to-right', (tester) async {
+  testWidgets('a saved English choice opens in English, left-to-right',
+      (tester) async {
     final controller = LocaleController(store: InMemoryLocaleStore('en'));
     await controller.load();
     await tester.pumpWidget(AbqariEduApp(localeController: controller));
@@ -34,7 +35,8 @@ void main() {
     expect(_direction(tester), TextDirection.ltr);
   });
 
-  testWidgets('the language button switches every string at once and saves', (tester) async {
+  testWidgets('the language button switches every string at once and saves',
+      (tester) async {
     final store = InMemoryLocaleStore();
     final controller = LocaleController(store: store);
     await tester.pumpWidget(AbqariEduApp(localeController: controller));

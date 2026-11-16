@@ -82,7 +82,8 @@ void main() {
       controller.addListener(() => seen.add(controller.locale));
 
       final pending = controller.setLocale(const Locale('en'));
-      expect(controller.locale, const Locale('en'), reason: 'before the save completes');
+      expect(controller.locale, const Locale('en'),
+          reason: 'before the save completes');
       await pending;
 
       expect(seen, const [Locale('en')]);
@@ -123,7 +124,8 @@ void main() {
       expect(store.languageCode, 'ar');
     });
 
-    test('a failing read is reported and the app still starts in Arabic', () async {
+    test('a failing read is reported and the app still starts in Arabic',
+        () async {
       final controller = LocaleController(store: _FailingStore());
       final reported = await _capturingErrors(controller.load);
 
@@ -146,7 +148,8 @@ void main() {
   group('SharedPreferencesLocaleStore', () {
     test('reads nothing on a fresh install', () async {
       SharedPreferences.setMockInitialValues({});
-      expect(await const SharedPreferencesLocaleStore().readLanguageCode(), isNull);
+      expect(await const SharedPreferencesLocaleStore().readLanguageCode(),
+          isNull);
     });
 
     test('a written language survives into a new controller', () async {

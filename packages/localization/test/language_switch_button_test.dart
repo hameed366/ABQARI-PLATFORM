@@ -29,11 +29,13 @@ void main() {
     expect(find.text('العربية'), findsNothing);
   });
 
-  testWidgets('one tap switches language and direction, and saves', (tester) async {
+  testWidgets('one tap switches language and direction, and saves',
+      (tester) async {
     final store = InMemoryLocaleStore();
     final controller = LocaleController(store: store);
     await tester.pumpWidget(_host(controller));
-    expect(Directionality.of(tester.element(find.byType(Scaffold))), TextDirection.rtl);
+    expect(Directionality.of(tester.element(find.byType(Scaffold))),
+        TextDirection.rtl);
 
     await tester.tap(find.text('English'));
     await tester.pumpAndSettle();
@@ -41,7 +43,8 @@ void main() {
     expect(controller.locale, const Locale('en'));
     expect(store.languageCode, 'en');
     expect(find.text('العربية'), findsOneWidget);
-    expect(Directionality.of(tester.element(find.byType(Scaffold))), TextDirection.ltr);
+    expect(Directionality.of(tester.element(find.byType(Scaffold))),
+        TextDirection.ltr);
   });
 
   testWidgets('switching language keeps what the user typed', (tester) async {
