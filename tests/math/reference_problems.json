@@ -1,0 +1,1128 @@
+{
+ "_about": "Reference problems with answers worked out by hand and fixed in advance. The engine is graded against these; they are never generated from the engine's own output. 'verification' is the weakest status the engine is allowed to report for that problem.",
+ "problems": [
+  {
+   "id": "arithmetic-01",
+   "domain": "arithmetic",
+   "input": "2 + 3 * 4",
+   "kind": "value",
+   "expect": "14",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-02",
+   "domain": "arithmetic",
+   "input": "(2 + 3) * 4",
+   "kind": "value",
+   "expect": "20",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-03",
+   "domain": "arithmetic",
+   "input": "١٢ ÷ ٤ + ٥",
+   "kind": "value",
+   "expect": "8",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-04",
+   "domain": "arithmetic",
+   "input": "2^10",
+   "kind": "value",
+   "expect": "1024",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-05",
+   "domain": "arithmetic",
+   "input": "10 - 2 - 3",
+   "kind": "value",
+   "expect": "5",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-06",
+   "domain": "arithmetic",
+   "input": "100 / 10 / 2",
+   "kind": "value",
+   "expect": "5",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-07",
+   "domain": "arithmetic",
+   "input": "2^3^2",
+   "kind": "value",
+   "expect": "512",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-08",
+   "domain": "arithmetic",
+   "input": "-3^2",
+   "kind": "value",
+   "expect": "-9",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-09",
+   "domain": "arithmetic",
+   "input": "(-3)^2",
+   "kind": "value",
+   "expect": "9",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-10",
+   "domain": "arithmetic",
+   "input": "2^-3",
+   "kind": "value",
+   "expect": "1/8",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-11",
+   "domain": "arithmetic",
+   "input": "12.5 * 4",
+   "kind": "value",
+   "expect": "50",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-12",
+   "domain": "arithmetic",
+   "input": "0.1 + 0.2",
+   "kind": "value",
+   "expect": "3/10",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-13",
+   "domain": "arithmetic",
+   "input": "7 - 10",
+   "kind": "value",
+   "expect": "-3",
+   "verification": "verified"
+  },
+  {
+   "id": "arithmetic-14",
+   "domain": "arithmetic",
+   "input": "احسب ٣ × (٤ + ٥) − ٢",
+   "kind": "value",
+   "expect": "25",
+   "verification": "verified"
+  },
+  {
+   "id": "fractions-01",
+   "domain": "fractions",
+   "input": "1/2 + 1/3",
+   "kind": "value",
+   "expect": "5/6",
+   "verification": "verified"
+  },
+  {
+   "id": "fractions-02",
+   "domain": "fractions",
+   "input": "3/4 - 5/6",
+   "kind": "value",
+   "expect": "-1/12",
+   "verification": "verified"
+  },
+  {
+   "id": "fractions-03",
+   "domain": "fractions",
+   "input": "2/3 × 9/4",
+   "kind": "value",
+   "expect": "3/2",
+   "verification": "verified"
+  },
+  {
+   "id": "fractions-04",
+   "domain": "fractions",
+   "input": "(1/2) / (3/4)",
+   "kind": "value",
+   "expect": "2/3",
+   "verification": "verified"
+  },
+  {
+   "id": "fractions-05",
+   "domain": "fractions",
+   "input": "(2/3)^2",
+   "kind": "value",
+   "expect": "4/9",
+   "verification": "verified"
+  },
+  {
+   "id": "fractions-06",
+   "domain": "fractions",
+   "input": "1 - 1/3 - 1/6",
+   "kind": "value",
+   "expect": "1/2",
+   "verification": "verified"
+  },
+  {
+   "id": "roots_powers-01",
+   "domain": "roots_powers",
+   "input": "√16",
+   "kind": "value",
+   "expect": "4",
+   "verification": "verified"
+  },
+  {
+   "id": "roots_powers-02",
+   "domain": "roots_powers",
+   "input": "√8",
+   "kind": "value",
+   "expect": "2*sqrt(2)",
+   "verification": "verified"
+  },
+  {
+   "id": "roots_powers-03",
+   "domain": "roots_powers",
+   "input": "√2 × √8",
+   "kind": "value",
+   "expect": "4",
+   "verification": "verified"
+  },
+  {
+   "id": "roots_powers-04",
+   "domain": "roots_powers",
+   "input": "sqrt(50)",
+   "kind": "value",
+   "expect": "5*sqrt(2)",
+   "verification": "verified"
+  },
+  {
+   "id": "roots_powers-05",
+   "domain": "roots_powers",
+   "input": "sqrt(3)^2",
+   "kind": "value",
+   "expect": "3",
+   "verification": "verified"
+  },
+  {
+   "id": "roots_powers-06",
+   "domain": "roots_powers",
+   "input": "27^(1/3)",
+   "kind": "value",
+   "expect": "3",
+   "verification": "verified"
+  },
+  {
+   "id": "roots_powers-07",
+   "domain": "roots_powers",
+   "input": "8^(2/3)",
+   "kind": "value",
+   "expect": "4",
+   "verification": "verified"
+  },
+  {
+   "id": "roots_powers-08",
+   "domain": "roots_powers",
+   "input": "abs(-7)",
+   "kind": "value",
+   "expect": "7",
+   "verification": "verified"
+  },
+  {
+   "id": "roots_powers-09",
+   "domain": "roots_powers",
+   "input": "جذر(81)",
+   "kind": "value",
+   "expect": "9",
+   "verification": "verified"
+  },
+  {
+   "id": "trigonometry-01",
+   "domain": "trigonometry",
+   "input": "sin(pi/6)",
+   "kind": "value",
+   "expect": "1/2",
+   "verification": "verified"
+  },
+  {
+   "id": "trigonometry-02",
+   "domain": "trigonometry",
+   "input": "cos(pi)",
+   "kind": "value",
+   "expect": "-1",
+   "verification": "verified"
+  },
+  {
+   "id": "trigonometry-03",
+   "domain": "trigonometry",
+   "input": "tan(pi/4)",
+   "kind": "value",
+   "expect": "1",
+   "verification": "verified"
+  },
+  {
+   "id": "trigonometry-04",
+   "domain": "trigonometry",
+   "input": "جا(pi/2)",
+   "kind": "value",
+   "expect": "1",
+   "verification": "verified"
+  },
+  {
+   "id": "trigonometry-05",
+   "domain": "trigonometry",
+   "input": "cos(pi/3)",
+   "kind": "value",
+   "expect": "1/2",
+   "verification": "verified"
+  },
+  {
+   "id": "trigonometry-06",
+   "domain": "trigonometry",
+   "input": "sin(pi/4)^2",
+   "kind": "value",
+   "expect": "1/2",
+   "verification": "verified"
+  },
+  {
+   "id": "logarithms-01",
+   "domain": "logarithms",
+   "input": "log(1000)",
+   "kind": "value",
+   "expect": "3",
+   "verification": "verified"
+  },
+  {
+   "id": "logarithms-02",
+   "domain": "logarithms",
+   "input": "ln(e^2)",
+   "kind": "value",
+   "expect": "2",
+   "verification": "verified"
+  },
+  {
+   "id": "logarithms-03",
+   "domain": "logarithms",
+   "input": "log(1)",
+   "kind": "value",
+   "expect": "0",
+   "verification": "verified"
+  },
+  {
+   "id": "logarithms-04",
+   "domain": "logarithms",
+   "input": "ln(1)",
+   "kind": "value",
+   "expect": "0",
+   "verification": "verified"
+  },
+  {
+   "id": "logarithms-05",
+   "domain": "logarithms",
+   "input": "e^0",
+   "kind": "value",
+   "expect": "1",
+   "verification": "verified"
+  },
+  {
+   "id": "statements-01",
+   "domain": "statements",
+   "input": "2 + 2 = 4",
+   "kind": "truth",
+   "expect": true,
+   "verification": "verified"
+  },
+  {
+   "id": "statements-02",
+   "domain": "statements",
+   "input": "3 × 4 = 13",
+   "kind": "truth",
+   "expect": false,
+   "verification": "verified"
+  },
+  {
+   "id": "statements-03",
+   "domain": "statements",
+   "input": "1/3 < 0.34",
+   "kind": "truth",
+   "expect": true,
+   "verification": "verified"
+  },
+  {
+   "id": "statements-04",
+   "domain": "statements",
+   "input": "sqrt(2) > 1.5",
+   "kind": "truth",
+   "expect": false,
+   "verification": "verified"
+  },
+  {
+   "id": "statements-05",
+   "domain": "statements",
+   "input": "2^10 ≥ 1000",
+   "kind": "truth",
+   "expect": true,
+   "verification": "verified"
+  },
+  {
+   "id": "statements-06",
+   "domain": "statements",
+   "input": "1/2 + 1/2 != 1",
+   "kind": "truth",
+   "expect": false,
+   "verification": "verified"
+  },
+  {
+   "id": "statements-07",
+   "domain": "statements",
+   "input": "sqrt(2)^2 = 2",
+   "kind": "truth",
+   "expect": true,
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-01",
+   "domain": "linear_equations",
+   "input": "2x + 3 = 7",
+   "kind": "solutions",
+   "expect": [
+    "2"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-02",
+   "domain": "linear_equations",
+   "input": "٢س + ٣ = ٧",
+   "kind": "solutions",
+   "expect": [
+    "2"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-03",
+   "domain": "linear_equations",
+   "input": "3x - 5 = 2x + 7",
+   "kind": "solutions",
+   "expect": [
+    "12"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-04",
+   "domain": "linear_equations",
+   "input": "7 = 2x + 3",
+   "kind": "solutions",
+   "expect": [
+    "2"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-05",
+   "domain": "linear_equations",
+   "input": "x/2 + 1/3 = 5/6",
+   "kind": "solutions",
+   "expect": [
+    "1"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-06",
+   "domain": "linear_equations",
+   "input": "2(x - 3) = 4(x + 1)",
+   "kind": "solutions",
+   "expect": [
+    "-5"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-07",
+   "domain": "linear_equations",
+   "input": "0.5x = 2.5",
+   "kind": "solutions",
+   "expect": [
+    "5"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-08",
+   "domain": "linear_equations",
+   "input": "5 - x = 8",
+   "kind": "solutions",
+   "expect": [
+    "-3"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-09",
+   "domain": "linear_equations",
+   "input": "4y - 8 = 0",
+   "kind": "solutions",
+   "expect": [
+    "2"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-10",
+   "domain": "linear_equations",
+   "input": "-x = 4",
+   "kind": "solutions",
+   "expect": [
+    "-4"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-11",
+   "domain": "linear_equations",
+   "input": "2x = 0",
+   "kind": "solutions",
+   "expect": [
+    "0"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-12",
+   "domain": "linear_equations",
+   "input": "حل: ٣(س + ١) = ١٢",
+   "kind": "solutions",
+   "expect": [
+    "3"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-13",
+   "domain": "linear_equations",
+   "input": "x/3 = 2/5",
+   "kind": "solutions",
+   "expect": [
+    "6/5"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-14",
+   "domain": "linear_equations",
+   "input": "3(x+2) = 3x + 6",
+   "kind": "all_real_numbers",
+   "expect": null,
+   "verification": "verified"
+  },
+  {
+   "id": "linear_equations-15",
+   "domain": "linear_equations",
+   "input": "x + 1 = x + 2",
+   "kind": "solutions",
+   "expect": [],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-01",
+   "domain": "quadratic_equations",
+   "input": "x^2 - 5x + 6 = 0",
+   "kind": "solutions",
+   "expect": [
+    "2",
+    "3"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-02",
+   "domain": "quadratic_equations",
+   "input": "x² = 9",
+   "kind": "solutions",
+   "expect": [
+    "-3",
+    "3"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-03",
+   "domain": "quadratic_equations",
+   "input": "x^2 + 2x + 1 = 0",
+   "kind": "solutions",
+   "expect": [
+    "-1"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-04",
+   "domain": "quadratic_equations",
+   "input": "x^2 + 1 = 0",
+   "kind": "solutions",
+   "expect": [],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-05",
+   "domain": "quadratic_equations",
+   "input": "2x^2 - 4x - 6 = 0",
+   "kind": "solutions",
+   "expect": [
+    "-1",
+    "3"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-06",
+   "domain": "quadratic_equations",
+   "input": "x^2 - 2 = 0",
+   "kind": "solutions",
+   "expect": [
+    "-sqrt(2)",
+    "sqrt(2)"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-07",
+   "domain": "quadratic_equations",
+   "input": "x^2 + x - 1 = 0",
+   "kind": "solutions",
+   "expect": [
+    "(-1-sqrt(5))/2",
+    "(-1+sqrt(5))/2"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-08",
+   "domain": "quadratic_equations",
+   "input": "x(x - 4) = 0",
+   "kind": "solutions",
+   "expect": [
+    "0",
+    "4"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-09",
+   "domain": "quadratic_equations",
+   "input": "(x-1)^2 = 4",
+   "kind": "solutions",
+   "expect": [
+    "-1",
+    "3"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-10",
+   "domain": "quadratic_equations",
+   "input": "x^2 = 2x",
+   "kind": "solutions",
+   "expect": [
+    "0",
+    "2"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-11",
+   "domain": "quadratic_equations",
+   "input": "6x^2 + x - 2 = 0",
+   "kind": "solutions",
+   "expect": [
+    "-2/3",
+    "1/2"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-12",
+   "domain": "quadratic_equations",
+   "input": "س² − ٧س + ١٠ = ٠",
+   "kind": "solutions",
+   "expect": [
+    "2",
+    "5"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "quadratic_equations-13",
+   "domain": "quadratic_equations",
+   "input": "x^2 - 4x + 5 = 0",
+   "kind": "solutions",
+   "expect": [],
+   "verification": "verified"
+  },
+  {
+   "id": "polynomial_equations-01",
+   "domain": "polynomial_equations",
+   "input": "x^3 - 6x^2 + 11x - 6 = 0",
+   "kind": "solutions",
+   "expect": [
+    "1",
+    "2",
+    "3"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "polynomial_equations-02",
+   "domain": "polynomial_equations",
+   "input": "x^3 = 8",
+   "kind": "solutions",
+   "expect": [
+    "2"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "polynomial_equations-03",
+   "domain": "polynomial_equations",
+   "input": "x^4 - 5x^2 + 4 = 0",
+   "kind": "solutions",
+   "expect": [
+    "-2",
+    "-1",
+    "1",
+    "2"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "polynomial_equations-04",
+   "domain": "polynomial_equations",
+   "input": "x^3 - x = 0",
+   "kind": "solutions",
+   "expect": [
+    "-1",
+    "0",
+    "1"
+   ],
+   "verification": "verified"
+  },
+  {
+   "id": "polynomial_equations-05",
+   "domain": "polynomial_equations",
+   "input": "x^4 + 1 = 0",
+   "kind": "solutions",
+   "expect": [],
+   "verification": "verified"
+  },
+  {
+   "id": "other_equations-01",
+   "domain": "other_equations",
+   "input": "1/x = 2",
+   "kind": "solutions",
+   "expect": [
+    "1/2"
+   ],
+   "verification": "partial",
+   "note": "completeness of the solution set is not provable for this equation type"
+  },
+  {
+   "id": "other_equations-02",
+   "domain": "other_equations",
+   "input": "sqrt(x) = 3",
+   "kind": "solutions",
+   "expect": [
+    "9"
+   ],
+   "verification": "partial",
+   "note": "completeness of the solution set is not provable for this equation type"
+  },
+  {
+   "id": "other_equations-03",
+   "domain": "other_equations",
+   "input": "2^x = 8",
+   "kind": "solutions",
+   "expect": [
+    "3"
+   ],
+   "verification": "partial",
+   "note": "completeness of the solution set is not provable for this equation type"
+  },
+  {
+   "id": "other_equations-04",
+   "domain": "other_equations",
+   "input": "ln(x) = 0",
+   "kind": "solutions",
+   "expect": [
+    "1"
+   ],
+   "verification": "partial",
+   "note": "completeness of the solution set is not provable for this equation type"
+  },
+  {
+   "id": "other_equations-05",
+   "domain": "other_equations",
+   "input": "(x^2 - 1)/(x - 1) = 0",
+   "kind": "solutions",
+   "expect": [
+    "-1"
+   ],
+   "verification": "partial",
+   "note": "completeness of the solution set is not provable for this equation type"
+  },
+  {
+   "id": "other_equations-06",
+   "domain": "other_equations",
+   "input": "abs(x) = 3",
+   "kind": "solutions",
+   "expect": [
+    "-3",
+    "3"
+   ],
+   "verification": "partial",
+   "note": "completeness of the solution set is not provable for this equation type"
+  },
+  {
+   "id": "other_equations-07",
+   "domain": "other_equations",
+   "input": "e^x = 1",
+   "kind": "solutions",
+   "expect": [
+    "0"
+   ],
+   "verification": "partial",
+   "note": "completeness of the solution set is not provable for this equation type"
+  },
+  {
+   "id": "other_equations-08",
+   "domain": "other_equations",
+   "input": "sqrt(x) = -1",
+   "kind": "solutions",
+   "expect": [],
+   "verification": "partial",
+   "note": "completeness of the solution set is not provable for this equation type"
+  },
+  {
+   "id": "simplify-01",
+   "domain": "simplify",
+   "input": "(x^2 - 1)/(x - 1)",
+   "kind": "equivalent",
+   "expect": "x + 1",
+   "verification": "verified"
+  },
+  {
+   "id": "simplify-02",
+   "domain": "simplify",
+   "input": "2x + 3x",
+   "kind": "equivalent",
+   "expect": "5*x",
+   "verification": "verified"
+  },
+  {
+   "id": "simplify-03",
+   "domain": "simplify",
+   "input": "sin(x)^2 + cos(x)^2",
+   "kind": "equivalent",
+   "expect": "1",
+   "verification": "verified"
+  },
+  {
+   "id": "simplify-04",
+   "domain": "simplify",
+   "input": "(x+1)^2 - (x-1)^2",
+   "kind": "equivalent",
+   "expect": "4*x",
+   "verification": "verified"
+  },
+  {
+   "id": "simplify-05",
+   "domain": "simplify",
+   "input": "بسّط ٢س + ٣ص − س + ص",
+   "kind": "equivalent",
+   "expect": "x + 4*y",
+   "verification": "verified"
+  },
+  {
+   "id": "simplify-06",
+   "domain": "simplify",
+   "input": "x^2 * x^3",
+   "kind": "equivalent",
+   "expect": "x**5",
+   "verification": "verified"
+  },
+  {
+   "id": "expand-01",
+   "domain": "expand",
+   "input": "expand (x+1)^2",
+   "kind": "same_form",
+   "expect": "x**2 + 2*x + 1",
+   "verification": "verified"
+  },
+  {
+   "id": "expand-02",
+   "domain": "expand",
+   "input": "فك (س+٢)(س−٣)",
+   "kind": "same_form",
+   "expect": "x**2 - x - 6",
+   "verification": "verified"
+  },
+  {
+   "id": "expand-03",
+   "domain": "expand",
+   "input": "expand (a+b)^3",
+   "kind": "same_form",
+   "expect": "a**3 + 3*a**2*b + 3*a*b**2 + b**3",
+   "verification": "verified"
+  },
+  {
+   "id": "expand-04",
+   "domain": "expand",
+   "input": "expand 2(x - 5)",
+   "kind": "same_form",
+   "expect": "2*x - 10",
+   "verification": "verified"
+  },
+  {
+   "id": "factor-01",
+   "domain": "factor",
+   "input": "factor x^2 - 9",
+   "kind": "same_form",
+   "expect": "(x - 3)*(x + 3)",
+   "verification": "verified"
+  },
+  {
+   "id": "factor-02",
+   "domain": "factor",
+   "input": "حلل س² + ٥س + ٦",
+   "kind": "same_form",
+   "expect": "(x + 2)*(x + 3)",
+   "verification": "verified"
+  },
+  {
+   "id": "factor-03",
+   "domain": "factor",
+   "input": "factor x^3 - 8",
+   "kind": "same_form",
+   "expect": "(x - 2)*(x**2 + 2*x + 4)",
+   "verification": "verified"
+  },
+  {
+   "id": "factor-04",
+   "domain": "factor",
+   "input": "factor 2x^2 + 4x",
+   "kind": "same_form",
+   "expect": "2*x*(x + 2)",
+   "verification": "verified"
+  },
+  {
+   "id": "derivatives-01",
+   "domain": "derivatives",
+   "input": "derivative of x^3",
+   "kind": "equivalent",
+   "expect": "3*x**2",
+   "verification": "verified"
+  },
+  {
+   "id": "derivatives-02",
+   "domain": "derivatives",
+   "input": "اشتق جا(س)",
+   "kind": "equivalent",
+   "expect": "cos(x)",
+   "verification": "verified"
+  },
+  {
+   "id": "derivatives-03",
+   "domain": "derivatives",
+   "input": "differentiate x^2 sin(x)",
+   "kind": "equivalent",
+   "expect": "x**2*cos(x) + 2*x*sin(x)",
+   "verification": "verified"
+  },
+  {
+   "id": "derivatives-04",
+   "domain": "derivatives",
+   "input": "derivative of e^(2x)",
+   "kind": "equivalent",
+   "expect": "2*exp(2*x)",
+   "verification": "verified"
+  },
+  {
+   "id": "derivatives-05",
+   "domain": "derivatives",
+   "input": "derivative of ln(x)",
+   "kind": "equivalent",
+   "expect": "1/x",
+   "verification": "verified"
+  },
+  {
+   "id": "derivatives-06",
+   "domain": "derivatives",
+   "input": "derivative of 5",
+   "kind": "equivalent",
+   "expect": "0",
+   "verification": "verified"
+  },
+  {
+   "id": "derivatives-07",
+   "domain": "derivatives",
+   "input": "derivative of sqrt(x)",
+   "kind": "equivalent",
+   "expect": "1/(2*sqrt(x))",
+   "verification": "verified"
+  },
+  {
+   "id": "derivatives-08",
+   "domain": "derivatives",
+   "input": "مشتقة س³ − ٢س",
+   "kind": "equivalent",
+   "expect": "3*x**2 - 2",
+   "verification": "verified"
+  },
+  {
+   "id": "integrals-01",
+   "domain": "integrals",
+   "input": "integrate x^2",
+   "kind": "antiderivative",
+   "expect": "x**3/3",
+   "verification": "verified"
+  },
+  {
+   "id": "integrals-02",
+   "domain": "integrals",
+   "input": "تكامل جتا(س)",
+   "kind": "antiderivative",
+   "expect": "sin(x)",
+   "verification": "verified"
+  },
+  {
+   "id": "integrals-03",
+   "domain": "integrals",
+   "input": "integral of 1/x",
+   "kind": "antiderivative",
+   "expect": "log(x)",
+   "verification": "verified"
+  },
+  {
+   "id": "integrals-04",
+   "domain": "integrals",
+   "input": "integrate e^x",
+   "kind": "antiderivative",
+   "expect": "exp(x)",
+   "verification": "verified"
+  },
+  {
+   "id": "integrals-05",
+   "domain": "integrals",
+   "input": "integrate 2x + 1",
+   "kind": "antiderivative",
+   "expect": "x**2 + x",
+   "verification": "verified"
+  },
+  {
+   "id": "integrals-06",
+   "domain": "integrals",
+   "input": "integrate sin(x)^2",
+   "kind": "antiderivative",
+   "expect": "x/2 - sin(2*x)/4",
+   "verification": "verified"
+  },
+  {
+   "id": "undefined-01",
+   "domain": "undefined",
+   "input": "1/0",
+   "kind": "status",
+   "expect": {
+    "status": "undefined",
+    "code": "division_by_zero"
+   },
+   "verification": null
+  },
+  {
+   "id": "undefined-02",
+   "domain": "undefined",
+   "input": "5/(3-3)",
+   "kind": "status",
+   "expect": {
+    "status": "undefined",
+    "code": "division_by_zero"
+   },
+   "verification": null
+  },
+  {
+   "id": "undefined-03",
+   "domain": "undefined",
+   "input": "0^-1",
+   "kind": "status",
+   "expect": {
+    "status": "undefined",
+    "code": "division_by_zero"
+   },
+   "verification": null
+  },
+  {
+   "id": "undefined-04",
+   "domain": "undefined",
+   "input": "sqrt(-4)",
+   "kind": "status",
+   "expect": {
+    "status": "undefined",
+    "code": "not_real"
+   },
+   "verification": null
+  },
+  {
+   "id": "undefined-05",
+   "domain": "undefined",
+   "input": "ln(0)",
+   "kind": "status",
+   "expect": {
+    "status": "undefined",
+    "code": "undefined"
+   },
+   "verification": null
+  },
+  {
+   "id": "undefined-06",
+   "domain": "undefined",
+   "input": "tan(pi/2)",
+   "kind": "status",
+   "expect": {
+    "status": "undefined",
+    "code": "undefined"
+   },
+   "verification": null
+  },
+  {
+   "id": "unsupported-01",
+   "domain": "unsupported",
+   "input": "x + y = 3",
+   "kind": "status",
+   "expect": {
+    "status": "unsupported",
+    "code": "multiple_variables"
+   },
+   "verification": null
+  },
+  {
+   "id": "unsupported-02",
+   "domain": "unsupported",
+   "input": "2x > 4",
+   "kind": "status",
+   "expect": {
+    "status": "unsupported",
+    "code": "inequality_not_supported"
+   },
+   "verification": null
+  },
+  {
+   "id": "unsupported-03",
+   "domain": "unsupported",
+   "input": "sin(x) = 0",
+   "kind": "status",
+   "expect": {
+    "status": "unsupported",
+    "code": "cannot_solve"
+   },
+   "verification": null
+  }
+ ]
+}

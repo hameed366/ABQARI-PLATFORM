@@ -228,3 +228,22 @@ def test_ui_package_carries_no_user_visible_text():
         assert not ARABIC.search(path.read_text(encoding="utf-8")), path.name
     pubspec = (REPO_ROOT / "packages" / "shared_ui" / "pubspec.yaml").read_text()
     assert "abqari_localization" not in pubspec
+
+
+# ── phase 5: user text is never executed ────────────────────────────────────
+
+def test_math_engine_never_evaluates_user_text():
+    """The engine must parse input itself: no eval/exec/sympify/parse_expr anywhere in it."""
+    engine = REPO_ROOT / "backend" / "math_solver" / "abqari_solver"
+    forbidden = re.compile(r"(?<![.\w])(eval|exec|sympify|parse_expr|compile|__import__)\s*\(")
+    for path in engine.rglob("*.py"):
+        text = _strip_comments(path, path.read_text(encoding="utf-8"))
+        match = forbidden.search(text) or re.search(r"sp\.(sympify|parse_expr)\s*\(", text)
+        assert match is None, f"{path.name} calls {match.group(1)}()"
+
+
+def test_ci_requires_sympy_for_the_engine_tests():
+    for workflow in ("ci.yml", "math-engine.yml"):
+        text = (REPO_ROOT / ".github/workflows" / workflow).read_text()
+        assert 'ABQARI_REQUIRE_SYMPY: "1"' in text, workflow
+        assert "backend/math_solver/requirements.txt" in text, workflow

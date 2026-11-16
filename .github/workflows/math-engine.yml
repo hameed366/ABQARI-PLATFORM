@@ -1,0 +1,23 @@
+# Fast feedback for the mathematics engine on every branch push that touches it.
+# The full suite still runs in ci.yml on pull requests.
+name: math-engine
+on:
+  push:
+    branches-ignore: [main]
+    paths:
+      - 'backend/math_solver/**'
+      - 'tests/math/**'
+      - '.github/workflows/math-engine.yml'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install pytest -r backend/math_solver/requirements.txt
+      - run: python -c "import sympy, mpmath; print('sympy', sympy.__version__, 'mpmath', mpmath.__version__)"
+      - run: python -m pytest tests/math -q
+        env:
+          ABQARI_REQUIRE_SYMPY: "1"

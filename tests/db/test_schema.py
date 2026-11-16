@@ -5,7 +5,7 @@ import uuid
 
 import pytest
 
-from conftest import SqlError, migration_files
+from db_harness import SqlError, migration_files
 
 TABLES = ["learning_progress", "math_domains", "math_topics", "profiles", "skills", "user_roles"]
 CONTENT_TABLES = ["math_domains", "math_topics", "skills"]
