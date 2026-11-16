@@ -96,7 +96,7 @@ class FakeCloud implements CloudService {
   @override
   Future<SchoolClass> joinClass(String code) async {
     _maybeFail();
-    final name = openCodes[code.trim().toUpperCase()];
+    final name = openCodes[normalizeJoinCode(code)];
     if (name == null) {
       throw const CloudException(CloudErrorKind.unknownClassCode);
     }
@@ -285,7 +285,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text(_ar.errorUnknownClassCode), findsOneWidget);
 
-    await tester.enterText(find.byKey(AccountKeys.joinCode), 'abcd2345');
+    await tester.enterText(find.byKey(AccountKeys.joinCode), 'abcd٢٣٤٥');
     await tester.tap(find.byKey(AccountKeys.join));
     await tester.pumpAndSettle();
     expect(find.text(_ar.joined('Class 7A')), findsOneWidget);

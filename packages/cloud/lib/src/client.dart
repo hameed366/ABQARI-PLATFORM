@@ -31,6 +31,23 @@ class _Reply {
   }
 }
 
+/// Join codes are shown with Arabic-Indic digits in Arabic, so a student may
+/// type them either way: spaces go, letters become capitals, and ٠–٩ / ۰–۹
+/// become 0–9.
+String normalizeJoinCode(String code) {
+  final out = StringBuffer();
+  for (final rune in code.trim().toUpperCase().runes) {
+    if (rune >= 0x0660 && rune <= 0x0669) {
+      out.writeCharCode(0x30 + rune - 0x0660);
+    } else if (rune >= 0x06F0 && rune <= 0x06F9) {
+      out.writeCharCode(0x30 + rune - 0x06F0);
+    } else if (rune != 0x20) {
+      out.writeCharCode(rune);
+    }
+  }
+  return out.toString();
+}
+
 /// Everything the apps use from the backend. [CloudClient] is the real one;
 /// app tests use fakes.
 abstract interface class CloudService {
@@ -213,7 +230,7 @@ class CloudClient implements CloudService {
 
   @override
   Future<SchoolClass> joinClass(String code) async {
-    final normalized = code.trim().toUpperCase();
+    final normalized = normalizeJoinCode(code);
     final reply = await _rest('POST', '/rest/v1/rpc/join_class',
         body: {'code': normalized});
     final row = _single(reply);

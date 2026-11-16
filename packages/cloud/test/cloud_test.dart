@@ -145,6 +145,12 @@ void main() {
     backend.serveAccount(role: role);
   }
 
+  test('join codes typed with Arabic-Indic digits are understood', () {
+    expect(normalizeJoinCode(' abcd٢٣٤٥ '), 'ABCD2345');
+    expect(normalizeJoinCode('abcd۲۳۴۵'), 'ABCD2345');
+    expect(normalizeJoinCode('AB CD 2345'), 'ABCD2345');
+  });
+
   group('config', () {
     test('only https, except for a server on this machine', () {
       expect(

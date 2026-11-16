@@ -156,7 +156,7 @@ abstract class EduStrings {
         for (final role in AccountRole.values) roleName(role),
         confirmationSent('a@example.com'),
         synced(DateTime(2026, 1, 1, 9, 5)),
-        joined('7A'),
+        joined('السابع أ'),
         joinCodeIs('ABCD2345'),
         studentsCount(12),
         masteredCount(3, 11),
@@ -322,7 +322,8 @@ class EduStringsAr extends EduStrings {
   @override
   String joined(String className) => 'انضممت إلى صف «$className».';
   @override
-  String joinCodeIs(String code) => 'رمز الانضمام: $code';
+  String joinCodeIs(String code) =>
+      AbqariDigits.toArabicIndic('رمز الانضمام: $code');
   @override
   String studentsCount(int count) =>
       AbqariDigits.toArabicIndic('عدد الطلاب: $count');
