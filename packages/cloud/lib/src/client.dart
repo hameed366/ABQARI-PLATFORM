@@ -355,8 +355,8 @@ class CloudClient implements CloudService {
 
   Future<CloudSession> _doRefresh() async {
     final session = _requireSession();
-    final reply = await _auth('/auth/v1/token',
-        {'grant_type': 'refresh_token'}, {'refresh_token': session.refreshToken});
+    final reply = await _auth('/auth/v1/token', {'grant_type': 'refresh_token'},
+        {'refresh_token': session.refreshToken});
     if (!reply.ok) {
       if (reply.status == 400 || reply.status == 401 || reply.status == 403) {
         _session = null;
@@ -380,8 +380,8 @@ class CloudClient implements CloudService {
   }) async {
     final uri = config.endpoint(path, query);
     var session = await _validSession();
-    var reply =
-        await _send(method, uri, body: body, token: session.accessToken, headers: headers);
+    var reply = await _send(method, uri,
+        body: body, token: session.accessToken, headers: headers);
     if (reply.status == 401) {
       session = await _refresh();
       reply = await _send(method, uri,
@@ -431,7 +431,8 @@ class CloudClient implements CloudService {
         request.contentLength = 0;
       }
       final response = await request.close().timeout(timeout);
-      final text = await response.transform(utf8.decoder).join().timeout(timeout);
+      final text =
+          await response.transform(utf8.decoder).join().timeout(timeout);
       Object? decoded;
       if (text.isNotEmpty) {
         try {

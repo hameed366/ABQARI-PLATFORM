@@ -135,7 +135,8 @@ class _AccountPageState extends State<AccountPage> {
                 key: AccountKeys.displayName,
                 controller: _name,
                 maxLength: 60,
-                decoration: InputDecoration(labelText: strings.displayNameLabel),
+                decoration:
+                    InputDecoration(labelText: strings.displayNameLabel),
                 validator: (v) =>
                     (v ?? '').trim().isEmpty ? strings.fieldRequired : null,
               ),
@@ -171,7 +172,8 @@ class _AccountPageState extends State<AccountPage> {
               child: FilledButton(
                 key: AccountKeys.submit,
                 onPressed: _c.busy ? null : () => _submit(strings, language),
-                child: Text(_signUp ? strings.signUpButton : strings.signInButton),
+                child:
+                    Text(_signUp ? strings.signUpButton : strings.signInButton),
               ),
             ),
           ],

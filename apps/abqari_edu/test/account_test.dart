@@ -36,7 +36,11 @@ class FakeCloud implements CloudService {
   }
 
   Account get _account => Account(
-      userId: 'u1', displayName: 'Alice', role: role, locale: 'ar', email: 'a@example.test');
+      userId: 'u1',
+      displayName: 'Alice',
+      role: role,
+      locale: 'ar',
+      email: 'a@example.test');
 
   @override
   bool get isSignedIn => _signedIn;
@@ -93,8 +97,10 @@ class FakeCloud implements CloudService {
   Future<SchoolClass> joinClass(String code) async {
     _maybeFail();
     final name = openCodes[code.trim().toUpperCase()];
-    if (name == null) throw const CloudException(CloudErrorKind.unknownClassCode);
-    final joined = SchoolClass(id: 'c-$name', name: name, joinCode: code, isMine: false);
+    if (name == null)
+      throw const CloudException(CloudErrorKind.unknownClassCode);
+    final joined =
+        SchoolClass(id: 'c-$name', name: name, joinCode: code, isMine: false);
     _classes.add(joined);
     return joined;
   }
@@ -108,25 +114,33 @@ class FakeCloud implements CloudService {
   @override
   Future<SchoolClass> createClass(String name) async {
     _maybeFail();
-    if (role != AccountRole.teacher) throw const CloudException(CloudErrorKind.notAllowed);
-    final created = SchoolClass(id: 'c${_classes.length}', name: name, joinCode: 'WXYZ6789', isMine: true);
+    if (role != AccountRole.teacher)
+      throw const CloudException(CloudErrorKind.notAllowed);
+    final created = SchoolClass(
+        id: 'c${_classes.length}',
+        name: name,
+        joinCode: 'WXYZ6789',
+        isMine: true);
     _classes.add(created);
     return created;
   }
 
   @override
-  Future<void> archiveClass(String classId) async => _classes.removeWhere((c) => c.id == classId);
+  Future<void> archiveClass(String classId) async =>
+      _classes.removeWhere((c) => c.id == classId);
 
   @override
   Future<String> regenerateJoinCode(String classId) async {
     final i = _classes.indexWhere((c) => c.id == classId);
     final old = _classes[i];
-    _classes[i] = SchoolClass(id: old.id, name: old.name, joinCode: 'NEWC0DE2', isMine: true);
+    _classes[i] = SchoolClass(
+        id: old.id, name: old.name, joinCode: 'NEWC0DE2', isMine: true);
     return 'NEWC0DE2';
   }
 
   @override
-  Future<void> leaveClass(String classId) async => _classes.removeWhere((c) => c.id == classId);
+  Future<void> leaveClass(String classId) async =>
+      _classes.removeWhere((c) => c.id == classId);
 
   @override
   Future<List<ClassProgressRow>> classProgress(String classId) async {
@@ -186,7 +200,8 @@ void main() {
     expect(progressItems(const LearnerProgress()), isEmpty);
   });
 
-  testWidgets('a build without a backend has no account button', (tester) async {
+  testWidgets('a build without a backend has no account button',
+      (tester) async {
     final progress = ProgressController(store: InMemoryProgressStore());
     await tester.pumpWidget(AbqariEduApp(
       localeController: LocaleController(store: InMemoryLocaleStore()),
@@ -197,7 +212,8 @@ void main() {
     expect(find.byKey(EduHomePage.accountButtonKey), findsNothing);
   });
 
-  testWidgets('home shows the account button when a backend exists', (tester) async {
+  testWidgets('home shows the account button when a backend exists',
+      (tester) async {
     final progress = ProgressController(store: InMemoryProgressStore());
     final account = AccountController(cloud: FakeCloud(), progress: progress);
     await account.start();
@@ -213,7 +229,8 @@ void main() {
     expect(find.text(_ar.accountIntro), findsOneWidget);
   });
 
-  testWidgets('wrong password, then sign-in uploads local progress', (tester) async {
+  testWidgets('wrong password, then sign-in uploads local progress',
+      (tester) async {
     final cloud = FakeCloud();
     await openAccount(tester, cloud, progress: practised());
     await signIn(tester, 'nope');
@@ -256,7 +273,8 @@ void main() {
     expect(cloud.isSignedIn, isFalse);
   });
 
-  testWidgets('student joins a class; a wrong code is explained', (tester) async {
+  testWidgets('student joins a class; a wrong code is explained',
+      (tester) async {
     final cloud = FakeCloud();
     await openAccount(tester, cloud);
     await signIn(tester, 'right-password');
@@ -276,15 +294,26 @@ void main() {
     expect(find.byKey(AccountKeys.classTile('c-Class 7A')), findsNothing);
   });
 
-  testWidgets('teacher creates a class and sees each student\'s mastery', (tester) async {
+  testWidgets('teacher creates a class and sees each student\'s mastery',
+      (tester) async {
     final cloud = FakeCloud(role: AccountRole.teacher)
       ..progressRows = const [
         ClassProgressRow(
-            studentId: 's1', displayName: 'Sara', path: 'linear-equations',
-            skill: 'one-step-add', mastery: 100, attempts: 6, mastered: true),
+            studentId: 's1',
+            displayName: 'Sara',
+            path: 'linear-equations',
+            skill: 'one-step-add',
+            mastery: 100,
+            attempts: 6,
+            mastered: true),
         ClassProgressRow(
-            studentId: 's1', displayName: 'Sara', path: 'fractions',
-            skill: 'add-fractions', mastery: 40, attempts: 3, mastered: false),
+            studentId: 's1',
+            displayName: 'Sara',
+            path: 'fractions',
+            skill: 'add-fractions',
+            mastery: 40,
+            attempts: 3,
+            mastered: false),
         ClassProgressRow(studentId: 's2', displayName: 'Omar'),
       ];
     await openAccount(tester, cloud);
@@ -303,7 +332,8 @@ void main() {
     expect(find.text(_ar.noProgressYet), findsOneWidget);
     await tester.tap(find.byKey(ClassKeys.student('s1')));
     await tester.pumpAndSettle();
-    expect(find.text(linearEquations.skills.first.title.of('ar')), findsOneWidget);
+    expect(
+        find.text(linearEquations.skills.first.title.of('ar')), findsOneWidget);
     expect(find.text(_ar.mastery(40)), findsOneWidget);
 
     await tester.tap(find.byKey(ClassKeys.newCode));
@@ -311,7 +341,8 @@ void main() {
     expect(find.text(_ar.joinCodeIs('NEWC0DE2')), findsOneWidget);
   });
 
-  testWidgets('practice after signing in is uploaded in the background', (tester) async {
+  testWidgets('practice after signing in is uploaded in the background',
+      (tester) async {
     final cloud = FakeCloud();
     final (_, progress) = await openAccount(tester, cloud);
     await signIn(tester, 'right-password');
@@ -335,7 +366,8 @@ void main() {
     expect(find.byKey(AccountKeys.submit), findsOneWidget);
   });
 
-  testWidgets('offline sync keeps the user signed in and explains', (tester) async {
+  testWidgets('offline sync keeps the user signed in and explains',
+      (tester) async {
     final cloud = FakeCloud();
     await openAccount(tester, cloud);
     await signIn(tester, 'right-password');

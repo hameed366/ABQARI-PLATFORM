@@ -443,7 +443,8 @@ class EduStringsEn extends EduStrings {
   @override
   String get leaveClassButton => 'Leave class';
   @override
-  String get noStudents => 'No students yet. Give your students the class code.';
+  String get noStudents =>
+      'No students yet. Give your students the class code.';
   @override
   String get noProgressYet => 'No progress uploaded yet';
   @override

@@ -35,8 +35,9 @@ class FakeBackend {
       requests.add(recorded);
       final key = '${request.method} ${request.uri.path}';
       final route = routes[key];
-      final (status, reply) =
-          route == null ? (404, {'message': 'no route $key'}) : await route(recorded);
+      final (status, reply) = route == null
+          ? (404, {'message': 'no route $key'})
+          : await route(recorded);
       request.response.statusCode = status;
       request.response.headers.contentType = ContentType.json;
       if (reply != null) request.response.write(jsonEncode(reply));
@@ -61,21 +62,30 @@ class FakeBackend {
   /// Account rows for user u1 with the given role, guarded by the token.
   void serveAccount({String role = 'student', String name = 'Alice'}) {
     routes['GET /rest/v1/profiles'] = (r) => authorized(r)
-        ? (200, [
-            {'display_name': name, 'preferred_locale': 'ar'}
-          ])
+        ? (
+            200,
+            [
+              {'display_name': name, 'preferred_locale': 'ar'}
+            ]
+          )
         : (401, {'message': 'JWT expired'});
     routes['GET /rest/v1/user_roles'] = (r) => authorized(r)
-        ? (200, [
-            {'role': role}
-          ])
+        ? (
+            200,
+            [
+              {'role': role}
+            ]
+          )
         : (401, {'message': 'JWT expired'});
   }
 
-  bool authorized(Recorded r) => r.headers['authorization'] == 'Bearer $validAccess';
+  bool authorized(Recorded r) =>
+      r.headers['authorization'] == 'Bearer $validAccess';
 
-  List<Recorded> named(String method, String path) =>
-      [for (final r in requests) if (r.method == method && r.uri.path == path) r];
+  List<Recorded> named(String method, String path) => [
+        for (final r in requests)
+          if (r.method == method && r.uri.path == path) r
+      ];
 }
 
 class Recorded {
@@ -124,18 +134,32 @@ void main() {
           body['refresh_token'] == 'refresh-${backend.tokenCounter}') {
         return (200, backend.session());
       }
-      return (400, {'error_code': 'invalid_credentials', 'msg': 'Invalid login credentials'});
+      return (
+        400,
+        {
+          'error_code': 'invalid_credentials',
+          'msg': 'Invalid login credentials'
+        }
+      );
     };
     backend.serveAccount(role: role);
   }
 
   group('config', () {
     test('only https, except for a server on this machine', () {
-      expect(() => CloudConfig(url: Uri.parse('http://example.com'), anonKey: 'k'),
+      expect(
+          () => CloudConfig(url: Uri.parse('http://example.com'), anonKey: 'k'),
           throwsArgumentError);
-      expect(CloudConfig(url: Uri.parse('https://x.supabase.co'), anonKey: 'k').url.host,
+      expect(
+          CloudConfig(url: Uri.parse('https://x.supabase.co'), anonKey: 'k')
+              .url
+              .host,
           'x.supabase.co');
-      expect(CloudConfig(url: Uri.parse('http://127.0.0.1:9'), anonKey: 'k').url.port, 9);
+      expect(
+          CloudConfig(url: Uri.parse('http://127.0.0.1:9'), anonKey: 'k')
+              .url
+              .port,
+          9);
     });
 
     test('missing or bad build flags mean no account features', () {
@@ -148,8 +172,10 @@ void main() {
     });
 
     test('endpoints keep a base path', () {
-      final c = CloudConfig(url: Uri.parse('https://h.example/base/'), anonKey: 'k');
-      expect(c.endpoint('/auth/v1/token', {'grant_type': 'password'}).toString(),
+      final c =
+          CloudConfig(url: Uri.parse('https://h.example/base/'), anonKey: 'k');
+      expect(
+          c.endpoint('/auth/v1/token', {'grant_type': 'password'}).toString(),
           'https://h.example/base/auth/v1/token?grant_type=password');
     });
   });
@@ -174,21 +200,34 @@ void main() {
 
     test('wrong password, in old and new server wording', () async {
       serveSignIn();
-      await expectLater(client.signIn('a@example.test', 'nope'),
-          throwsA(isA<CloudException>().having((e) => e.kind, 'kind', CloudErrorKind.invalidCredentials)));
-      backend.routes['POST /auth/v1/token'] = (_) =>
-          (400, {'error': 'invalid_grant', 'error_description': 'Invalid login credentials'});
-      await expectLater(client.signIn('a@example.test', 'nope'),
-          throwsA(isA<CloudException>().having((e) => e.kind, 'kind', CloudErrorKind.invalidCredentials)));
+      await expectLater(
+          client.signIn('a@example.test', 'nope'),
+          throwsA(isA<CloudException>().having(
+              (e) => e.kind, 'kind', CloudErrorKind.invalidCredentials)));
+      backend.routes['POST /auth/v1/token'] = (_) => (
+            400,
+            {
+              'error': 'invalid_grant',
+              'error_description': 'Invalid login credentials'
+            }
+          );
+      await expectLater(
+          client.signIn('a@example.test', 'nope'),
+          throwsA(isA<CloudException>().having(
+              (e) => e.kind, 'kind', CloudErrorKind.invalidCredentials)));
       expect(client.isSignedIn, isFalse);
       expect(store.data, isNull);
     });
 
     test('unconfirmed email', () async {
-      backend.routes['POST /auth/v1/token'] =
-          (_) => (400, {'error_code': 'email_not_confirmed', 'msg': 'Email not confirmed'});
-      await expectLater(client.signIn('a@example.test', 'x'),
-          throwsA(isA<CloudException>().having((e) => e.kind, 'kind', CloudErrorKind.emailNotConfirmed)));
+      backend.routes['POST /auth/v1/token'] = (_) => (
+            400,
+            {'error_code': 'email_not_confirmed', 'msg': 'Email not confirmed'}
+          );
+      await expectLater(
+          client.signIn('a@example.test', 'x'),
+          throwsA(isA<CloudException>().having(
+              (e) => e.kind, 'kind', CloudErrorKind.emailNotConfirmed)));
     });
 
     test('offline when nothing listens', () async {
@@ -197,8 +236,10 @@ void main() {
         store: store,
         timeout: const Duration(seconds: 5),
       );
-      await expectLater(dead.signIn('a@example.test', 'x'),
-          throwsA(isA<CloudException>().having((e) => e.kind, 'kind', CloudErrorKind.offline)));
+      await expectLater(
+          dead.signIn('a@example.test', 'x'),
+          throwsA(isA<CloudException>()
+              .having((e) => e.kind, 'kind', CloudErrorKind.offline)));
       dead.close();
     });
   });
@@ -208,7 +249,10 @@ void main() {
       backend.routes['POST /auth/v1/signup'] = (_) => (200, backend.session());
       backend.serveAccount();
       final result = await client.signUp(
-          email: 'a@example.test', password: 'pw-123456', displayName: ' حميد ', locale: 'ar');
+          email: 'a@example.test',
+          password: 'pw-123456',
+          displayName: ' حميد ',
+          locale: 'ar');
       expect(result, isA<SignedUp>());
       final body = backend.named('POST', '/auth/v1/signup').single.body as Map;
       expect(body['data'], {'display_name': 'حميد', 'preferred_locale': 'ar'});
@@ -216,30 +260,60 @@ void main() {
     });
 
     test('email confirmation required', () async {
-      backend.routes['POST /auth/v1/signup'] =
-          (_) => (200, {'id': 'u1', 'email': 'a@example.test', 'confirmation_sent_at': 'now'});
+      backend.routes['POST /auth/v1/signup'] = (_) => (
+            200,
+            {
+              'id': 'u1',
+              'email': 'a@example.test',
+              'confirmation_sent_at': 'now'
+            }
+          );
       final result = await client.signUp(
-          email: 'a@example.test', password: 'pw-123456', displayName: 'A', locale: 'en');
+          email: 'a@example.test',
+          password: 'pw-123456',
+          displayName: 'A',
+          locale: 'en');
       expect(result, isA<ConfirmationSent>());
       expect(client.isSignedIn, isFalse);
     });
 
     test('taken email and weak password', () async {
-      backend.routes['POST /auth/v1/signup'] =
-          (_) => (422, {'error_code': 'user_already_exists', 'msg': 'User already registered'});
+      backend.routes['POST /auth/v1/signup'] = (_) => (
+            422,
+            {
+              'error_code': 'user_already_exists',
+              'msg': 'User already registered'
+            }
+          );
       await expectLater(
-          client.signUp(email: 'a@example.test', password: 'pw-123456', displayName: 'A', locale: 'ar'),
-          throwsA(isA<CloudException>().having((e) => e.kind, 'kind', CloudErrorKind.emailTaken)));
-      backend.routes['POST /auth/v1/signup'] =
-          (_) => (422, {'error_code': 'weak_password', 'msg': 'Password should be at least 6 characters'});
+          client.signUp(
+              email: 'a@example.test',
+              password: 'pw-123456',
+              displayName: 'A',
+              locale: 'ar'),
+          throwsA(isA<CloudException>()
+              .having((e) => e.kind, 'kind', CloudErrorKind.emailTaken)));
+      backend.routes['POST /auth/v1/signup'] = (_) => (
+            422,
+            {
+              'error_code': 'weak_password',
+              'msg': 'Password should be at least 6 characters'
+            }
+          );
       await expectLater(
-          client.signUp(email: 'a@example.test', password: '1', displayName: 'A', locale: 'ar'),
-          throwsA(isA<CloudException>().having((e) => e.kind, 'kind', CloudErrorKind.weakPassword)));
+          client.signUp(
+              email: 'a@example.test',
+              password: '1',
+              displayName: 'A',
+              locale: 'ar'),
+          throwsA(isA<CloudException>()
+              .having((e) => e.kind, 'kind', CloudErrorKind.weakPassword)));
     });
   });
 
   group('sessions', () {
-    test('restore with nothing saved is signed out, without any request', () async {
+    test('restore with nothing saved is signed out, without any request',
+        () async {
       expect(await client.restore(), isNull);
       expect(backend.requests, isEmpty);
     });
@@ -253,7 +327,10 @@ void main() {
       store.data = saved;
       final account = await again.restore();
       expect(account?.displayName, 'Alice');
-      expect(backend.named('POST', '/auth/v1/token').map((r) => r.uri.queryParameters['grant_type']),
+      expect(
+          backend
+              .named('POST', '/auth/v1/token')
+              .map((r) => r.uri.queryParameters['grant_type']),
           ['password', 'refresh_token']);
       again.close();
     });
@@ -285,7 +362,8 @@ void main() {
       expect(CloudSession.decode(null), isNull);
     });
 
-    test('sign-out clears locally even when the server is unreachable', () async {
+    test('sign-out clears locally even when the server is unreachable',
+        () async {
       serveSignIn();
       await client.signIn('a@example.test', 'right-password');
       await backend.stop();
@@ -307,75 +385,144 @@ void main() {
           (r) => (200, ((r.body as Map)['items'] as List).length);
       final items = [
         for (var i = 0; i < 1200; i++)
-          ProgressItem(path: 'p', skill: 's$i', mastery: 80, attempts: 5, mastered: true),
+          ProgressItem(
+              path: 'p',
+              skill: 's$i',
+              mastery: 80,
+              attempts: 5,
+              mastered: true),
       ];
       expect(await client.syncProgress(items), 1200);
       final calls = backend.named('POST', '/rest/v1/rpc/sync_progress');
       expect(calls.length, 3);
       final first = ((calls.first.body as Map)['items'] as List).first;
-      expect(first, {'path': 'p', 'skill': 's0', 'mastery': 80, 'attempts': 5, 'mastered': true});
+      expect(first, {
+        'path': 'p',
+        'skill': 's0',
+        'mastery': 80,
+        'attempts': 5,
+        'mastered': true
+      });
     });
 
     test('joining normalizes the code; an unknown code is reported', () async {
-      backend.routes['POST /rest/v1/rpc/join_class'] = (r) => (r.body as Map)['code'] == 'ABCD2345'
-          ? (200, [
-              {'class_id': 'c1', 'class_name': 'Class A'}
-            ])
-          : (400, {'code': 'P0002', 'message': 'unknown class code'});
+      backend.routes['POST /rest/v1/rpc/join_class'] =
+          (r) => (r.body as Map)['code'] == 'ABCD2345'
+              ? (
+                  200,
+                  [
+                    {'class_id': 'c1', 'class_name': 'Class A'}
+                  ]
+                )
+              : (400, {'code': 'P0002', 'message': 'unknown class code'});
       final joined = await client.joinClass(' abcd2345 ');
       expect(joined.name, 'Class A');
       expect(joined.joinCode, 'ABCD2345');
-      await expectLater(client.joinClass('ZZZZZZZZ'),
-          throwsA(isA<CloudException>().having((e) => e.kind, 'kind', CloudErrorKind.unknownClassCode)));
+      await expectLater(
+          client.joinClass('ZZZZZZZZ'),
+          throwsA(isA<CloudException>()
+              .having((e) => e.kind, 'kind', CloudErrorKind.unknownClassCode)));
     });
 
     test('class list marks the classes I teach', () async {
-      backend.routes['GET /rest/v1/classes'] = (_) => (200, [
-            {'id': 'c1', 'name': 'Mine', 'join_code': 'ABCD2345', 'teacher_id': 'u1'},
-            {'id': 'c2', 'name': 'Joined', 'join_code': 'EFGH6789', 'teacher_id': 'u9'},
-          ]);
+      backend.routes['GET /rest/v1/classes'] = (_) => (
+            200,
+            [
+              {
+                'id': 'c1',
+                'name': 'Mine',
+                'join_code': 'ABCD2345',
+                'teacher_id': 'u1'
+              },
+              {
+                'id': 'c2',
+                'name': 'Joined',
+                'join_code': 'EFGH6789',
+                'teacher_id': 'u9'
+              },
+            ]
+          );
       final list = await client.classes();
       expect([for (final c in list) c.isMine], [true, false]);
-      expect(backend.named('GET', '/rest/v1/classes').single.uri.queryParameters['archived_at'],
+      expect(
+          backend
+              .named('GET', '/rest/v1/classes')
+              .single
+              .uri
+              .queryParameters['archived_at'],
           'is.null');
     });
 
-    test('creating a class asks for the new row; a refusal is "not allowed"', () async {
-      backend.routes['POST /rest/v1/classes'] = (_) => (201, [
-            {'id': 'c1', 'name': 'Class A', 'join_code': 'ABCD2345', 'teacher_id': 'u1'}
-          ]);
+    test('creating a class asks for the new row; a refusal is "not allowed"',
+        () async {
+      backend.routes['POST /rest/v1/classes'] = (_) => (
+            201,
+            [
+              {
+                'id': 'c1',
+                'name': 'Class A',
+                'join_code': 'ABCD2345',
+                'teacher_id': 'u1'
+              }
+            ]
+          );
       final created = await client.createClass('  Class A ');
       expect(created.isMine, isTrue);
       final call = backend.named('POST', '/rest/v1/classes').single;
       expect(call.headers['prefer'], 'return=representation');
       expect(call.body, {'name': 'Class A'});
-      backend.routes['POST /rest/v1/classes'] = (_) =>
-          (403, {'code': '42501', 'message': 'new row violates row-level security policy'});
-      await expectLater(client.createClass('x'),
-          throwsA(isA<CloudException>().having((e) => e.kind, 'kind', CloudErrorKind.notAllowed)));
+      backend.routes['POST /rest/v1/classes'] = (_) => (
+            403,
+            {
+              'code': '42501',
+              'message': 'new row violates row-level security policy'
+            }
+          );
+      await expectLater(
+          client.createClass('x'),
+          throwsA(isA<CloudException>()
+              .having((e) => e.kind, 'kind', CloudErrorKind.notAllowed)));
     });
 
     test('class progress rows, including students with nothing yet', () async {
-      backend.routes['POST /rest/v1/rpc/class_progress'] = (_) => (200, [
-            {
-              'student_id': 's1', 'display_name': 'Alice', 'path': 'fractions',
-              'skill': 'add-fractions', 'mastery': 40.0, 'attempts': 3, 'mastered': false,
-            },
-            {
-              'student_id': 's2', 'display_name': 'Bob', 'path': null,
-              'skill': null, 'mastery': null, 'attempts': null, 'mastered': null,
-            },
-          ]);
+      backend.routes['POST /rest/v1/rpc/class_progress'] = (_) => (
+            200,
+            [
+              {
+                'student_id': 's1',
+                'display_name': 'Alice',
+                'path': 'fractions',
+                'skill': 'add-fractions',
+                'mastery': 40.0,
+                'attempts': 3,
+                'mastered': false,
+              },
+              {
+                'student_id': 's2',
+                'display_name': 'Bob',
+                'path': null,
+                'skill': null,
+                'mastery': null,
+                'attempts': null,
+                'mastered': null,
+              },
+            ]
+          );
       final rows = await client.classProgress('c1');
       expect(rows.first.mastery, 40);
       expect(rows.last.skill, isNull);
-      expect(backend.named('POST', '/rest/v1/rpc/class_progress').single.body, {'class': 'c1'});
+      expect(backend.named('POST', '/rest/v1/rpc/class_progress').single.body,
+          {'class': 'c1'});
     });
 
     test('leaving a class deletes only my membership row', () async {
       backend.routes['DELETE /rest/v1/class_members'] = (_) => (204, null);
       await client.leaveClass('c1');
-      final q = backend.named('DELETE', '/rest/v1/class_members').single.uri.queryParameters;
+      final q = backend
+          .named('DELETE', '/rest/v1/class_members')
+          .single
+          .uri
+          .queryParameters;
       expect(q, {'class_id': 'eq.c1', 'student_id': 'eq.u1'});
     });
   });

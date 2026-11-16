@@ -91,7 +91,8 @@ class AccountController extends ChangeNotifier {
     } on CloudException catch (e) {
       // Offline at launch: stay signed out in the UI for now; the saved
       // session is kept and used next time.
-      _status = _cloud.isSignedIn ? AccountStatus.signedIn : AccountStatus.signedOut;
+      _status =
+          _cloud.isSignedIn ? AccountStatus.signedIn : AccountStatus.signedOut;
       _error = e.kind;
     }
     notifyListeners();
@@ -113,7 +114,10 @@ class AccountController extends ChangeNotifier {
     SignUpResult? result;
     await _run(() async {
       result = await _cloud.signUp(
-          email: email, password: password, displayName: displayName, locale: locale);
+          email: email,
+          password: password,
+          displayName: displayName,
+          locale: locale);
       if (result case SignedUp(:final account)) {
         _account = account;
         _status = AccountStatus.signedIn;

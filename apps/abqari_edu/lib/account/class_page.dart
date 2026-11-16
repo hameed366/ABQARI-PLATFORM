@@ -34,8 +34,8 @@ List<StudentSummary> summarize(List<ClassProgressRow> rows) {
   };
   final byStudent = <String, StudentSummary>{};
   for (final row in rows) {
-    final summary = byStudent.putIfAbsent(
-        row.studentId, () => StudentSummary(row.studentId, row.displayName, []));
+    final summary = byStudent.putIfAbsent(row.studentId,
+        () => StudentSummary(row.studentId, row.displayName, []));
     final skill = skillsById['${row.path}/${row.skill}'];
     if (skill != null) summary.skills.add((skill, row));
   }
@@ -107,7 +107,8 @@ class _ClassPageState extends State<ClassPage> {
                   child: Text(
                     strings.cloudError(kind),
                     key: ClassKeys.error,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                    style:
+                        TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                 ),
               Text(strings.joinCodeIs(_class.joinCode),
