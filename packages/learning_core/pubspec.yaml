@@ -1,0 +1,12 @@
+name: abqari_learning
+description: Learning paths for ABQARI EDU - skills, lessons, endless engine-verified practice, exact marking, and mastery tracking. Pure Dart.
+publish_to: 'none'
+version: 0.1.0
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+dependencies:
+  abqari_engine:
+    path: ../math_engine
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.25.0

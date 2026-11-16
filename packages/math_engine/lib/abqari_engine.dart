@@ -8,7 +8,14 @@ library;
 
 export 'src/engine.dart';
 export 'src/errors.dart';
-export 'src/exact.dart' show Surd, constantSurd, exactRational, exactSurd;
+export 'src/exact.dart'
+    show
+        Surd,
+        checkRealDomain,
+        checkSize,
+        constantSurd,
+        exactRational,
+        exactSurd;
 export 'src/messages.dart';
 export 'src/nodes.dart';
 export 'src/normalize.dart' show Normalized, knownTasks, normalize;

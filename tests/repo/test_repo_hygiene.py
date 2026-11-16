@@ -261,3 +261,10 @@ def test_no_invisible_direction_characters_in_source():
             if hidden.search(line):
                 offenders.append(f"{path.relative_to(REPO_ROOT)}:{number}")
     assert offenders == []
+
+
+# ── phase 7: learning content ───────────────────────────────────────────────
+
+def test_edu_takes_its_content_from_the_learning_package():
+    pubspec = (REPO_ROOT / "apps" / "abqari_edu" / "pubspec.yaml").read_text()
+    assert "path: ../../packages/learning_core" in pubspec

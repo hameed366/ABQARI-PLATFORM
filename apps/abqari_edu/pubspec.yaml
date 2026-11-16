@@ -14,6 +14,13 @@ dependencies:
     path: ../../packages/localization
   abqari_ui:
     path: ../../packages/shared_ui
+  abqari_engine:
+    path: ../../packages/math_engine
+  abqari_formula:
+    path: ../../packages/math_view
+  abqari_learning:
+    path: ../../packages/learning_core
+  shared_preferences: ^2.3.0
   cupertino_icons: ^1.0.8
 dev_dependencies:
   flutter_test:

@@ -1,7 +1,8 @@
 import 'package:abqari_localization/abqari_localization.dart';
 import 'package:flutter/widgets.dart';
 
-/// Every user-visible string of ABQARI EDU, in both languages.
+/// Every user-visible interface string of ABQARI EDU, in both languages.
+/// (Lesson content lives in the abqari_learning catalog.)
 ///
 /// Adding a getter here forces both languages to provide it at compile time.
 abstract class EduStrings {
@@ -10,24 +11,54 @@ abstract class EduStrings {
   String get appTitle;
   String get headline;
   String get tagline;
-  String get firstFeatureTitle;
-  String get firstFeatureSubtitle;
-  String get secondFeatureTitle;
-  String get secondFeatureSubtitle;
-  String get thirdFeatureTitle;
-  String get thirdFeatureSubtitle;
+  String get pathsTitle;
+  String get lessonTitle;
+  String get workedExampleTitle;
+  String get practiceButton;
+  String get lockedHint;
+  String get recommended;
+  String get levelNotStarted;
+  String get levelLearning;
+  String get levelPractising;
+  String get levelMastered;
+  String get answerLabel;
+  String get answerHint;
+  String get checkButton;
+  String get nextButton;
+  String get correct;
+  String get incorrect;
+  String get correctAnswerIs;
+  String get showSolution;
+  String get questionUnavailable;
+  String pathProgress(int percent);
+  String mastery(int percent);
 
-  /// All strings, for completeness checks in tests.
-  List<String> get all => [
-        appTitle,
-        headline,
-        tagline,
-        firstFeatureTitle,
-        firstFeatureSubtitle,
-        secondFeatureTitle,
-        secondFeatureSubtitle,
-        thirdFeatureTitle,
-        thirdFeatureSubtitle,
+  /// The home-screen strings, for completeness checks in tests.
+  List<String> get all => [appTitle, headline, tagline, pathsTitle];
+
+  /// Every string, for completeness checks in tests.
+  List<String> get everything => [
+        ...all,
+        lessonTitle,
+        workedExampleTitle,
+        practiceButton,
+        lockedHint,
+        recommended,
+        levelNotStarted,
+        levelLearning,
+        levelPractising,
+        levelMastered,
+        answerLabel,
+        answerHint,
+        checkButton,
+        nextButton,
+        correct,
+        incorrect,
+        correctAnswerIs,
+        showSolution,
+        questionUnavailable,
+        pathProgress(40),
+        mastery(80),
       ];
 
   static const LocalizationsDelegate<EduStrings> delegate =
@@ -51,18 +82,49 @@ class EduStringsAr extends EduStrings {
   String get tagline =>
       'مسارات عامة مبنية على الموضوع والمهارة ومستوى الإتقان.';
   @override
-  String get firstFeatureTitle => 'مسارات التعلّم';
+  String get pathsTitle => 'مسارات التعلّم';
   @override
-  String get firstFeatureSubtitle => 'اختر مجالاً وموضوعاً يناسب مستواك';
+  String get lessonTitle => 'الدرس';
   @override
-  String get secondFeatureTitle => 'التدريب والاختبار';
+  String get workedExampleTitle => 'مثال محلول';
   @override
-  String get secondFeatureSubtitle => 'أسئلة متدرجة مع تغذية راجعة';
+  String get practiceButton => 'تدرّب';
   @override
-  String get thirdFeatureTitle => 'متابعة التقدّم';
+  String get lockedHint => 'أتقن المهارة السابقة أولًا';
   @override
-  String get thirdFeatureSubtitle =>
-      'اعرف المهارات التي أتقنتها وما يحتاج إلى مراجعة';
+  String get recommended => 'المهارة التالية المقترحة';
+  @override
+  String get levelNotStarted => 'لم تبدأ';
+  @override
+  String get levelLearning => 'تتعلّم';
+  @override
+  String get levelPractising => 'تتدرّب';
+  @override
+  String get levelMastered => 'أتقنتها';
+  @override
+  String get answerLabel => 'إجابتك';
+  @override
+  String get answerHint => 'اكتب الإجابة هنا';
+  @override
+  String get checkButton => 'تحقّق';
+  @override
+  String get nextButton => 'سؤال آخر';
+  @override
+  String get correct => 'إجابة صحيحة';
+  @override
+  String get incorrect => 'إجابة غير صحيحة';
+  @override
+  String get correctAnswerIs => 'الإجابة الصحيحة';
+  @override
+  String get showSolution => 'طريقة الحل';
+  @override
+  String get questionUnavailable => 'تعذّر إعداد سؤال لهذه المهارة الآن.';
+  @override
+  String pathProgress(int percent) =>
+      AbqariDigits.toArabicIndic('الإتقان في المسار: ٪$percent');
+  @override
+  String mastery(int percent) =>
+      AbqariDigits.toArabicIndic('الإتقان: ٪$percent');
 }
 
 class EduStringsEn extends EduStrings {
@@ -76,17 +138,46 @@ class EduStringsEn extends EduStrings {
   String get tagline =>
       'General learning paths built on topic, skill, and mastery level.';
   @override
-  String get firstFeatureTitle => 'Learning paths';
+  String get pathsTitle => 'Learning paths';
   @override
-  String get firstFeatureSubtitle =>
-      'Pick a domain and a topic that match your level';
+  String get lessonTitle => 'Lesson';
   @override
-  String get secondFeatureTitle => 'Practice and quizzes';
+  String get workedExampleTitle => 'Worked example';
   @override
-  String get secondFeatureSubtitle => 'Graded questions with feedback';
+  String get practiceButton => 'Practise';
   @override
-  String get thirdFeatureTitle => 'Progress tracking';
+  String get lockedHint => 'Master the previous skill first';
   @override
-  String get thirdFeatureSubtitle =>
-      'See which skills you have mastered and which need review';
+  String get recommended => 'Suggested next skill';
+  @override
+  String get levelNotStarted => 'Not started';
+  @override
+  String get levelLearning => 'Learning';
+  @override
+  String get levelPractising => 'Practising';
+  @override
+  String get levelMastered => 'Mastered';
+  @override
+  String get answerLabel => 'Your answer';
+  @override
+  String get answerHint => 'Type the answer here';
+  @override
+  String get checkButton => 'Check';
+  @override
+  String get nextButton => 'Another question';
+  @override
+  String get correct => 'Correct';
+  @override
+  String get incorrect => 'Not correct';
+  @override
+  String get correctAnswerIs => 'The correct answer';
+  @override
+  String get showSolution => 'How to solve it';
+  @override
+  String get questionUnavailable =>
+      'A question for this skill could not be prepared right now.';
+  @override
+  String pathProgress(int percent) => 'Path mastery: $percent%';
+  @override
+  String mastery(int percent) => 'Mastery: $percent%';
 }

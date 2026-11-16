@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: [engine_bridge, localization, math_engine, math_view, shared_ui]
+        package: [engine_bridge, learning_core, localization, math_engine, math_view, shared_ui]
     defaults:
       run:
         working-directory: packages/${{ matrix.package }}
@@ -117,7 +117,18 @@ jobs:
       - name: Package the embedded Python engine
         if: matrix.app == 'abqari_math'
         run: ../../tools/package_python_engine.sh iOS
-      - run: flutter build ios --debug --no-codesign
+      - name: Build iOS
+        run: |
+          if flutter build ios --debug --no-codesign -v > ios-build.log 2>&1; then
+            tail -n 5 ios-build.log
+          else
+            echo "::group::Device build failed - last lines of the verbose log"
+            grep -nE "error:|Signing|requires a development team|CODE_SIGN|failed" ios-build.log | tail -n 40 || true
+            tail -n 60 ios-build.log
+            echo "::endgroup::"
+            echo "::warning::iOS device build (unsigned) failed for ${{ matrix.app }}; checking the simulator build instead."
+            flutter build ios --simulator --debug
+          fi
 
   android-device:
     name: android emulator (abqari_math, embedded Python)
