@@ -125,3 +125,38 @@ def test_flutter_client_does_not_reference_privileged_credentials(app):
 )
 def test_required_docs_present(doc):
     assert (REPO_ROOT / doc).is_file()
+
+
+# ── phase 2: each app is independently buildable ────────────────────────────
+
+@pytest.mark.parametrize("app", APPS)
+@pytest.mark.parametrize(
+    "path",
+    ["pubspec.lock", "test/widget_test.dart", "android/app/build.gradle.kts",
+     "ios/Runner.xcodeproj/project.pbxproj"],
+)
+def test_app_has_everything_needed_to_build_alone(app, path):
+    assert (REPO_ROOT / "apps" / app / path).is_file()
+
+
+def _android_id(app: str) -> str:
+    gradle = (REPO_ROOT / "apps" / app / "android/app/build.gradle.kts").read_text()
+    return re.search(r'applicationId\s*=\s*"([^"]+)"', gradle).group(1)
+
+
+def _ios_id(app: str) -> str:
+    pbx = (REPO_ROOT / "apps" / app / "ios/Runner.xcodeproj/project.pbxproj").read_text()
+    ids = set(re.findall(r"PRODUCT_BUNDLE_IDENTIFIER = ([^;]+);", pbx))
+    return next(i for i in ids if not i.endswith("RunnerTests"))
+
+
+def test_apps_have_distinct_store_identifiers():
+    assert len({_android_id(a) for a in APPS}) == len(APPS)
+    assert len({_ios_id(a) for a in APPS}) == len(APPS)
+
+
+def test_ci_builds_every_app():
+    ci = (REPO_ROOT / ".github/workflows/ci.yml").read_text()
+    assert ci.count("app: [abqari_edu, abqari_math]") == 2  # android + ios matrices
+    for command in ("flutter analyze", "flutter test", "flutter build apk", "flutter build ios"):
+        assert command in ci

@@ -21,24 +21,23 @@ apps/
 backend/database/   # هجرات PostgreSQL
 docs/               # قرارات ومعمارية وخطة وتقارير المراحل
 tests/              # اختبارات القاعدة ونظافة المستودع
+.github/workflows/  # CI: الخلفية + كل تطبيق على Android وiOS
 ```
 يُضاف لاحقًا، كلٌّ مع تنفيذه واختباراته: `packages/`، `backend/api`، `backend/ai`، `backend/math_solver`، `admin/web_dashboard`.
 
 ## الحالة الحالية
-**هيكل بداية** وليس إصدارًا إنتاجيًا ولا ملفات IPA/APK. اكتملت المرحلة 1 (الفحص) — راجع `docs/PHASE1_AUDIT.md`. لم يُربط أي خادم أو مصادقة أو مزود ذكاء اصطناعي، ولم يُطبَّق مخطط القاعدة على أي قاعدة حية. كود Flutter يجتاز `flutter analyze` في CI، ولم يُبنَ أو يُشغَّل على جهاز بعد.
+**هيكل بداية** وليس إصدارًا إنتاجيًا. اكتملت المرحلتان 1 و2 — راجع `docs/PHASE1_AUDIT.md` و`docs/PHASE2_REPORT.md`. التطبيقان يُحلَّلان ويُختبران ويُبنيان (debug، دون توقيع) لأندرويد وiOS في CI. لم يُشغَّلا على جهاز بعد، ولا توجد ملفات IPA/APK للنشر. لم يُربط أي خادم أو مصادقة أو مزود ذكاء اصطناعي، ولم يُطبَّق مخطط القاعدة على أي قاعدة حية.
 
 ## تشغيل التطبيقين
-الحزمة لا تحتوي مجلدات المنصات ولا مجلد `test/` بعد. داخل كل تطبيق:
+داخل كل تطبيق:
 
 ```bash
-cd apps/abqari_edu      # ثم كرر مع apps/abqari_math
-flutter create .        # يولّد مجلدات المنصات دون المساس بـ lib/
+cd apps/abqari_edu      # أو apps/abqari_math
 flutter pub get
 flutter analyze
+flutter test
 flutter run
 ```
-
-هذه الخطوات لم تُختبر بعد في بيئة فيها Flutter.
 
 ## تشغيل الاختبارات المتاحة
 يتطلب Python 3.11+ مع pytest، وخادم PostgreSQL 14+ عبر متغيرات libpq (`PGHOST`، `PGUSER`…) بصلاحية superuser. تُنشأ قاعدة مؤقتة وتُحذف تلقائيًا.
