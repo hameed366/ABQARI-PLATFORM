@@ -18,6 +18,7 @@ from .messages import message
 from .normalize import TASKS, normalize
 from .parser import Node, Statement, parse, variables
 from .to_sympy import as_mp, ensure_defined, symbol, to_sympy
+from .tree import to_tree
 from .version import ENGINE_VERSION
 
 MIN_SAMPLES = 3
@@ -27,7 +28,7 @@ MIN_SAMPLES = 3
 
 def _value(expression: sp.Expr) -> dict:
     """An exact value with a decimal approximation when it is not an integer."""
-    out = {"latex": sp.latex(expression), "plain": sp.sstr(expression)}
+    out = {"latex": sp.latex(expression), "plain": sp.sstr(expression), "tree": to_tree(expression)}
     if not expression.free_symbols and not expression.is_Integer:
         out["approx"] = sp.sstr(expression.evalf(12))
     return out
@@ -376,7 +377,7 @@ def _solve_equation(statement: Statement, requested: str | None) -> dict:
     if approximate:
         rendered = [
             {"latex": rf"{name} \approx {sp.sstr(s.evalf(12))}", "plain": sp.sstr(s.evalf(12)),
-             "approx": sp.sstr(s.evalf(12))}
+             "approx": sp.sstr(s.evalf(12)), "tree": to_tree(s.evalf(12))}
             for s in solutions
         ]
     else:
@@ -502,6 +503,7 @@ def _integrate(tree: Node, requested: str | None) -> dict:
     return {
         "task": "integrate", "variable": name,
         "answer": {"latex": sp.latex(result) + " + C", "plain": sp.sstr(result) + " + C",
+                   "tree": to_tree(result),
                    "result_latex": sp.latex(result), "constant_of_integration": True},
         "steps": [], "verification": check, "notes": [message("steps_not_available")],
     }
