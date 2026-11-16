@@ -21,3 +21,16 @@ alter default privileges in schema public
   grant all on tables to anon, authenticated;
 alter default privileges in schema public
   grant all on sequences to anon, authenticated;
+
+-- Stand-in for the hosted auth schema: auth.users and auth.uid().
+-- Tests "sign in" with:  set local request.jwt.claim.sub = '<uuid>';
+create schema if not exists auth;
+create table if not exists auth.users (
+  id uuid primary key,
+  email text,
+  raw_user_meta_data jsonb not null default '{}'::jsonb
+);
+create or replace function auth.uid() returns uuid
+language sql stable
+as $$ select nullif(current_setting('request.jwt.claim.sub', true), '')::uuid $$;
+grant usage on schema auth to anon, authenticated;

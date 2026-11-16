@@ -20,6 +20,8 @@ dependencies:
     path: ../../packages/math_view
   abqari_learning:
     path: ../../packages/learning_core
+  abqari_cloud:
+    path: ../../packages/cloud
   shared_preferences: ^2.3.0
   cupertino_icons: ^1.0.8
 dev_dependencies:
