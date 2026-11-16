@@ -97,8 +97,9 @@ class FakeCloud implements CloudService {
   Future<SchoolClass> joinClass(String code) async {
     _maybeFail();
     final name = openCodes[code.trim().toUpperCase()];
-    if (name == null)
+    if (name == null) {
       throw const CloudException(CloudErrorKind.unknownClassCode);
+    }
     final joined =
         SchoolClass(id: 'c-$name', name: name, joinCode: code, isMine: false);
     _classes.add(joined);
@@ -114,8 +115,9 @@ class FakeCloud implements CloudService {
   @override
   Future<SchoolClass> createClass(String name) async {
     _maybeFail();
-    if (role != AccountRole.teacher)
+    if (role != AccountRole.teacher) {
       throw const CloudException(CloudErrorKind.notAllowed);
+    }
     final created = SchoolClass(
         id: 'c${_classes.length}',
         name: name,
