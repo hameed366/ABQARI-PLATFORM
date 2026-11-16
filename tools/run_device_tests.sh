@@ -6,6 +6,12 @@
 set -uo pipefail
 cd "$(dirname "$0")/../apps/abqari_math"
 
+mkdir -p build
+adb logcat -c || true
+adb logcat -v time > build/device-logcat.txt 2>&1 &
+logcat_pid=$!
+trap 'kill "$logcat_pid" 2>/dev/null || true' EXIT
+
 log="$(mktemp)"
 flutter test integration_test/full_engine_test.dart --reporter expanded 2>&1 | tee "$log"
 status=${PIPESTATUS[0]}
