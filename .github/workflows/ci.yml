@@ -156,5 +156,5 @@ jobs:
           target: google_apis
           disable-animations: true
           working-directory: apps/abqari_math
-          script: flutter test integration_test/full_engine_test.dart
+          script: ../../tools/run_device_tests.sh
 
