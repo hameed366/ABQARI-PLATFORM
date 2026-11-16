@@ -71,6 +71,34 @@ class Database:
         out = _psql(self.name, script)
         return out.splitlines() if out else []
 
+    def as_user(self, user_id: str, statement: str) -> list[str]:
+        """Run inside a rolled-back transaction as a signed-in user.
+
+        Mirrors what the hosted API does for a request with a user's token:
+        role `authenticated`, and auth.uid() returning the token's subject.
+        """
+        script = (
+            "begin;\n"
+            "set local role authenticated;\n"
+            f"set local request.jwt.claim.sub = '{user_id}';\n"
+            f"{statement.rstrip().rstrip(';')};\n"
+            "rollback;\n"
+        )
+        out = _psql(self.name, script)
+        return out.splitlines() if out else []
+
+    def commit_as_user(self, user_id: str, statement: str) -> list[str]:
+        """Like as_user, but the changes are kept."""
+        script = (
+            "begin;\n"
+            "set local role authenticated;\n"
+            f"set local request.jwt.claim.sub = '{user_id}';\n"
+            f"{statement.rstrip().rstrip(';')};\n"
+            "commit;\n"
+        )
+        out = _psql(self.name, script)
+        return out.splitlines() if out else []
+
 
 @contextlib.contextmanager
 def temp_database(suffix: str, *, upto: int | None = None):
@@ -94,6 +122,18 @@ def _require_server():
         _psql("postgres", "select 1")
     except SqlError as exc:
         pytest.skip(f"no reachable PostgreSQL server: {exc}")
+
+
+SEED = REPO_ROOT / "backend" / "database" / "seed" / "catalog.sql"
+
+
+@pytest.fixture(scope="session")
+def seeded_db():
+    """All migrations plus the generated catalog seed."""
+    _require_server()
+    with temp_database("seeded") as database:
+        database.sql(SEED.read_text(encoding="utf-8"))
+        yield database
 
 
 @pytest.fixture(scope="session")
