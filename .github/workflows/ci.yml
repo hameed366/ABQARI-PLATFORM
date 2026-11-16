@@ -37,7 +37,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        package: [localization, math_engine, math_view, shared_ui]
+        package: [learning_core, localization, math_engine, math_view, shared_ui]
     defaults:
       run:
         working-directory: packages/${{ matrix.package }}
