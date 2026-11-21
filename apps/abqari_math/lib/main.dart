@@ -136,11 +136,13 @@ class MathHomePage extends StatelessWidget {
             icon: Icons.category_outlined,
             title: strings.secondFeatureTitle,
             subtitle: strings.secondFeatureSubtitle,
+            badge: strings.comingSoon,
           ),
           FeatureCard(
             icon: Icons.functions,
             title: strings.thirdFeatureTitle,
             subtitle: strings.thirdFeatureSubtitle,
+            badge: strings.comingSoon,
           ),
         ],
       ),

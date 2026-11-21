@@ -16,6 +16,7 @@ abstract class MathStrings {
   String get secondFeatureSubtitle;
   String get thirdFeatureTitle;
   String get thirdFeatureSubtitle;
+  String get comingSoon;
 
   // solver screen
   String get solverTitle;
@@ -66,6 +67,7 @@ abstract class MathStrings {
         secondFeatureSubtitle,
         thirdFeatureTitle,
         thirdFeatureSubtitle,
+        comingSoon,
       ];
 
   static const LocalizationsDelegate<MathStrings> delegate =
@@ -99,6 +101,8 @@ class MathStringsAr extends MathStrings {
   String get thirdFeatureTitle => 'الرياضيات المتقدمة';
   @override
   String get thirdFeatureSubtitle => 'تفاضل وتكامل، إحصاء وجبر خطي';
+  @override
+  String get comingSoon => 'قريبًا';
 
   @override
   String get solverTitle => 'حل المسائل';
@@ -166,6 +170,8 @@ class MathStringsEn extends MathStrings {
   String get thirdFeatureTitle => 'Advanced mathematics';
   @override
   String get thirdFeatureSubtitle => 'Calculus, statistics, and linear algebra';
+  @override
+  String get comingSoon => 'Coming soon';
 
   @override
   String get solverTitle => 'Problem solving';
